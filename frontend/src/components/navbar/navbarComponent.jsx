@@ -29,7 +29,7 @@ const Navbar = () => {
           <FaStore className="sell-icon" /> Vender
         </button>
 
-        <a href="#" className="launch-app-btn">Iniciar Sesión ↗</a>
+        <a href="/login" className="launch-app-btn">Iniciar Sesión ↗</a>
       </nav>
     </div>
   );

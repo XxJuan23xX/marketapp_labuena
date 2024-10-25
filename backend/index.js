@@ -1,9 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-
+const cors = require('cors'); // Importar CORS
+const userRoutes = require('./routes/userRoutes'); // Importar las rutas de usuarios
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+
+
+app.use(cors({
+    origin: 'http://localhost:5173', // Cambia esto por el origen de tu frontend
+    credentials: true, // Si necesitas enviar cookies o encabezados de autenticación
+  }));
 
 // Middleware para leer JSON
 app.use(express.json());
@@ -14,8 +22,10 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error('Error conectando a MongoDB:', err));
 
 // Rutas para usuarios
-const userRoutes = require('./Routes/userRoutes');
+
 app.use('/api/users', userRoutes);
+
+app.use('/api/users/login', userRoutes);
 
 // Rutas para productos
 const productRoutes = require('./Routes/productRoutes');
