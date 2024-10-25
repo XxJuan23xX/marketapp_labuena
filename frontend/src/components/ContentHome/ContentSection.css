@@ -1,0 +1,29 @@
+/* Estilo para las secciones de contenido */
+.content-section {
+    padding: 50px;
+    text-align: center;
+    font-size: 1.5rem;
+    background-color: rgb(57 57 57);
+    min-height: 400px; /* Ajuste para reducir el espacio en blanco */
+    margin-bottom: 50px; /* Añade margen entre las secciones */
+    color: white;
+  }
+  
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .image-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .image-item p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #ffffff;
+  }
+  

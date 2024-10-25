@@ -1,0 +1,89 @@
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 20px;
+  width: 100%;
+  z-index: 100;
+}
+
+.navbar {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50px;
+  padding: 10px 30px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  width: 60%; /* Ajustamos el ancho total del navbar */
+  
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin-right: 2rem;
+}
+
+.navbar-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #48e5e4;
+}
+
+.search-bar {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  width: 290px;
+  background-color: #ffffff90;
+  color: white;
+}
+
+.cart-icon,
+.heart-icon {
+  font-size: 1.5rem;
+  color: white;
+  margin-left: 1.5rem;
+  cursor: pointer;
+}
+
+.sell-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 30px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1.5rem;
+}
+
+.sell-button:hover {
+  background-color: #48e5e4;
+}
+
+.launch-app-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 30px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1.5rem;
+}
+
+.launch-app-btn:hover {
+  background-color: #48e5e4;
+}

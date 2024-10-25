@@ -1,0 +1,20 @@
+
+  
+  .triangle-left {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #18CFC3;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    left: 0;
+  }
+  
+  .triangle-right {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #18CFC3;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    right: 0;
+  }
+  
