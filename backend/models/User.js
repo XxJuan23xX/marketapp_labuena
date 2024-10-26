@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Definir el esquema de usuario
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -14,13 +15,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    role: {
+    phone: {
         type: String,
-        enum: ['vendedor', 'comprador'],
-        default: 'comprador',
     },
-    address: String,
-    phone: String,
+    avatar: {
+        type: String,
+        default: 'uploads/avatar-default.webp', // Imagen por defecto para el avatar
+    },
+    role: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Role', // Relación con la colección Role
+    },
     ratings: [
         {
             reviewer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -39,6 +44,8 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+// Crear el modelo de usuario usando el esquema definido
 const User = mongoose.model('User', userSchema);
 
+// Exportar el modelo
 module.exports = User;

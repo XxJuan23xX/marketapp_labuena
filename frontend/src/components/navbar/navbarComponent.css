@@ -14,8 +14,7 @@
   display: flex;
   align-items: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  width: 60%; /* Ajustamos el ancho total del navbar */
-  
+  width: 60%;
 }
 
 .navbar-links {
@@ -30,10 +29,8 @@
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.3s ease;
-}
-
-.navbar-links a:hover {
-  color: #48e5e4;
+  position: relative;
+  cursor: pointer;
 }
 
 .search-bar {
@@ -41,7 +38,7 @@
   border-radius: 20px;
   border: none;
   outline: none;
-  width: 280px;
+  width: 180px;
   background-color: #ffffff90;
   color: white;
 }
@@ -86,4 +83,74 @@
 
 .launch-app-btn:hover {
   background-color: #48e5e4;
+}
+
+.logout-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 30px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1.5rem;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #e53935;
+}
+
+.avatar-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  margin-left: 40px;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  width: 150px;
+}
+
+.dropdown-menu a {
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-menu a:active {
+  background-color: #e0e0e0;
 }
