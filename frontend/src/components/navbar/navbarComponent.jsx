@@ -42,7 +42,7 @@ const Navbar = () => {
       <nav className="navbar">
         <ul className="navbar-links">
           <li><a href="/" data-original-text="Inicio">Inicio</a></li>
-          <li><a href="#" data-original-text="Productos">Productos</a></li>
+          <li><a href="/products" data-original-text="Productos">Productos</a></li>
           {userRole === 'admin' ? (
             <li><a href="/dashboard" data-original-text="Dashboard">Dashboard</a></li>
           ) : (

@@ -4,6 +4,8 @@ import {AuthProvider} from './context/AuthContext'; // Asegúrate de que la ruta
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Products from './pages/Products';
+import CreateProduccion from './pages/Crearproducto';
 import UserProfile from './pages/UserProfile';
 
 const App = () => {
@@ -17,13 +19,19 @@ const App = () => {
           {/* Ruta para la página de login */}
           <Route path="/login" element={<Login />} />
 
+        <Route path="/products" element={<Products />}/>
+
+        <Route path="/createproducts" element={<CreateProduccion/>}/>
+        
+        {/* Otras rutas pueden ir aquí */}
           {/* Ruta para la página de register */}
           <Route path="/register" element={<Register />} />
           
           {/* Otras rutas pueden ir aquí */}
           <Route path="/Account" element={<UserProfile />} />
-        </Routes>
-      </Router>
+          </Routes>
+          </Router>
+      
     </AuthProvider>
   );
 };

@@ -16,7 +16,6 @@ const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
 // Configurar CORS
 app.use(cors({
     origin: 'http://localhost:5173', // Cambia esto por el origen de tu frontend
@@ -25,6 +24,8 @@ app.use(cors({
 
 // Middleware para leer JSON
 app.use(express.json());
+
+app.use('/uploads', express.static('uploads'));
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -36,7 +37,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rutas para cada recurso
 app.use('/api/users', userRoutes);
+
+app.use('/api/users/login', userRoutes);
+
+// Rutas para productos
+
 app.use('/api/products', productRoutes);
+
+// Rutas para órdenes
 app.use('/api/orders', orderRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/categories', categoryRoutes);
