@@ -23,8 +23,29 @@ const decryptText = (element, originalText) => {
 };
 
 const Navbar = () => {
-  const { isAuthenticated, userRole, userAvatar, logout } = useContext(AuthContext);
+  const { isAuthenticated, userRole, userId, logout } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [avatar, setAvatar] = useState('/uploads/avatar-default.webp'); // Avatar por defecto
+
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        if (userId) {
+          const response = await fetch(`http://localhost:5000/api/users/${userId}/avatar`, {
+            credentials: 'include',
+          });
+          const data = await response.json();
+          if (data.avatar) {
+            setAvatar(`http://localhost:5000/${data.avatar}`);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching avatar:', error);
+      }
+    };
+
+    fetchAvatar();
+  }, [userId]);
 
   useEffect(() => {
     const links = document.querySelectorAll('.navbar-links a');
@@ -68,16 +89,12 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <div className="avatar-container" onClick={toggleMenu}>
-            {userAvatar ? (
-              <img
-                src={userAvatar}
-                alt="User Avatar"
-                className="user-avatar"
-                onError={(e) => { e.target.src = '/uploads/avatar-default.webp'; }} // Fallback si hay error en la carga
-              />
-            ) : (
-              <div className="user-avatar-placeholder">Cargando...</div>
-            )}
+            <img
+              src={avatar}
+              alt="User Avatar"
+              className="user-avatar"
+              onError={(e) => { e.target.src = '/uploads/avatar-default.webp'; }}
+            />
 
             {menuOpen && (
               <div className="dropdown-menu">
