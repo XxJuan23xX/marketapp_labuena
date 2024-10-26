@@ -1,59 +1,27 @@
+// models/Product.js
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-    seller_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Referencia al vendedor
-        required: true
-    },
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    price: {
-        type: Number,
-        required: true
-    },
-    isAuction: {
-        type: Boolean,
-        default: false // Por defecto, no es subasta
-    },
-    auction_end_time: {
-        type: Date,
-        required: function() {
-            return this.isAuction;
-        } // Solo requerido si es subasta
-    },
-    auction_bids: [
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    category: { type: String, required: true },
+    images: [{ type: String }], // Guardará rutas de las imágenes
+    type: { type: String, enum: ['venta', 'subasta'], required: true }, // Indica si es venta o subasta
+    price: { type: Number }, // Precio para venta
+    discount: { type: Number, default: 0 }, // Descuento para ventas (opcional)
+    startingPrice: { type: Number }, // Precio inicial para subasta
+    auctionEndTime: { type: Date }, // Fecha de fin de subasta
+    isActive: { type: Boolean, default: true }, // Indica si la subasta está activa
+    bids: [
         {
             user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-            amount: Number,
-            bid_time: { type: Date, default: Date.now }
+            bidAmount: Number,
+            bidTime: { type: Date, default: Date.now }
         }
     ],
-    category: {
-        type: String,
-        required: true
-    },
-    images: [String], // URLs de imágenes
-    sold: {
-        type: Boolean,
-        default: false
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now
-    }
+    seller_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    createdAt: { type: Date, default: Date.now }
 });
 
 const Product = mongoose.model('Product', productSchema);
-
 module.exports = Product;

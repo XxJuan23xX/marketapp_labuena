@@ -22,7 +22,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(9deg, rgba(68,195,88,1) 0%, rgba(2,0,36,1) 100%);
+  
   font-family: 'Arial', sans-serif;
   animation: fadeIn 1s ease-out;
 }

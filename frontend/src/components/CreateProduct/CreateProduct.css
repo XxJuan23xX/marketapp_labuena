@@ -1,0 +1,121 @@
+.create-product-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #1e1e4a;
+    color: white;
+    box-sizing: border-box;
+}
+
+.image-preview-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #2a2a5a;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.image-preview {
+    width: 500px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 5px solid #7676ff;
+    margin-bottom: 20px;
+}
+
+.thumbnail-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.thumbnail:hover,
+.thumbnail:active {
+    border-color: #7676ff;
+}
+
+.placeholder-text {
+    color: #aaa;
+    font-size: 16px;
+    text-align: center;
+}
+
+.create-product-form {
+    flex: 1;
+    background-color: #2a2a5a;
+    padding: 30px;
+    border-radius: 8px;
+    max-height: calc(100vh - 40px);
+}
+
+.create-product-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.create-product-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.create-product-input,
+.create-product-textarea,
+.create-product-select {
+    padding: 12px;
+    border: 1px solid #4a4a7a;
+    border-radius: 6px;
+    background-color: #3a3a6a;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.createbotonazo {
+    background-color: #7676ff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.createbotonazo:hover {
+    background-color: #8a8aff;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    color: #7676ff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    transition: color 0.3s;
+  }
+  
+  .back-button:hover {
+    color: #8a8aff;
+  }
+  

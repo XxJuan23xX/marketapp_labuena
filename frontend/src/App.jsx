@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login'; // Asegúrate de que la ruta sea correcta
 import Home from './pages/Home'; // Ejemplo de otro componente
 import Register from './pages/Register';
+import Products from './pages/Products';
+import CreateProduccion from './pages/Crearproducto';
+
 
 const App = () => {
   return (
@@ -16,6 +19,11 @@ const App = () => {
 
          {/* Ruta para la página de register*/}
         <Route path="/register" element={<Register />}/>
+        
+/
+        <Route path="/products" element={<Products />}/>
+
+        <Route path="/createproducts" element={<CreateProduccion/>}/>
         
         {/* Otras rutas pueden ir aquí */}
       </Routes>

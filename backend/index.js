@@ -5,6 +5,8 @@ const cors = require('cors'); // Importar CORS
 const userRoutes = require('./routes/userRoutes'); // Importar las rutas de usuarios
 const app = express();
 const PORT = process.env.PORT || 5000;
+const productRoutes = require('./routes/productRoutes');
+
 
 
 
@@ -15,6 +17,8 @@ app.use(cors({
 
 // Middleware para leer JSON
 app.use(express.json());
+
+app.use('/uploads', express.static('uploads'));
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -27,9 +31,10 @@ app.use('/api/users', userRoutes);
 
 app.use('/api/users/login', userRoutes);
 
-// Rutas para productos
-const productRoutes = require('./Routes/productRoutes');
+//Ruta solo paa recibir inormaion para el home 
 app.use('/api/products', productRoutes);
+// Rutas para ventas
+
 
 // Rutas para órdenes
 const orderRoutes = require('./Routes/orderRoutes');

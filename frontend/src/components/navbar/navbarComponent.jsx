@@ -9,7 +9,7 @@ const Navbar = () => {
       <nav className="navbar">
         <ul className="navbar-links">
           <li><a href="/">Inicio</a></li>
-          <li><a href="#">Productos</a></li>
+          <li><a href="Products">Productos</a></li>
         </ul>
 
         <input type="text" placeholder="Buscar productos..." className="search-bar" />
