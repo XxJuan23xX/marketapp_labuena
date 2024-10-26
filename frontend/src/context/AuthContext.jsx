@@ -2,28 +2,47 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
+// Función para decodificar el token manualmente
+const decodeToken = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1])); // Decodifica la parte del payload del JWT
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [userAvatar, setUserAvatar] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
-    const avatar = localStorage.getItem('avatar');
-
-    setIsAuthenticated(!!token);
-    setUserRole(role);
-    setUserAvatar(avatar);
+    if (token) {
+      const decodedToken = decodeToken(token);
+      if (decodedToken) {
+        setUserId(decodedToken.id); // Obtener el ID del usuario desde el token
+        setUserRole(decodedToken.role);
+        setIsAuthenticated(true);
+        setUserAvatar(localStorage.getItem('avatar') || '/uploads/avatar-default.webp');
+      }
+    }
   }, []);
 
   const login = (token, role, avatar) => {
     localStorage.setItem('token', token);
     localStorage.setItem('role', role);
     localStorage.setItem('avatar', avatar);
-    setIsAuthenticated(true);
-    setUserRole(role);
-    setUserAvatar(avatar);
+
+    const decodedToken = decodeToken(token);
+    if (decodedToken) {
+      setUserId(decodedToken.id);
+      setUserRole(role);
+      setIsAuthenticated(true);
+      setUserAvatar(avatar);
+    }
   };
 
   const logout = () => {
@@ -33,10 +52,11 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     setUserRole(null);
     setUserAvatar(null);
+    setUserId(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userRole, userAvatar, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userRole, userAvatar, userId, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

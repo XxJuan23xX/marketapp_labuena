@@ -9,5 +9,8 @@ router.get('/:id', userController.getUserById);
 router.put('/:id', userController.updateUser);
 router.put('/:id/avatar', userController.updateAvatar); // Nueva ruta para actualizar avatar
 router.delete('/:id', userController.deleteUser);
+// Ruta para obtener el avatar del usuario actual
+router.get('/:id/avatar', userController.getAvatar);
+
 
 module.exports = router;

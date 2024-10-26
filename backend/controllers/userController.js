@@ -137,3 +137,16 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
+// Obtener avatar de usuario por ID
+exports.getAvatar = async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+  
+      // Asegura que 'avatar' tenga un valor de ruta válido
+      res.status(200).json({ avatar: user.avatar || '/uploads/avatar-default.webp' });
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener el avatar' });
+    }
+  };
+  

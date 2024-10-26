@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { FaGoogle, FaFacebookF, FaApple, FaSteam, FaArrowLeft } from 'react-icons/fa';
-import { AuthContext } from '../context/AuthContext'; // Asegúrate de que esta ruta sea correcta
+import { AuthContext } from '../context/AuthContext';
 import './Login.css';
 
 const Login = () => {
-  const { login } = useContext(AuthContext); // Usa el contexto de autenticación
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -30,11 +30,16 @@ const Login = () => {
       const data = await response.json();
       console.log('Login Success:', data);
 
-      // Asegúrate de pasar también el avatar en la función de login
-      login(data.token, data.user.role.roleName, data.user.avatar);
+      // Asegúrate de que el backend esté devolviendo `avatar` correctamente.
+      if (data.token && data.user && data.user.role && data.user.avatar) {
+        // Pasar `token`, `role`, y `avatar` al contexto de autenticación
+        login(data.token, data.user.role.roleName, data.user.avatar);
 
-      // Redirigir al dashboard o a la página principal
-      window.location.href = '/';
+        // Redirigir al dashboard o a la página principal
+        window.location.href = '/';
+      } else {
+        setErrorMessage('Error: Datos de usuario incompletos.');
+      }
     } catch (error) {
       setErrorMessage('Error al iniciar sesión, intenta de nuevo.');
       console.error('Login Error:', error);

@@ -1,26 +1,29 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext'; // Asegúrate de que esta ruta sea correcta
+import { AuthContext } from '../context/AuthContext';
 import './UserProfile.css';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const UserProfile = () => {
-  const { userRole, logout } = useContext(AuthContext);
-  const [avatar, setAvatar] = useState('/uploads/avatar-default.webp'); // Ruta por defecto
+  const { userRole, logout, userId } = useContext(AuthContext);
+  const [avatar, setAvatar] = useState('/uploads/avatar-default.webp');
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // Petición GET para obtener el avatar actual del usuario desde el backend
   useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/users/avatar', { credentials: 'include' });
-        const data = await response.json();
-        if (data.avatar) setAvatar(data.avatar); // Si hay avatar, lo asigna; si no, queda el default
-      } catch (error) {
-        console.error('Error al obtener el avatar:', error);
-      }
-    };
-    fetchAvatar();
-  }, []);
+    if (userId) {
+      const fetchAvatar = async () => {
+        try {
+          const response = await fetch(`http://localhost:5000/api/users/${userId}/avatar`, { credentials: 'include' });
+          const data = await response.json();
+          if (data.avatar) {
+            setAvatar(`http://localhost:5000/${data.avatar}`);
+          }
+        } catch (error) {
+          console.error('Error al obtener el avatar:', error);
+        }
+      };
+      fetchAvatar();
+    }
+  }, [userId]);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -32,13 +35,15 @@ const UserProfile = () => {
       formData.append('avatar', selectedFile);
 
       try {
-        const response = await fetch('http://localhost:5000/api/users/avatar', {
+        const response = await fetch(`http://localhost:5000/api/users/${userId}/avatar`, {
           method: 'PUT',
           body: formData,
           credentials: 'include',
         });
         const data = await response.json();
-        if (data.user && data.user.avatar) setAvatar(data.user.avatar);
+        if (data.user && data.user.avatar) {
+          setAvatar(`http://localhost:5000/${data.user.avatar}`);
+        }
         alert('Avatar actualizado exitosamente');
       } catch (error) {
         console.error('Error al subir el avatar:', error);
