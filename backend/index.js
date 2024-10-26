@@ -16,9 +16,6 @@ const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const productRoutes = require('./routes/productRoutes');
-
-
 // Configurar CORS
 app.use(cors({
     origin: 'http://localhost:5173', // Cambia esto por el origen de tu frontend
@@ -44,11 +41,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/users/login', userRoutes);
 
 // Rutas para productos
-const productRoutes = require('./routes/productRoutes');
+
 app.use('/api/products', productRoutes);
 
 // Rutas para órdenes
-const orderRoutes = require('./routes/orderRoutes');
 app.use('/api/orders', orderRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/categories', categoryRoutes);
