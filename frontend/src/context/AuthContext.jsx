@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       const decodedToken = decodeToken(token);
       if (decodedToken) {
-        setUserId(decodedToken.id); // Obtener el ID del usuario desde el token
+        setUserId(decodedToken.id);
         setUserRole(decodedToken.role);
         setIsAuthenticated(true);
         setUserAvatar(localStorage.getItem('avatar') || '/uploads/avatar-default.webp');
@@ -55,8 +55,13 @@ export const AuthProvider = ({ children }) => {
     setUserId(null);
   };
 
+  const updateUserAvatar = (newAvatar) => {
+    localStorage.setItem('avatar', newAvatar);
+    setUserAvatar(newAvatar);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userRole, userAvatar, userId, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userRole, userAvatar, userId, login, logout, updateUserAvatar }}>
       {children}
     </AuthContext.Provider>
   );

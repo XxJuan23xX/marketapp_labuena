@@ -4,7 +4,7 @@ import './UserProfile.css';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const UserProfile = () => {
-  const { userRole, logout, userId } = useContext(AuthContext);
+  const { userRole, logout, userId, updateUserAvatar } = useContext(AuthContext);
   const [avatar, setAvatar] = useState('/uploads/avatar-default.webp');
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -29,6 +29,20 @@ const UserProfile = () => {
     setSelectedFile(e.target.files[0]);
   };
 
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      setSelectedFile(file);
+    } else {
+      alert("Por favor, arrastra solo archivos de imagen.");
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
   const handleAvatarUpload = async () => {
     if (selectedFile) {
       const formData = new FormData();
@@ -42,7 +56,9 @@ const UserProfile = () => {
         });
         const data = await response.json();
         if (data.user && data.user.avatar) {
-          setAvatar(`http://localhost:5000/${data.user.avatar}`);
+          const newAvatar = `http://localhost:5000/${data.user.avatar}`;
+          setAvatar(newAvatar);
+          updateUserAvatar(newAvatar); // Actualiza el avatar en AuthContext
         }
         alert('Avatar actualizado exitosamente');
       } catch (error) {
@@ -73,17 +89,20 @@ const UserProfile = () => {
           </div>
           <ul className="menu">
             <li><a href="#personal-info">Información Personal</a></li>
-            <li><a href="#settings">Configuración de Seguridad</a></li>
             <li><a href="#" onClick={logout}>Cerrar Sesión</a></li>
           </ul>
         </div>
         <div className="profile-main">
           <h3>Actualizar Avatar</h3>
-          <div className="upload-preview">
+          <div
+            className="upload-preview"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
             {selectedFile ? (
               <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
             ) : (
-              <p>No se ha seleccionado archivo.</p>
+              <p>Arrastra y suelta una imagen aquí o selecciona un archivo.</p>
             )}
           </div>
           <button onClick={handleAvatarUpload} className="save-button">Guardar Avatar</button>

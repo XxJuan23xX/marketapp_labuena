@@ -68,12 +68,16 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <div className="avatar-container" onClick={toggleMenu}>
-            <img
-              src={userAvatar ? `http://localhost:5000/${userAvatar}` : '/uploads/avatar-default.webp'}
-              alt="User Avatar"
-              className="user-avatar"
-              onError={(e) => { e.target.src = '/uploads/avatar-default.webp'; }} // Fallback si hay error en la carga
-            />
+            {userAvatar ? (
+              <img
+                src={userAvatar}
+                alt="User Avatar"
+                className="user-avatar"
+                onError={(e) => { e.target.src = '/uploads/avatar-default.webp'; }} // Fallback si hay error en la carga
+              />
+            ) : (
+              <div className="user-avatar-placeholder">Cargando...</div>
+            )}
 
             {menuOpen && (
               <div className="dropdown-menu">
