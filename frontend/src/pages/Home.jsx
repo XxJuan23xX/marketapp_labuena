@@ -5,6 +5,7 @@ import AnimatedBackground from "../components/backgroundHome/AnimatedBackground"
 import FirstContentSection from "../components/ContentHome/FirstContentSection";
 import SecondContentSection from "../components/ContentHome/SecondContentSection";
 import MysteryBoxComponent from "../components/MysteryBoxAnimation/MysteryBoxComponent";
+import Footer from "../components/footer/Footer";
 import './Home.css';
 
 const HomePage = () => {
@@ -15,6 +16,7 @@ const HomePage = () => {
       <FirstContentSection />
       <SecondContentSection />
       <MysteryBoxComponent />
+      <Footer />
     </div>
   );
 };

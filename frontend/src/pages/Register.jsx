@@ -8,8 +8,6 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'comprador', // Rol por defecto
-    address: '',
     phone: ''
   });
 
@@ -28,7 +26,7 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/users',  {
+      const response = await fetch('http://localhost:5000/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,8 +35,6 @@ const Register = () => {
           name: user.name,
           email: user.email,
           password: user.password,
-          role: user.role, // Si el usuario selecciona un rol, este campo se envía
-          address: user.address,
           phone: user.phone,
         }),
       });
@@ -78,18 +74,8 @@ const Register = () => {
             <label htmlFor="confirmPassword">Confirm Password</label>
             <input type="password" name="confirmPassword" value={user.confirmPassword} onChange={handleChange} required />
 
-            <label htmlFor="address">Address</label>
-            <input type="text" name="address" value={user.address} onChange={handleChange} required />
-
             <label htmlFor="phone">Phone Number</label>
             <input type="text" name="phone" value={user.phone} onChange={handleChange} required />
-
-            {/* Si quieres que el usuario seleccione un rol, puedes agregar esto */}
-            <label htmlFor="role">Role</label>
-            <select name="role" value={user.role} onChange={handleChange} required>
-              <option value="comprador">Comprador</option>
-              <option value="vendedor">Vendedor</option>
-            </select>
 
             <div className="terms-container">
               <input type="checkbox" id="terms" required />
@@ -100,6 +86,9 @@ const Register = () => {
 
             <button type="submit">REGISTER</button>
           </form>
+          <p>
+            Already have an account? <a href="/login">Login now</a>
+          </p>
         </div>
         <div className="image-section">
           <img src={illustration} alt="Illustration" />

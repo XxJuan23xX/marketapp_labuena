@@ -13,16 +13,9 @@
   to { transform: translateX(0); opacity: 1; }
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(9deg, rgba(68,195,88,1) 0%, rgba(2,0,36,1) 100%);
   font-family: 'Arial', sans-serif;
   animation: fadeIn 1s ease-out;
 }
@@ -37,36 +30,36 @@ body {
 .register-container {
   display: flex;
   width: 80%;
-  max-width: 1000px; /* Reducir el tamaño máximo */
+  max-width: 1000px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  animation: fadeIn 1s ease-out, pulse 2s ease-in-out infinite;
+  animation: fadeIn 1s ease-out; /* Eliminamos el efecto de pulse */
 }
 
 .form-section {
-  padding: 20px; /* Reducir padding */
+  padding: 20px;
   width: 50%;
   animation: slideInLeft 1s ease-out;
 }
 
 .form-section h2 {
-  margin-bottom: 15px; /* Reducir margen inferior */
+  margin-bottom: 15px;
   animation: slideInLeft 1s ease-out 0.2s both;
 }
 
 .form-section label {
   display: block;
-  margin-bottom: 8px; /* Reducir margen inferior */
-  font-size: 0.8rem; /* Reducir tamaño de fuente */
+  margin-bottom: 8px;
+  font-size: 0.8rem;
   animation: slideInLeft 1s ease-out 0.4s both;
 }
 
 .form-section input {
-  width: 90%; /* Reducir ancho */
-  padding: 8px; /* Reducir padding */
-  margin-bottom: 15px; /* Reducir margen inferior */
+  width: 90%;
+  padding: 8px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   transition: all 0.3s ease;
@@ -76,25 +69,25 @@ body {
 .form-section input:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  transform: translateY(-2px); /* Reducir efecto de movimiento */
+  transform: translateY(-2px);
 }
 
 .terms-container {
   display: flex;
   align-items: center;
-  margin-bottom: 15px; /* Reducir margen inferior */
+  margin-bottom: 15px;
   animation: slideInLeft 1s ease-out 0.8s both;
 }
 
 .terms-container input[type="checkbox"] {
-  margin-right: 8px; /* Reducir espacio entre el checkbox y el texto */
-  width: 18px; /* Ajustar tamaño */
+  margin-right: 8px;
+  width: 18px;
   margin-top: 10px;
   cursor: pointer;
 }
 
 .terms-label {
-  font-size: 0.85rem; /* Reducir tamaño de fuente */
+  font-size: 0.85rem;
   width: 300px;
   transition: color 0.3s ease;
 }
@@ -112,7 +105,7 @@ body {
 
 .form-section button {
   width: 100%;
-  padding: 8px; /* Reducir padding */
+  padding: 8px;
   background: linear-gradient(9deg, rgba(68,195,88,1) 0%, rgba(2,0,36,1) 100%);
   color: white;
   border: none;
@@ -124,7 +117,7 @@ body {
 
 .form-section button:hover {
   background-color: #02411a;
-  transform: translateY(-2px); /* Reducir efecto de movimiento */
+  transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
 }
 
@@ -134,8 +127,8 @@ body {
 
 .error {
   color: red;
-  margin-bottom: 15px; /* Reducir margen inferior */
-  font-size: 0.85rem; /* Reducir tamaño de fuente */
+  margin-bottom: 15px;
+  font-size: 0.85rem;
   text-align: center;
   animation: fadeIn 0.5s ease-out;
 }
@@ -151,7 +144,7 @@ body {
 
 .image-section img {
   width: 100%;
-  height: 670px; /* Reducir altura de la imagen */
+  height: 670px;
   transition: transform 0.3s ease;
 }
 

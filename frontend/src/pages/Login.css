@@ -261,3 +261,13 @@ button[type="submit"]:active {
     scroll-behavior: auto !important;
   }
 }
+
+.back-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1.8rem; /* Tamaño del icono */
+  color: white; /* Color del icono */
+  cursor: pointer;
+  z-index: 10;
+}

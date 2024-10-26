@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { FaGoogle, FaFacebookF, FaApple, FaSteam } from 'react-icons/fa';
+import React, { useState, useContext } from 'react';
+import { FaGoogle, FaFacebookF, FaApple, FaSteam, FaArrowLeft } from 'react-icons/fa';
+import { AuthContext } from '../context/AuthContext'; // Asegúrate de que esta ruta sea correcta
 import './Login.css';
 
 const Login = () => {
+  const { login } = useContext(AuthContext); // Usa el contexto de autenticación
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -11,7 +13,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', { // Asegúrate de que la ruta es correcta
+      const response = await fetch('http://localhost:5000/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,14 +28,13 @@ const Login = () => {
       }
 
       const data = await response.json();
-console.log('Login Success:', data);
+      console.log('Login Success:', data);
 
-// Guardar el token en localStorage
-localStorage.setItem('token', data.token);
+      // Asegúrate de pasar también el avatar en la función de login
+      login(data.token, data.user.role.roleName, data.user.avatar);
 
-// Redirigir al dashboard o a la página principal
-window.location.href = '/';
-
+      // Redirigir al dashboard o a la página principal
+      window.location.href = '/';
     } catch (error) {
       setErrorMessage('Error al iniciar sesión, intenta de nuevo.');
       console.error('Login Error:', error);
@@ -42,6 +43,9 @@ window.location.href = '/';
 
   return (
     <div className="login-page">
+      <div>
+        <FaArrowLeft className="back-icon" onClick={() => (window.location.href = '/')} />
+      </div>
       <div className="left-section"></div>
       <div className="right-section">
         <div className="login-form-container">
