@@ -29,10 +29,12 @@ const Footer = () => {
           </ul>
         </div>
         <div className="footer-column">
-          <h4>Join Our Newsletter</h4>
-          <label htmlFor="email">Email:</label>
-          <input type="email" placeholder="lorem@loremipsum.com" />
-          <input type="submit" value="Subscribe" />
+          <h4>Desarrollado por</h4>
+          <ul>
+            <li><a href="https://www.facebook.com/manuel.sima.12" target="_blank" rel="noopener noreferrer">Juan Manuel</a></li>
+            <li><a href="https://www.facebook.com/angelo.romos" target="_blank" rel="noopener noreferrer">Miguel Angel</a></li>
+            <li><a href="https://www.twitch.tv/derrapin" target="_blank" rel="noopener noreferrer">Twitch Derrapin</a></li>
+          </ul>
         </div>
       </div>
     </footer>

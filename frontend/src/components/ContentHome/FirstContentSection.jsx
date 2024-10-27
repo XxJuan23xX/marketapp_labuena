@@ -1,27 +1,48 @@
-// components/FirstContentSection.js
-import React from "react";
-import Img1 from "../../assets/v1.avif";
-import Img2 from "../../assets/v2.webp";
-import Img3 from "../../assets/v3.avif";
+import React, { useState, useEffect } from "react";
+import Img1 from "../../assets/phone.png";
+import Img2 from "../../assets/mario.jpg";
+import Img3 from "../../assets/dino.jpg";
 import "./ContentSection.css";
 
 const FirstContentSection = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const items = [
+    {
+      image: Img1,
+      description: "Celular marca Zero de medio uso pero en buenas condiciones."
+    },
+    {
+      image: Img2,
+      description: "Set de icónicos personajes de la franquicia Mario Bros en excelentes condiciones."
+    },
+    {
+      image: Img3,
+      description: "Dinosaurio de juguete de tamaño chico 30 x 15 cm."
+    }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+    }, 3000); // Cambia cada 3 segundos
+
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
+  }, [items.length]);
+
   return (
     <div className="content-section">
       <h2>Ven y Conoce las Ventas del Momento.</h2>
       <div className="image-grid">
-        <div className="image-item">
-          <img src={Img1} alt="Image 1" />
-          <p>Descripción del producto 1.</p>
-        </div>
-        <div className="image-item">
-          <img src={Img2} alt="Image 2" />
-          <p>Descripción del producto 2.</p>
-        </div>
-        <div className="image-item">
-          <img src={Img3} alt="Image 3" />
-          <p>Descripción del producto 3.</p>
-        </div>
+        {items.map((item, index) => (
+          <div
+            className={`image-item ${index === currentIndex ? "active" : ""}`}
+            key={index}
+          >
+            <img src={item.image} alt={`Image ${index + 1}`} />
+            <p>{item.description}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
