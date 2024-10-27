@@ -54,24 +54,24 @@ const Login = () => {
       <div className="left-section"></div>
       <div className="right-section">
         <div className="login-form-container">
-          <h2>Hello! Welcome back</h2>
+          <h2>Bienvenido de vuelta!</h2>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
           <form onSubmit={handleLogin}>
             <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
-              placeholder="Enter your email"
+              placeholder="Ingresa tu correo"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
 
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Contraseña</label>
             <input
               type="password"
               id="password"
-              placeholder="Enter your password"
+              placeholder="Ingresa tu contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -79,15 +79,15 @@ const Login = () => {
 
             <div className="form-options">
               <label>
-                <input type="checkbox" /> Remember me
+                <input type="checkbox" /> Recuérdame
               </label>
-              <a href="/reset-password">Reset Password!</a>
+              <a href="/reset-password">¿Olvidaste tu contraseña?</a>
             </div>
 
             <button type="submit">Login</button>
 
             <div className="social-login">
-              <p>or</p>
+              <p>o logearse con:</p>
               <div className="social-icons">
                 <button className="icon-button google"><FaGoogle /></button>
                 <button className="icon-button facebook"><FaFacebookF /></button>
@@ -97,7 +97,7 @@ const Login = () => {
             </div>
           </form>
           <p>
-            Don’t have an account? <a href="/register">Create Account</a>
+            ¿No tienes una cuenta? <a href="/register">Créala aquí</a>
           </p>
         </div>
       </div>

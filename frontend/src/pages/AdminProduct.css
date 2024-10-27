@@ -6,7 +6,7 @@
 .productos-content {
     flex-grow: 1;
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: #424599;
   }
   
 .productos-title {
@@ -43,7 +43,7 @@
   }
   
 .productos-table th {
-    background-color: #3B82F6;
+    background-color: #0d1c47;
     color: white;
   }
   
@@ -61,7 +61,7 @@
   }
   
 .details-button:hover {
-    background-color: #1E3A8A;
+    background-color: aqua;
   }
 
   .product-summary {
@@ -70,11 +70,11 @@
     margin-bottom: 20px; /* Espacio debajo de la sección de estadísticas */
     font-size: 1rem;
     font-weight: 500;
-    color: #333;
+    color: #ffffff;
 }
 
 .product-summary span {
     padding: 5px 10px;
-    background-color: #f0f0f0; /* Fondo claro para cada estadística */
+    background-color: #0d1c47; /* Fondo claro para cada estadística */
     border-radius: 5px;
 }

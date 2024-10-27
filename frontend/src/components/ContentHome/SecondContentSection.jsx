@@ -8,19 +8,19 @@ import "./ContentSection.css";
 const SecondContentSection = () => {
   return (
     <div className="content-section">
-      <h2>Explore the New World... Dive Deeper.</h2>
+      <h2>La Subastas del Momento.</h2>
       <div className="image-grid">
         <div className="image-item">
           <img src={Img1} alt="Image 1" />
-          <p>Discover the hidden secrets of New Eden.</p>
+          <p>Descripción del producto 4.</p>
         </div>
         <div className="image-item">
           <img src={Img2} alt="Image 2" />
-          <p>Meet the Animus Creatures.</p>
+          <p>Descripción del producto 5.</p>
         </div>
         <div className="image-item">
           <img src={Img3} alt="Image 3" />
-          <p>Witness the Evolution of Humanity.</p>
+          <p>Descripción del producto 6.</p>
         </div>
       </div>
     </div>

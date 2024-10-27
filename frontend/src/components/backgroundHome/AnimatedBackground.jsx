@@ -26,9 +26,9 @@ const AnimatedBackground = () => {
     <div className={`animated-background ${shrinkBackground ? "shrink" : ""}`}>
       <img src={backgroundImage} alt="Background" className="background-img" />
       <div className="text-container">
-        <h1 className="main-title">KEEP. PROTECT. REIMAGINE.</h1>
+        <h1 className="main-title">MARKETAPP MX.</h1>
         <p className="subtext">
-          KPR is a brand that focuses on collective narrative and empowering storytellers.
+          Hechos para darle una segunda vida a tus productos.
         </p>
       </div>
     </div>

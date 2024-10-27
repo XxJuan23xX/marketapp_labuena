@@ -16,17 +16,16 @@ const Footer = () => {
         <div className="footer-column">
           <h4>Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Sobre Nosotros</a></li>
+            <li><a href="#">Contacto</a></li>
           </ul>
         </div>
         <div className="footer-column">
-          <h4>Contact Us</h4>
+          <h4>Contáctanos</h4>
           <ul>
-            <li><a href="#">Email: lorem@loremipsum.com</a></li>
-            <li><a href="#">Phone: +1 123 4567890</a></li>
+            <li><a href="#">Email: 23090467@alumno.utmetropolitana.com.mx</a></li>
+            <li><a href="#">Phone: +52 9995406380</a></li>
           </ul>
         </div>
         <div className="footer-column">
