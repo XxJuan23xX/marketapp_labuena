@@ -150,3 +150,24 @@ exports.getAvatar = async (req, res) => {
     }
   };
   
+  // Obtener el número total de clientes
+  exports.getTotalClientes = async (req, res) => {
+    try {
+        const totalClientes = await User.countDocuments(); // Cuenta todos los documentos en la colección de usuarios
+        res.status(200).json({ total: totalClientes });
+    } catch (error) {
+        res.status(500).json({ error: 'Error obteniendo el total de clientes: ' + error.message });
+    }
+};
+
+// Obtener los últimos 3 usuarios agregados
+exports.getLatestUsers = async (req, res) => {
+    try {
+      const latestUsers = await User.find().sort({ createdAt: -1 }).limit(3);
+      res.status(200).json(latestUsers);
+    } catch (error) {
+      res.status(500).json({ error: 'Error obteniendo los últimos usuarios: ' + error.message });
+    }
+  };
+
+  

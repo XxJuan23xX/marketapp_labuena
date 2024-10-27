@@ -71,7 +71,7 @@ const Navbar = () => {
           )}
         </ul>
 
-        <input type="text" placeholder="Buscar productos..." className="search-bar" />
+        <input type="text" placeholder="Buscar productos..." className="search-bar1" />
 
         {userRole !== 'admin' && (
           <>

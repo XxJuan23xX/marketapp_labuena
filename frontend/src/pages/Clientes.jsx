@@ -1,55 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
+import axios from 'axios';
 import './Clientes.css';
 
-const clientesData = [
-  { id: 1, nombre: 'Juan Perez', email: 'juan.perez@example.com', fechaRegistro: '2023-01-01', estado: 'Activo' },
-  { id: 2, nombre: 'Ana Gomez', email: 'ana.gomez@example.com', fechaRegistro: '2023-02-15', estado: 'Activo' },
-  { id: 3, nombre: 'Carlos Lopez', email: 'carlos.lopez@example.com', fechaRegistro: '2023-03-10', estado: 'Inactivo' },
-  // Añade más clientes si es necesario
-];
-
 const Clientes = () => {
+  const [clientes, setClientes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredClientes, setFilteredClientes] = useState(clientesData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCliente, setSelectedCliente] = useState(null);
+  const clientsPerPage = 10;
 
-  const clientesPerPage = 10;
+  useEffect(() => {
+    const fetchClientes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/users');
+        setClientes(response.data);
+      } catch (error) {
+        console.error("Error al obtener los clientes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchClientes();
+  }, []);
 
-  // Filtrar clientes por término de búsqueda
-  const handleSearch = (event) => {
-    const term = event.target.value.toLowerCase();
-    setSearchTerm(term);
-    setFilteredClientes(
-      clientesData.filter(
-        cliente =>
-          cliente.nombre.toLowerCase().includes(term) ||
-          cliente.email.toLowerCase().includes(term)
-      )
-    );
+  // Filtrar clientes según el término de búsqueda
+  const filteredClients = clientes.filter(client =>
+    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    client.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Calcular paginación
+  const indexOfLastClient = currentPage * clientsPerPage;
+  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+  const currentClients = filteredClients.slice(indexOfFirstClient, indexOfLastClient);
+  const totalPages = Math.ceil(filteredClients.length / clientsPerPage);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Resetear a la primera página en cada nueva búsqueda
   };
-
-  // Paginación
-  const indexOfLastCliente = currentPage * clientesPerPage;
-  const indexOfFirstCliente = indexOfLastCliente - clientesPerPage;
-  const currentClientes = filteredClientes.slice(indexOfFirstCliente, indexOfLastCliente);
-  const totalPages = Math.ceil(filteredClientes.length / clientesPerPage);
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Modal de detalles
-  const handleVerDetalles = (cliente) => setSelectedCliente(cliente);
 
   return (
     <div className="clientes-container">
       <Sidebar />
       <div className="clientes-content">
         <h1 className="clientes-title">Clientes</h1>
-
-        {/* Barra de búsqueda */}
         <div className="search-bar">
-          <label>Buscar cliente: </label>
           <input
             type="text"
             placeholder="Nombre o Email"
@@ -57,64 +54,62 @@ const Clientes = () => {
             onChange={handleSearch}
           />
         </div>
-
-        {/* Tabla de clientes */}
-        <table className="clientes-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Fecha de Registro</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentClientes.map((cliente) => (
-              <tr key={cliente.id}>
-                <td>{cliente.id}</td>
-                <td>{cliente.nombre}</td>
-                <td>{cliente.email}</td>
-                <td>{cliente.fechaRegistro}</td>
-                <td className={cliente.estado.toLowerCase()}>{cliente.estado}</td>
-                <td>
-                  <button className="action-button view-button" onClick={() => handleVerDetalles(cliente)}>Ver Detalles</button>
-                  <button className="action-button toggle-button">{cliente.estado === 'Activo' ? 'Desactivar' : 'Activar'}</button>
-                  <button className="action-button delete-button">Eliminar</button>
-                </td>
+        {loading ? (
+          <p>Cargando clientes...</p>
+        ) : currentClients.length === 0 ? (
+          <p>Aún no se han registrado clientes...</p>
+        ) : (
+          <table className="clientes-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Avatar</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Fecha de Registro</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
+            </thead>
+            <tbody>
+              {currentClients.map((client, index) => (
+                <tr key={index}>
+                  <td>{indexOfFirstClient + index + 1}</td>
+                  <td>
+                    <img
+                      src={`http://localhost:5000/${client.avatar}`}
+                      alt="Avatar"
+                      className="avatar-img"
+                    />
+                  </td>
+                  <td>{client.name}</td>
+                  <td>{client.email}</td>
+                  <td>{new Date(client.created_at).toLocaleDateString()}</td>
+                  <td>{client.active ? "Activo" : "Inactivo"}</td>
+                  <td>
+                    <button className="action-button view-button">Ver Detalles</button>
+                    <button className={`action-button toggle-button ${client.active ? 'button-deactivate' : 'button-activate'}`}>
+                      {client.active ? "Desactivar" : "Activar"}
+                    </button>
+                    <button className="action-button delete-button">Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
         {/* Paginación */}
         <div className="pagination">
-          {[...Array(totalPages).keys()].map((page) => (
+          {Array.from({ length: totalPages }, (_, i) => (
             <button
-              key={page}
-              className={`page-button ${currentPage === page + 1 ? 'active' : ''}`}
-              onClick={() => handlePageChange(page + 1)}
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`page-button ${currentPage === i + 1 ? 'active' : ''}`}
             >
-              {page + 1}
+              {i + 1}
             </button>
           ))}
         </div>
-
-        {/* Modal de detalles */}
-        {selectedCliente && (
-          <div className="modal">
-            <div className="modal-content">
-              <h2>Detalles del Cliente</h2>
-              <p>ID: {selectedCliente.id}</p>
-              <p>Nombre: {selectedCliente.nombre}</p>
-              <p>Email: {selectedCliente.email}</p>
-              <p>Fecha de Registro: {selectedCliente.fechaRegistro}</p>
-              <p>Estado: {selectedCliente.estado}</p>
-              <button onClick={() => setSelectedCliente(null)}>Cerrar</button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

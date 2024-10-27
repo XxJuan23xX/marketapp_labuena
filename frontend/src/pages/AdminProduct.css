@@ -63,3 +63,18 @@
 .details-button:hover {
     background-color: #1E3A8A;
   }
+
+  .product-summary {
+    display: flex;
+    gap: 20px; /* Espacio entre cada estadística */
+    margin-bottom: 20px; /* Espacio debajo de la sección de estadísticas */
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.product-summary span {
+    padding: 5px 10px;
+    background-color: #f0f0f0; /* Fondo claro para cada estadística */
+    border-radius: 5px;
+}

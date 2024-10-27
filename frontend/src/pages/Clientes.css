@@ -33,7 +33,7 @@
 .clientes-table th, .clientes-table td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
-    text-align: left;
+    text-align: center;
 }
 
 .clientes-table th {
@@ -109,3 +109,11 @@
     width: 300px;
     text-align: left;
 }
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
