@@ -81,7 +81,7 @@ const Navbar = () => {
             <div className="heart-icon">
               <AiOutlineHeart />
             </div>
-            <button className="sell-button">
+            <button className="sell-button" >
               <FaStore className="sell-icon" /> Vender
             </button>
           </>

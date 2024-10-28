@@ -14,6 +14,18 @@ import Pedidos from './pages/Pedidos';
 import Clientes from './pages/Clientes';
 import Productos from './pages/AdminProduct';
 
+import Subastas from './pages/Subastas';
+import DetailsSubastas from './pages/DetailsSubasts';
+import CrearSubasta from './pages/CrearSubasta';
+import AllProducts from './pages/AllProducts';
+
+
+
+
+
+
+
+
 const App = () => {
   return (
     <AuthProvider>
@@ -29,6 +41,42 @@ const App = () => {
         <Route path="/products" element={<Products />}/>
 
         <Route path="/createproducts" element={<CreateProduccion/>}/>
+
+
+
+
+        <Route path="/subastasderrapin" element={<Subastas/>}/>
+
+
+        <Route path="/detailsderrapin" element={<DetailsSubastas/>}/>
+
+
+        <Route path="/crearderrapin" element={<CrearSubasta/>}/>
+
+
+        <Route path="/allderrapin" element={<AllProducts/>}/>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
         {/* Otras rutas pueden ir aquí */}
           {/* Ruta para la página de register */}
