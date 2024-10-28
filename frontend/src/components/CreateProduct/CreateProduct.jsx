@@ -86,8 +86,8 @@ const CreateProduct = () => {
 
   return (
     <div className="create-product-container">
-      <button className="back-button" onClick={() => navigate('/productos')}>
-        <FaArrowLeft /> Regresar a Productos
+      <button className="back-button" onClick={() => navigate('/')}>
+        <FaArrowLeft /> Regresar a la página principal
       </button>
 
       <div className="create-product-container">

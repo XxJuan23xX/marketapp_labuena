@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import {AuthProvider} from './context/AuthContext'; // Asegúrate de que la ruta a AuthContext sea correcta
-//import { UserProductsProvider } from './context/UserProductsContext';
+import { AuthProvider } from './context/AuthContext';
 import { UserProductsProvider } from './context/UserProductsContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -13,36 +12,41 @@ import Dashboard from './pages/Dashboard';
 import Pedidos from './pages/Pedidos';
 import Clientes from './pages/Clientes';
 import Productos from './pages/AdminProduct';
+import ProtectedRoute from './components/RutasAdmin/ProtectedRoute';
 
 const App = () => {
   return (
     <AuthProvider>
       <UserProductsProvider>
-      <Router>
-        <Routes>
-          {/* Ruta para el home */}
-          <Route path="/" element={<Home />} />
-          
-          {/* Ruta para la página de login */}
-          <Route path="/login" element={<Login />} />
-
-        <Route path="/products" element={<Products />}/>
-
-        <Route path="/createproducts" element={<CreateProduccion/>}/>
-        
-        {/* Otras rutas pueden ir aquí */}
-          {/* Ruta para la página de register */}
-          <Route path="/register" element={<Register />} />
-          
-          {/* Otras rutas pueden ir aquí */}
-          <Route path="/Account" element={<UserProfile />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Pedidos" element={<Pedidos />} />
-          <Route path="/Clientes" element={<Clientes />} />
-          <Route path="/Productos" element={<Productos />} />
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/createproducts" element={<CreateProduccion />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/Account" element={<UserProfile />} />
+            
+            {/* Rutas protegidas para administrador */}
+            <Route 
+              path="/Dashboard" 
+              element={<ProtectedRoute component={Dashboard} />} 
+            />
+            <Route 
+              path="/Pedidos" 
+              element={<ProtectedRoute component={Pedidos} />} 
+            />
+            <Route 
+              path="/Clientes" 
+              element={<ProtectedRoute component={Clientes} />} 
+            />
+            <Route 
+              path="/Productos" 
+              element={<ProtectedRoute component={Productos} />} 
+            />
           </Routes>
-          </Router>
-          </UserProductsProvider>
+        </Router>
+      </UserProductsProvider>
     </AuthProvider>
   );
 };
