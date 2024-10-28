@@ -3,14 +3,14 @@ import './CreateProduct.css';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { UserProductsContext } from '../../context/UserProductsContext';
-import axios from 'axios';
+import api from '../../../api'; // Cambiamos a `api`
 
 const CreateProduct = () => {
   const { addProduct } = useContext(UserProductsContext); // Accede a la función addProduct del contexto
   const [product, setProduct] = useState({
     name: '',
     description: '',
-    category: '', // Cambiamos esto a un select
+    category: '',
     images: [],
     type: 'venta',
     price: '',
@@ -20,7 +20,7 @@ const CreateProduct = () => {
     auctionEndTime: '',
   });
 
-  const [categories, setCategories] = useState([]); // Almacena las categorías
+  const [categories, setCategories] = useState([]); 
   const [imagePreviews, setImagePreviews] = useState([]);
   const [mainImage, setMainImage] = useState(null);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const CreateProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/categories'); // URL de tu endpoint de categorías
+        const response = await api.get('/categories'); // usa `api` para la solicitud
         setCategories(response.data);
       } catch (error) {
         console.error("Error al obtener las categorías:", error);
@@ -78,10 +78,8 @@ const CreateProduct = () => {
       }
     });
 
-    // Llama a la función addProduct del contexto para agregar el producto
-    await addProduct(formData);
+    await addProduct(formData); // Usa addProduct del contexto para enviar el producto
 
-    // Redirigir o limpiar el formulario después de agregar el producto
     setProduct({
       name: '',
       description: '',
@@ -185,15 +183,6 @@ const CreateProduct = () => {
                 required
                 className="create-product-input"
               />
-
-              <label className="create-product-label">Descuento:</label>
-              <input
-                type="number"
-                name="discount"
-                value={product.discount}
-                onChange={handleChange}
-                className="create-product-input"
-              />
             </>
           )}
 
@@ -232,14 +221,25 @@ const CreateProduct = () => {
           )}
 
           <label className="create-product-label">Imágenes:</label>
-          <input
-            type="file"
-            name="images"
-            onChange={handleFileChange}
-            multiple
-            accept="image/*"
-            className="create-product-file-input"
-          />
+          <div className="file-input-container">
+            <input
+              type="file"
+              name="images"
+              onChange={handleFileChange}
+              multiple
+              accept="image/*"
+              className="create-product-file-input"
+              id="file"
+            />
+            <label htmlFor="file" className="file-input-label">
+              Elegir archivos
+            </label>
+            <span className="file-selected">
+              {product.images.length > 0
+                ? `${product.images.length} archivo(s) seleccionado(s)`
+                : "Ningún archivo seleccionado"}
+            </span>
+          </div>
 
           <button type="submit" className="createbotonazo">Crear Producto</button>
         </form>

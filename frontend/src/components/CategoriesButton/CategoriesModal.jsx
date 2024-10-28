@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../api'; // Cambia a `api`
 import './CategoriesModal.css';
 
 const CategoriesModal = ({ closeModal }) => {
@@ -10,7 +10,7 @@ const CategoriesModal = ({ closeModal }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/categories'); // Cambia la URL según tu API
+        const response = await api.get('/categories'); // Usamos `api` en lugar de `axios`
         setCategories(response.data);
       } catch (error) {
         console.error("Error al obtener las categorías:", error);
@@ -21,12 +21,12 @@ const CategoriesModal = ({ closeModal }) => {
 
   // Función para agregar una nueva categoría
   const handleAddCategory = async () => {
-    if (newCategory.trim() === '') return; // Validación básica
+    if (newCategory.trim() === '') return;
 
     try {
-      await axios.post('http://localhost:5000/api/categories', { name: newCategory });
-      setCategories(prevCategories => [...prevCategories, { name: newCategory }]); // Añade la nueva categoría a la lista
-      setNewCategory(''); // Limpia el campo de entrada
+      await api.post('/categories', { name: newCategory }); // Usamos `api` en lugar de `axios`
+      setCategories((prevCategories) => [...prevCategories, { name: newCategory }]);
+      setNewCategory('');
     } catch (error) {
       console.error("Error al agregar la categoría:", error);
     }

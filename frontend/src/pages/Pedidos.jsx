@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
-import axios from 'axios';
+import api from '../../api'; // Importar `api` en lugar de `axios`
 import './Pedidos.css';
 
 const Pedidos = () => {
@@ -10,7 +10,7 @@ const Pedidos = () => {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/orders');
+        const response = await api.get('/orders');
         setPedidos(response.data);
       } catch (error) {
         console.error("Error al obtener los pedidos:", error);

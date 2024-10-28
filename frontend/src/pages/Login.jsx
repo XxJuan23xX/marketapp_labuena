@@ -11,7 +11,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:5000/api/users/login', {
         method: 'POST',
@@ -20,32 +20,34 @@ const Login = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         setErrorMessage(errorData.error || 'Login failed');
         return;
       }
-
+  
       const data = await response.json();
-      console.log('Login Success:', data);
-
-      // Asegúrate de que el backend esté devolviendo `avatar` correctamente.
-      if (data.token && data.user && data.user.role && data.user.avatar) {
-        // Pasar `token`, `role`, y `avatar` al contexto de autenticación
-        login(data.token, data.user.role.roleName, data.user.avatar);
-
-        // Redirigir al dashboard o a la página principal
+      console.log('Datos recibidos:', data); // Log adicional para ver la respuesta completa
+  
+      // Verificar que se reciban `token` y `user`
+      if (data.token && data.user) {
+        // Llama a la función `login` con `token` y `avatar` desde `user`
+        login(data.token, data.token, data.user.avatar || '/uploads/avatar-default.webp'); // Usa el token para ambos y un avatar por defecto si no existe
+  
+        // Redirige al dashboard o a la página principal
         window.location.href = '/';
       } else {
         setErrorMessage('Error: Datos de usuario incompletos.');
+        console.error('Datos de usuario incompletos:', data); // Log adicional en caso de error
       }
     } catch (error) {
       setErrorMessage('Error al iniciar sesión, intenta de nuevo.');
       console.error('Login Error:', error);
     }
   };
-
+  
+  
   return (
     <div className="login-page">
       <div>

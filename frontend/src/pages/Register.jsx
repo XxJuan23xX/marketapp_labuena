@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Register.css';
 import illustration from '../assets/registro.png';
+import api from '../../api'; // Importar `api` en lugar de usar fetch directamente
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -26,32 +27,18 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: user.name,
-          email: user.email,
-          password: user.password,
-          phone: user.phone,
-        }),
+      const response = await api.post('/users', {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        phone: user.phone,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setErrorMessage(errorData.error || 'Error creando el usuario');
-        return;
-      }
-
-      const data = await response.json();
-      console.log('Usuario creado:', data);
-
+      console.log('Usuario creado:', response.data);
       // Redirigir al login después del registro exitoso
       window.location.href = '/login';
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(error.response?.data?.error || 'Error creando el usuario');
     }
   };
 

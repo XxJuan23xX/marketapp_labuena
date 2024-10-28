@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Chart, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import axios from 'axios';
+import api from '../../../api'; // Usamos `api` en lugar de `axios`
 import './SalesChart.css';
 
 Chart.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
@@ -13,7 +13,7 @@ const SalesChart = () => {
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/orders/monthly-sales');
+        const response = await api.get('/orders/monthly-sales'); // Usamos `api` para la solicitud
         setSalesData(response.data || []);
         setIsLoading(false);
       } catch (error) {
@@ -30,15 +30,15 @@ const SalesChart = () => {
   }
 
   const data = {
-    labels: salesData && salesData.length > 0 ? salesData.map(item => item.month) : ["Sin datos"],
+    labels: salesData.length > 0 ? salesData.map(item => item.month) : ["Sin datos"],
     datasets: [
       {
         label: 'Ventas Mensuales',
-        data: salesData && salesData.length > 0 ? salesData.map(item => item.totalSales) : [0],
+        data: salesData.length > 0 ? salesData.map(item => item.totalSales) : [0],
         fill: false,
         borderColor: '#3B82F6',
         tension: 0.1,
-        pointRadius: 3, // Tamaño ajustado de los puntos en el gráfico
+        pointRadius: 3,
       }
     ]
   };
@@ -67,7 +67,7 @@ const SalesChart = () => {
           }
         },
         ticks: {
-          maxRotation: 0, // Evita que las etiquetas se inclinen
+          maxRotation: 0,
           font: {
             size: 10
           }

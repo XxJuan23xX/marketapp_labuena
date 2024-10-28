@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
 import { FaDollarSign, FaBox, FaUser } from 'react-icons/fa';
 import './Dashboard.css';
-import axios from 'axios';
-import SalesChart from '../components/SalesChart/SalesChart'; // Importar el componente de gráfica
+import api from '../../api'; // Importar `api` en lugar de `axios`
+import SalesChart from '../components/SalesChart/SalesChart';
 
 const Dashboard = () => {
   const [ganancias, setGanancias] = useState(0);
@@ -18,7 +18,7 @@ const Dashboard = () => {
   useEffect(() => {
     const obtenerGanancias = async () => {
       try {
-        const response = await axios.get('/api/orders/ganancias');
+        const response = await api.get('/orders/ganancias');
         setGanancias(response.data.total || 0);
         setCambioPorcentual(response.data.cambioPorcentual || 0);
       } catch (error) {
@@ -28,7 +28,7 @@ const Dashboard = () => {
 
     const obtenerProductosVendidos = async () => {
       try {
-        const response = await axios.get('/api/orders/productos-vendidos');
+        const response = await api.get('/orders/productos-vendidos');
         setProductosVendidos(response.data.total || 0);
         setCambioProductos(response.data.cambioPorcentual || 0);
       } catch (error) {
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
     const obtenerClientes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users/count');
+        const response = await api.get('/users/count');
         setClientes(response.data.total || 0);
         setCambioClientes(response.data.cambioPorcentual || 0); 
       } catch (error) {
@@ -48,7 +48,7 @@ const Dashboard = () => {
 
     const obtenerClientesRecientes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users/latest');
+        const response = await api.get('/users/latest');
         setLatestUsers(response.data);
       } catch (error) {
         console.error("Error al obtener los últimos clientes:", error);
@@ -57,7 +57,7 @@ const Dashboard = () => {
 
     const obtenerUltimosProductosVendidos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/orders/last-sold-products');
+        const response = await api.get('/orders/last-sold-products');
         setLastSoldProducts(response.data);
       } catch (error) {
         console.error("Error al obtener los últimos productos vendidos:", error);
@@ -110,7 +110,7 @@ const Dashboard = () => {
             <button className="record-button">Tap to record →</button>
           </div>
           <div className="additional-card">
-            <SalesChart /> {/* Agregar la gráfica de ventas mensuales */}
+            <SalesChart />
           </div>
         </div>
 
