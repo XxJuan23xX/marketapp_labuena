@@ -9,7 +9,8 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Asigna el payload del token (userId) a req.user
+    console.log("Decoded token:", decoded); // Verifica el contenido del token
+    req.user = decoded; // Debería contener { id, role }
     next();
   } catch (error) {
     res.status(401).json({ message: 'Token is not valid' });
