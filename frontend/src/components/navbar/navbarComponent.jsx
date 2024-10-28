@@ -17,7 +17,10 @@ const decryptText = (element, originalText) => {
         return letters[Math.floor(Math.random() * letters.length)];
       })
       .join('');
-    if (iterations >= originalText.length) clearInterval(interval);
+    if (iterations >= originalText.length) {
+      clearInterval(interval);
+      element.innerHTML = originalText;
+    }
     iterations += 1 / 3;
   }, 20);
 };
@@ -25,7 +28,8 @@ const decryptText = (element, originalText) => {
 const Navbar = () => {
   const { isAuthenticated, userRole, userId, logout } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [avatar, setAvatar] = useState('/uploads/avatar-default.webp'); // Avatar por defecto
+  const [avatar, setAvatar] = useState('/uploads/avatar-default.webp');
+  const [isVendedorMode, setIsVendedorMode] = useState(false);
 
   useEffect(() => {
     const fetchAvatar = async () => {
@@ -50,24 +54,36 @@ const Navbar = () => {
   useEffect(() => {
     const links = document.querySelectorAll('.navbar-links a');
     links.forEach(link => {
-      const originalText = link.dataset.originalText;
+      const originalText = link.getAttribute('data-original-text');
       link.addEventListener('mouseover', () => decryptText(link, originalText));
     });
-  }, [userRole]);
+  }, [isVendedorMode]); // Aplicamos el efecto solo cuando cambia el modo vendedor
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
+
+  const toggleVendedorMode = () => setIsVendedorMode(!isVendedorMode);
 
   return (
     <div className="navbar-container">
       <nav className="navbar">
         <ul className="navbar-links">
           <li><a href="/" data-original-text="Inicio">Inicio</a></li>
-          <li><a href="/products" data-original-text="Productos">Productos</a></li>
-          {userRole === 'admin' ? (
-            <li><a href="/Dashboard" data-original-text="Dashboard">Dashboard</a></li>
+          
+          {isVendedorMode ? (
+            <>
+              <li><a href="/mis-productos" data-original-text="Mis Productos">Mis Productos</a></li>
+              <li><a href="/ventas" data-original-text="Ventas">Ventas</a></li> {/* Texto fijo "Ventas" */}
+            </>
           ) : (
-            <li><a href="#" data-original-text="Historial">Historial</a></li>
+            <>
+              <li><a href="/products" data-original-text="Productos">Productos</a></li>
+              {userRole === 'admin' ? (
+                <li><a href="/Dashboard" data-original-text="Dashboard">Dashboard</a></li>
+              ) : (
+                <li><a href="#" data-original-text="Historial">Historial</a></li>
+              )}
+            </>
           )}
         </ul>
 
@@ -75,14 +91,18 @@ const Navbar = () => {
 
         {userRole !== 'admin' && (
           <>
-            <div className="cart-icon">
-              <FaShoppingCart />
-            </div>
-            <div className="heart-icon">
-              <AiOutlineHeart />
-            </div>
-            <button className="sell-button" >
-              <FaStore className="sell-icon" /> Vender
+            {!isVendedorMode && (
+              <>
+                <div className="cart-icon">
+                  <FaShoppingCart />
+                </div>
+                <div className="heart-icon">
+                  <AiOutlineHeart />
+                </div>
+              </>
+            )}
+            <button className="sell-button" onClick={toggleVendedorMode}>
+              <FaStore className="sell-icon" /> {isVendedorMode ? "Comprar" : "Vender"}
             </button>
           </>
         )}
