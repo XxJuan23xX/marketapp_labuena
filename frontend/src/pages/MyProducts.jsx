@@ -62,12 +62,18 @@ const MyProducts = () => {
     }
   };
 
-  const handleToggleStatus = async (productId, newStatus) => {
+  const handleToggleStatus = async (productId, currentStatus) => {
     try {
+      // Alterna el valor del estado actual
+      const newStatus = !currentStatus;
+  
       const response = await api.patch(`/products/${productId}/status`, { isActive: newStatus });
+      
+      // Actualiza el estado del producto en el frontend
       setProducts(products.map(product => 
         product._id === productId ? { ...product, isActive: newStatus } : product
       ));
+  
       console.log("Product status updated:", productId, newStatus);
     } catch (error) {
       console.error("Error al cambiar estado del producto:", error);
@@ -123,24 +129,34 @@ const MyProducts = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredProducts.map((product) => (
-                <tr key={product._id}>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.isActive ? 'Activo' : 'Inactivo'}</td>
-                  <td>
-                    <Link to={`/edit-product/${product._id}`} className="action-button">Editar</Link>
-                    <button className="action-button delete" onClick={() => handleDelete(product._id)}>Eliminar</button>
-                    <button 
-                      className={`action-button ${product.isActive ? 'deactivate' : 'activate'}`} 
-                      onClick={() => handleToggleStatus(product._id, product.isActive)}
-                    >
-                      {product.isActive ? 'Desactivar' : 'Activar'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {filteredProducts.map((product) => (
+    <tr key={product._id}>
+      <td>{product.name}</td>
+      <td>${product.price}</td>
+      <td>{product.isActive ? 'Activo' : 'Inactivo'}</td>
+      <td>
+        <Link to={`/edit-product/${product._id}`} className="action-button">Editar</Link>
+        <button className="action-button delete" onClick={() => handleDelete(product._id)}>Eliminar</button>
+        {product.isActive ? (
+          <button
+            className="action-button deactivate"
+            onClick={() => handleToggleStatus(product._id, product.isActive)}
+          >
+            Desactivar
+          </button>
+        ) : (
+          <button
+            className="action-button activate"
+            onClick={() => handleToggleStatus(product._id, product.isActive)}
+          >
+            Activar
+          </button>
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </table>
         )}
       </div>
