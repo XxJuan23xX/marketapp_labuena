@@ -24,7 +24,7 @@ import AllProducts from './pages/AllProducts';
 
 
 
-import ProtectedRoute from './components/RutasAdmin/ProtectedRoute';
+import ProtectedRoute from './components/RutasAdmin/ProtectedRoute'; // Asegúrate que la ruta sea correcta
 
 const App = () => {
   return (
@@ -75,23 +75,11 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/Account" element={<UserProfile />} />
             
-            {/* Rutas protegidas para administrador */}
-            <Route 
-              path="/Dashboard" 
-              element={<ProtectedRoute component={Dashboard} />} 
-            />
-            <Route 
-              path="/Pedidos" 
-              element={<ProtectedRoute component={Pedidos} />} 
-            />
-            <Route 
-              path="/Clientes" 
-              element={<ProtectedRoute component={Clientes} />} 
-            />
-            <Route 
-              path="/Productos" 
-              element={<ProtectedRoute component={Productos} />} 
-            />
+            {/* Rutas protegidas */}
+            <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />
+            <Route path="/Pedidos" element={<ProtectedRoute component={Pedidos} />} />
+            <Route path="/Clientes" element={<ProtectedRoute component={Clientes} />} />
+            <Route path="/Productos" element={<ProtectedRoute component={Productos} />} />
           </Routes>
         </Router>
       </UserProductsProvider>

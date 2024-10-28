@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
 import axios from 'axios';
+import CategoriesModal from '../components/CategoriesButton/CategoriesModal'; // Asegúrate de que la ruta es correcta
 import './AdminProduct.css';
 
 const Productos = () => {
@@ -8,7 +9,10 @@ const Productos = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const productsPerPage = 10;
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -46,11 +50,19 @@ const Productos = () => {
       <Sidebar />
       <div className="productos-content">
         <h1 className="productos-title">Productos</h1>
+        
         <div className="product-summary">
           <span>Total de Productos: {productos.length}</span>
           <span>Productos Activos: {productos.filter(product => product.active).length}</span>
           <span>Productos Inactivos: {productos.filter(product => !product.active).length}</span>
         </div>
+        
+        <div className="actions">
+          <button onClick={toggleModal} className="categories-button">
+            Categorías
+          </button>
+        </div>
+
         <div className="search-bar">
           <input
             type="text"
@@ -59,6 +71,7 @@ const Productos = () => {
             onChange={handleSearch}
           />
         </div>
+        
         {loading ? (
           <p>Cargando productos...</p>
         ) : currentProducts.length === 0 ? (
@@ -95,6 +108,7 @@ const Productos = () => {
             </tbody>
           </table>
         )}
+        
         {/* Paginación */}
         <div className="pagination">
           {Array.from({ length: totalPages }, (_, i) => (
@@ -107,6 +121,9 @@ const Productos = () => {
             </button>
           ))}
         </div>
+
+        {/* Modal de categorías */}
+        {isModalOpen && <CategoriesModal closeModal={toggleModal} />}
       </div>
     </div>
   );

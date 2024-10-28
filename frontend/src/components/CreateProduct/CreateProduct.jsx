@@ -1,16 +1,16 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './CreateProduct.css';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { UserProductsContext } from '../../context/UserProductsContext';
-
+import axios from 'axios';
 
 const CreateProduct = () => {
   const { addProduct } = useContext(UserProductsContext); // Accede a la función addProduct del contexto
   const [product, setProduct] = useState({
     name: '',
     description: '',
-    category: '',
+    category: '', // Cambiamos esto a un select
     images: [],
     type: 'venta',
     price: '',
@@ -20,9 +20,23 @@ const CreateProduct = () => {
     auctionEndTime: '',
   });
 
+  const [categories, setCategories] = useState([]); // Almacena las categorías
   const [imagePreviews, setImagePreviews] = useState([]);
   const [mainImage, setMainImage] = useState(null);
   const navigate = useNavigate();
+
+  // Obtener categorías desde el backend
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/categories'); // URL de tu endpoint de categorías
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error al obtener las categorías:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -133,14 +147,20 @@ const CreateProduct = () => {
           />
 
           <label className="create-product-label">Categoría:</label>
-          <input
-            type="text"
+          <select
             name="category"
             value={product.category}
             onChange={handleChange}
             required
-            className="create-product-input"
-          />
+            className="create-product-select"
+          >
+            <option value="">Selecciona una categoría</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </select>
 
           <label className="create-product-label">Tipo de Producto:</label>
           <select 

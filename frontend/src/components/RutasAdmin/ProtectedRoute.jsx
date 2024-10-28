@@ -4,19 +4,24 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 const ProtectedRoute = ({ component: Component }) => {
-  const { user } = useContext(AuthContext);
+  const { isAuthenticated, userRole } = useContext(AuthContext);
 
-  // Si no hay usuario autenticado, redirigir a /login
-  if (!user) {
+  // Si aún no se ha determinado la autenticación, no renderizar nada
+  if (isAuthenticated === null || userRole === null) {
+    return null; // O bien, puedes mostrar un "loading" temporal aquí si prefieres
+  }
+
+  // Si no está autenticado, redirigir a /login
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Si está autenticado pero no es admin, redirigir a /
+  if (isAuthenticated && userRole !== 'admin') {
     return <Navigate to="/" replace />;
   }
 
-  // Si el usuario está autenticado pero no es administrador, redirigir a /
-  if (user && user.role !== 'admin') {
-    return <Navigate to="/" replace />;
-  }
-
-  // Si el usuario es administrador, mostrar el componente protegido
+  // Si es admin y está autenticado, renderizar el componente protegido
   return <Component />;
 };
 
