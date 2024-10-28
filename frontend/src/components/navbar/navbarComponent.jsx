@@ -72,12 +72,12 @@ const Navbar = () => {
           
           {isVendedorMode ? (
             <>
-              <li><a href="/mis-productos" data-original-text="Mis Productos">Mis Productos</a></li>
+              <li><a href="/products" data-original-text="Mis Productos">Mis Productos</a></li>
               <li><a href="/ventas" data-original-text="Ventas">Ventas</a></li> {/* Texto fijo "Ventas" */}
             </>
           ) : (
             <>
-              <li><a href="/products" data-original-text="Productos">Productos</a></li>
+              <li><a href="/" data-original-text="Productos">Productos</a></li>
               {userRole === 'admin' ? (
                 <li><a href="/Dashboard" data-original-text="Dashboard">Dashboard</a></li>
               ) : (

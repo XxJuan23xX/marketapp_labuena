@@ -45,11 +45,17 @@ exports.getProducts = async (req, res) => {
     }
 };
 
+// En tu productController.js
+
 exports.getProductsByUser = async (req, res) => {
     try {
-        const products = await Product.find({ seller_id: req.user.id });
-        res.status(200).json(products);
+      const userId = req.user.id; // Esto debería obtener el `userId` del token
+      console.log("User ID:", userId); // Verifica el userId
+      const products = await Product.find({ seller_id: userId }).populate('seller_id', 'name email');
+      res.status(200).json(products);
     } catch (error) {
-        res.status(500).json({ error: 'Error obteniendo productos del usuario' });
+      res.status(500).json({ error: 'Error obteniendo los productos del usuario: ' + error.message });
     }
-};
+  };
+  
+

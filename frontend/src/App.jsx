@@ -5,7 +5,7 @@ import { UserProductsProvider } from './context/UserProductsContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Products from './pages/Products';
+import Products from './pages/MyProducts';
 import CreateProduccion from './pages/Crearproducto';
 import UserProfile from './pages/UserProfile';
 import Dashboard from './pages/Dashboard';
