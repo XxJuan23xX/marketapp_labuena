@@ -16,7 +16,7 @@ const MyProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get('/user-products'); // usa `api` para la solicitud
+        const response = await api.get('/user-products');
         console.log("Response from /api/user-products:", response.data);
         setProducts(response.data);
         setFilteredProducts(response.data);
@@ -38,7 +38,7 @@ const MyProducts = () => {
   useEffect(() => {
     const filtered = products.filter(product =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (statusFilter === 'todos' || product.status === statusFilter)
+      (statusFilter === 'todos' || (product.isActive ? 'activo' : 'inactivo') === statusFilter)
     );
     setFilteredProducts(filtered);
     console.log("Filtered Products:", filtered);
@@ -64,15 +64,16 @@ const MyProducts = () => {
 
   const handleToggleStatus = async (productId, newStatus) => {
     try {
-      await api.patch(`/products/${productId}/status`, { status: newStatus });
+      const response = await api.patch(`/products/${productId}/status`, { isActive: newStatus });
       setProducts(products.map(product => 
-        product._id === productId ? { ...product, status: newStatus } : product
+        product._id === productId ? { ...product, isActive: newStatus } : product
       ));
       console.log("Product status updated:", productId, newStatus);
     } catch (error) {
       console.error("Error al cambiar estado del producto:", error);
     }
   };
+  
 
   return (
     <div className="my-products-page">
@@ -88,7 +89,7 @@ const MyProducts = () => {
 
         <div className="summary">
           <span>Total de productos: {products.length}</span>
-          <span>Activos: {products.filter(p => p.status === 'activo').length}</span>
+          <span>Activos: {products.filter(p => p.isActive).length}</span>
           <span>En subasta: {products.filter(p => p.type === 'subasta').length}</span>
         </div>
         
@@ -104,7 +105,6 @@ const MyProducts = () => {
             <option value="todos">Todos</option>
             <option value="activo">Activos</option>
             <option value="inactivo">Inactivos</option>
-            <option value="subasta">En subasta</option>
           </select>
         </div>
 
@@ -127,15 +127,16 @@ const MyProducts = () => {
                 <tr key={product._id}>
                   <td>{product.name}</td>
                   <td>${product.price}</td>
-                  <td>{product.status}</td>
+                  <td>{product.isActive ? 'Activo' : 'Inactivo'}</td>
                   <td>
                     <Link to={`/edit-product/${product._id}`} className="action-button">Editar</Link>
                     <button className="action-button delete" onClick={() => handleDelete(product._id)}>Eliminar</button>
-                    {product.status === 'activo' ? (
-                      <button className="action-button deactivate" onClick={() => handleToggleStatus(product._id, 'inactivo')}>Desactivar</button>
-                    ) : (
-                      <button className="action-button activate" onClick={() => handleToggleStatus(product._id, 'activo')}>Activar</button>
-                    )}
+                    <button 
+                      className={`action-button ${product.isActive ? 'deactivate' : 'activate'}`} 
+                      onClick={() => handleToggleStatus(product._id, product.isActive)}
+                    >
+                      {product.isActive ? 'Desactivar' : 'Activar'}
+                    </button>
                   </td>
                 </tr>
               ))}

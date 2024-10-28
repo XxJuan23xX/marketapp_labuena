@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './navbarComponent.css';
-import { FaShoppingCart, FaStore } from 'react-icons/fa'; 
+import { FaBell, FaStore } from 'react-icons/fa';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -30,6 +30,8 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [avatar, setAvatar] = useState('/uploads/avatar-default.webp');
   const [isVendedorMode, setIsVendedorMode] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
+  const [fadeOut, setFadeOut] = useState(false); // Nuevo estado para el desvanecimiento
 
   useEffect(() => {
     const fetchAvatar = async () => {
@@ -57,12 +59,23 @@ const Navbar = () => {
       const originalText = link.getAttribute('data-original-text');
       link.addEventListener('mouseover', () => decryptText(link, originalText));
     });
-  }, [isVendedorMode]); // Aplicamos el efecto solo cuando cambia el modo vendedor
+  }, [isVendedorMode]);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
-  const toggleVendedorMode = () => setIsVendedorMode(!isVendedorMode);
+  const toggleVendedorMode = () => {
+    setLoadingMessage(isVendedorMode ? 'Cambiando a modo Comprador...' : 'Cambiando a modo Vendedor...');
+    setFadeOut(false);
+
+    setTimeout(() => {
+      setFadeOut(true); // Inicia el desvanecimiento después de 1.5 segundos
+      setTimeout(() => {
+        setIsVendedorMode(!isVendedorMode);
+        setLoadingMessage('');
+      }, 500); // Espera 0.5 segundos adicionales para el desvanecimiento
+    }, 1500); // Duración de la pantalla de carga
+  };
 
   return (
     <div className="navbar-container">
@@ -73,7 +86,7 @@ const Navbar = () => {
           {isVendedorMode ? (
             <>
               <li><a href="/products" data-original-text="Mis Productos">Mis Productos</a></li>
-              <li><a href="/ventas" data-original-text="Ventas">Ventas</a></li> {/* Texto fijo "Ventas" */}
+              <li><a href="/ventas" data-original-text="Ventas">Ventas</a></li>
             </>
           ) : (
             <>
@@ -93,8 +106,8 @@ const Navbar = () => {
           <>
             {!isVendedorMode && (
               <>
-                <div className="cart-icon">
-                  <FaShoppingCart />
+                <div className="notification-icon">
+                  <FaBell />
                 </div>
                 <div className="heart-icon">
                   <AiOutlineHeart />
@@ -128,6 +141,13 @@ const Navbar = () => {
           <a href="/login" className="launch-app-btn">Iniciar Sesión ↗</a>
         )}
       </nav>
+
+      {loadingMessage && (
+        <div className={`loading-screen ${fadeOut ? 'fade-out' : ''}`}>
+          <div className="spinner"></div>
+          <div className="loading-message">{loadingMessage}</div>
+        </div>
+      )}
     </div>
   );
 };
