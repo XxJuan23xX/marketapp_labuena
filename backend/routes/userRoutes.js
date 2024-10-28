@@ -13,4 +13,8 @@ router.delete('/:id', userController.deleteUser);
 router.get('/:id/avatar', userController.getAvatar);
 
 
+
+
+
+
 module.exports = router;

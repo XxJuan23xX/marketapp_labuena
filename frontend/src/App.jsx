@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import {AuthProvider} from './context/AuthContext'; // Asegúrate de que la ruta a AuthContext sea correcta
+//import { UserProductsProvider } from './context/UserProductsContext';
+import { UserProductsProvider } from './context/UserProductsContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,6 +13,7 @@ import UserProfile from './pages/UserProfile';
 const App = () => {
   return (
     <AuthProvider>
+      <UserProductsProvider>
       <Router>
         <Routes>
           {/* Ruta para el home */}
@@ -31,7 +34,7 @@ const App = () => {
           <Route path="/Account" element={<UserProfile />} />
           </Routes>
           </Router>
-      
+          </UserProductsProvider>
     </AuthProvider>
   );
 };

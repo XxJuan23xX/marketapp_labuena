@@ -1,18 +1,11 @@
-// routes/productRoutes.js
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-// Crear producto
-router.post('/', productController.createProduct);
-
-// Obtener todos los productos, con opción de filtrar por tipo
-router.get('/', productController.getProducts);
-
-// Obtener un producto por ID
-router.get('/:id', productController.getProductById);
-
-// Actualizar un producto por ID
-router.put('/:id', productController.updateProduct);
+router.post('/createproducts', authMiddleware, productController.createProduct);
+router.get('/products', productController.getProducts);
+router.get('/user-products', authMiddleware, productController.getProductsByUser);
+router.post('/products/create', authMiddleware, productController.createProduct);
 
 module.exports = router;

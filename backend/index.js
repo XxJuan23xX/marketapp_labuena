@@ -39,11 +39,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/users', userRoutes);
 
 app.use('/api/users/login', userRoutes);
-
-// Rutas para productos
-
-app.use('/api/products', productRoutes);
-
+app.use('/api', productRoutes);
 // Rutas para órdenes
 app.use('/api/orders', orderRoutes);
 app.use('/api/messages', messageRoutes);
