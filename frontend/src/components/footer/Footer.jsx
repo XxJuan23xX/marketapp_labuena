@@ -16,24 +16,25 @@ const Footer = () => {
         <div className="footer-column">
           <h4>Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Sobre Nosotros</a></li>
+            <li><a href="#">Contacto</a></li>
           </ul>
         </div>
         <div className="footer-column">
-          <h4>Contact Us</h4>
+          <h4>Contáctanos</h4>
           <ul>
-            <li><a href="#">Email: lorem@loremipsum.com</a></li>
-            <li><a href="#">Phone: +1 123 4567890</a></li>
+            <li><a href="#">Email: 23090467@alumno.utmetropolitana.com.mx</a></li>
+            <li><a href="#">Phone: +52 9995406380</a></li>
           </ul>
         </div>
         <div className="footer-column">
-          <h4>Join Our Newsletter</h4>
-          <label htmlFor="email">Email:</label>
-          <input type="email" placeholder="lorem@loremipsum.com" />
-          <input type="submit" value="Subscribe" />
+          <h4>Desarrollado por</h4>
+          <ul>
+            <li><a href="https://www.facebook.com/manuel.sima.12" target="_blank" rel="noopener noreferrer">Juan Manuel</a></li>
+            <li><a href="https://www.facebook.com/angelo.romos" target="_blank" rel="noopener noreferrer">Miguel Angel</a></li>
+            <li><a href="https://www.twitch.tv/derrapin" target="_blank" rel="noopener noreferrer">Twitch Derrapin</a></li>
+          </ul>
         </div>
       </div>
     </footer>

@@ -9,6 +9,10 @@ import Register from './pages/Register';
 import Products from './pages/Products';
 import CreateProduccion from './pages/Crearproducto';
 import UserProfile from './pages/UserProfile';
+import Dashboard from './pages/Dashboard';
+import Pedidos from './pages/Pedidos';
+import Clientes from './pages/Clientes';
+import Productos from './pages/AdminProduct';
 
 const App = () => {
   return (
@@ -32,6 +36,10 @@ const App = () => {
           
           {/* Otras rutas pueden ir aquí */}
           <Route path="/Account" element={<UserProfile />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Pedidos" element={<Pedidos />} />
+          <Route path="/Clientes" element={<Clientes />} />
+          <Route path="/Productos" element={<Productos />} />
           </Routes>
           </Router>
           </UserProductsProvider>

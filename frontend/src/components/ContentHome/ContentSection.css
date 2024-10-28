@@ -1,29 +1,55 @@
-/* Estilo para las secciones de contenido */
 .content-section {
-    padding: 50px;
-    text-align: center;
-    font-size: 1.5rem;
-    background-color: rgb(57 57 57);
-    min-height: 400px; /* Ajuste para reducir el espacio en blanco */
-    margin-bottom: 50px; /* Añade margen entre las secciones */
-    color: white;
-  }
   
-  .image-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-  
-  .image-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-  
-  .image-item p {
-    margin-top: 10px;
-    font-size: 1rem;
-    color: #ffffff;
-  }
-  
+  text-align: center;
+  font-size: 1.5rem;
+  background-color: #0d1c47;
+  min-height: 400px;
+  margin-bottom: 50px;
+  color: white;
+  position: relative;
+}
+
+.image-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  height: 440px;
+  width: 100%;
+  position: relative;
+}
+
+.image-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #0d1c47;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 600px;
+  position: absolute;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.image-item.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.image-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.image-item p {
+  font-size: 20px;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 132px;
+}

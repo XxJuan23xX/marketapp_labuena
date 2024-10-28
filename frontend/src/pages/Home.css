@@ -1,10 +1,10 @@
 
 
-body {
+.home-container {
   margin: 0 !important;
   padding: 0 !important;
   box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.777);
+  background-color: #0d1c47;
 }
 
   /* Estilos generales de la barra de desplazamiento */

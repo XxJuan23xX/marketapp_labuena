@@ -20,10 +20,7 @@ const orderSchema = new mongoose.Schema({
         type: Number, // Precio final de la compra
         required: true
     },
-    shipping_address: {
-        type: String, // Dirección de envío
-        required: true
-    },
+    
     status: {
         type: String,
         enum: ['pendiente', 'enviado', 'entregado', 'completado'],
