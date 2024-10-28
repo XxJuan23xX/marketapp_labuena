@@ -1,11 +1,11 @@
+// context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
-// Función para decodificar el token manualmente
 const decodeToken = (token) => {
   try {
-    return JSON.parse(atob(token.split('.')[1])); // Decodifica la parte del payload del JWT
+    return JSON.parse(atob(token.split('.')[1]));
   } catch (error) {
     console.error('Error decoding token:', error);
     return null;
@@ -20,13 +20,18 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log("Token from localStorage:", token); // Debugging
+
     if (token) {
       const decodedToken = decodeToken(token);
+      console.log("Decoded Token:", decodedToken); // Debugging
+
       if (decodedToken) {
         setUserId(decodedToken.id);
         setUserRole(decodedToken.role);
         setIsAuthenticated(true);
         setUserAvatar(localStorage.getItem('avatar') || '/uploads/avatar-default.webp');
+        console.log("User authenticated:", decodedToken.role); // Debugging
       }
     }
   }, []);
@@ -37,6 +42,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('avatar', avatar);
 
     const decodedToken = decodeToken(token);
+    console.log("Token set on login:", decodedToken); // Debugging
+
     if (decodedToken) {
       setUserId(decodedToken.id);
       setUserRole(role);
@@ -59,6 +66,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('avatar', newAvatar);
     setUserAvatar(newAvatar);
   };
+
+  console.log("AuthProvider - isAuthenticated:", isAuthenticated, "userRole:", userRole); // Final state check
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, userRole, userAvatar, userId, login, logout, updateUserAvatar }}>

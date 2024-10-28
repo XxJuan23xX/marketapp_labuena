@@ -43,7 +43,7 @@ app.use('/api', productRoutes);
 // Rutas para órdenes
 app.use('/api/orders', orderRoutes);
 app.use('/api/messages', messageRoutes);
-app.use('/api/categories', categoryRoutes);
+app.use('/api', categoryRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/wishlists', wishlistRoutes);
