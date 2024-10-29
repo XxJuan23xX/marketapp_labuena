@@ -88,9 +88,6 @@ exports.getProductById = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener el producto' });
     }
 };
-
-  };
-
   // Función para actualizar solo el estado (isActive) del producto
   exports.updateProductStatus = async (req, res) => {
     const { id } = req.params;
