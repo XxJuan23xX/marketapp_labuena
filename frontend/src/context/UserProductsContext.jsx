@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthContext';
+import api from '../../api'; // Importa la instancia configurada de axios con el interceptor
 
 export const UserProductsContext = createContext();
 
@@ -10,38 +11,19 @@ export const UserProductsProvider = ({ children }) => {
 
   const loadGlobalProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products');
-      if (!response.ok) {
-        throw new Error("Error al cargar productos globales");
-      }
-      const products = await response.json();
-      setGlobalProducts(products);
-      console.log("Productos globales cargados:", products);
+      const response = await api.get('/products'); // Usa `api` para manejar la petición con axios
+      setGlobalProducts(response.data);
+      console.log("Productos globales cargados:", response.data);
     } catch (error) {
       console.error("Error al cargar productos globales:", error);
     }
   };
 
   const loadUserProducts = async () => {
-    const token = localStorage.getItem('token');
-    console.log("Token para cargar productos del usuario:", token);
-
     try {
-      if (!token) {
-        throw new Error("Token no encontrado");
-      }
-      const response = await fetch('http://localhost:5000/api/user-products', {
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Error al cargar productos del usuario");
-      }
-      const products = await response.json();
-      setUserProducts(products);
-      console.log("Productos del usuario cargados:", products);
+      const response = await api.get('/user-products'); // Usa `api` con el interceptor para añadir el token automáticamente
+      setUserProducts(response.data);
+      console.log("Productos del usuario cargados:", response.data);
     } catch (error) {
       console.error("Error al cargar productos del usuario:", error);
     }
@@ -56,22 +38,15 @@ export const UserProductsProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   const addProduct = async (productData) => {
-    const token = localStorage.getItem('token');
-    console.log("Token para añadir producto:", token);
-
     try {
-      if (!token) {
-        throw new Error("Token no encontrado al intentar añadir producto");
-      }
-      const response = await fetch('http://localhost:5000/api/products/create', {
-        method: 'POST',
+      const response = await api.post('/products/create', productData, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data', // Aseguramos el tipo para el manejo de archivos
         },
-        body: productData, // Aquí se usa FormData en lugar de JSON.stringify()
       });
-      if (response.ok) {
-        const newProduct = await response.json();
+
+      if (response.status === 201) {
+        const newProduct = response.data;
         setUserProducts((prevProducts) => [...prevProducts, newProduct]);
         console.log("Producto añadido:", newProduct);
       } else {

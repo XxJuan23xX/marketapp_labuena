@@ -7,9 +7,9 @@ const productSchema = new mongoose.Schema({
     images: [{ type: String }],
     type: { type: String, enum: ['venta', 'subasta'], required: true },
     price: { type: Number },
-    discount: { type: Number, default: 0 },
     startingPrice: { type: Number },
     auctionEndTime: { type: Date },
+    stock: { type: Number, default: 0 }, // Agregar el campo stock
     isActive: { type: Boolean, default: true },
     seller_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, default: Date.now },
