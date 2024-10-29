@@ -40,6 +40,7 @@ exports.createProduct = [
 exports.getProducts = async (req, res) => {
     try {
         const products = await Product.find().populate('seller_id', 'name email');
+        console.log("Productos con seller_id:", products);
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ error: 'Error obteniendo los productos: ' + error.message });

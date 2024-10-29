@@ -35,45 +35,11 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/products" element={<Products />} />
             <Route path="/createproducts" element={<CreateProduccion />} />
-
-
-
-
         <Route path="/subastasderrapin" element={<Subastas/>}/>
-
         <Route path="/" element={<AllProducts />} />
         <Route path="/detallesallproducts/:productId" element={<DetallesAllProducts />} />
-
-
-
         <Route path="/crearderrapin" element={<CrearSubasta/>}/>
-
-
         <Route path="/allderrapin" element={<AllProducts/>}/>
-
-   
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <Route path="/register" element={<Register />} />
             <Route path="/Account" element={<UserProfile />} />
             

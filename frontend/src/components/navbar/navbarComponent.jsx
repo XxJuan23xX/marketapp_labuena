@@ -90,7 +90,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <li><a href="/" data-original-text="Productos">Productos</a></li>
+              <li><a href="/allderrapin" data-original-text="Productos">Productos</a></li>
               {userRole === 'admin' ? (
                 <li><a href="/Dashboard" data-original-text="Dashboard">Dashboard</a></li>
               ) : (

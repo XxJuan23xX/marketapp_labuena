@@ -1,45 +1,14 @@
-body {
-    background-color: #000000;
+.all-products-container {
+    background-color: #416285 !important;
     margin: 0;
     min-height: 100vh;
     font-family: Arial, sans-serif;
-}
-
-.subastas-container {
-    background-color: #000000 !important;
     padding-top: 100px;
-    min-height: 100vh;
     text-align: center;
     color: #ffffff;
     padding-bottom: 80px; /* Espacio extra para el footer */
 }
-/* Botón de corazón */
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-}
 
-.heart-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    outline: none;
-    padding: 0;
-}
-
-/* Icono de corazón sin seleccionar */
-.heart-icon {
-    color: #ffffff; /* Color del corazón sin seleccionar */
-    font-size: 1.5rem;
-    transition: color 0.3s;
-}
-
-/* Icono de corazón cuando está seleccionado */
-.heart-icon.filled {
-    color: red; /* Color rojo cuando está en modo "favorito" */
-}
 .subastas-controls {
     display: flex;
     justify-content: center;
@@ -90,102 +59,128 @@ body {
 
 .auction-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px; /* Espacio entre las tarjetas */
     margin-top: 40px;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding-bottom: 40px; /* Agrega margen inferior a las tarjetas */
 }
 
 .auction-card {
-    background-color: #14213d;
-    border: 1px solid #000000;
-    border-radius: 15px;
-    padding: 25px;
-    width: 245px;
-    text-align: center;
-    color: #e5e5e5;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    background-color: #22245d;
+    border: 1px solid #333;
+    border-radius: 10px;
+    overflow: hidden;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    color: #fff;
+    width: 100%;
+    max-width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 auto;
 }
 
 .auction-card:hover {
     transform: scale(1.05);
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
-    background-color: #fca311;
-    color: #000000;
 }
 
-.placeholder-image {
+/* Contenedor de la imagen */
+.auction-card img {
     width: 100%;
-    height: 150px;
-    background-color: #e5e5e5;
-    border-radius: 5px;
-    margin-bottom: 15px;
+    height: auto;
+    transition: opacity 0.3s ease;
 }
 
-.hammer-icon {
+/* Overlay oscuro */
+.auction-card::before {
+    content: '';
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: #000000;
-    color: #ffffff;
-    border-radius: 50%;
-    padding: 8px;
-    font-size: 14px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Información oculta por defecto */
+.auction-card .info-section {
+    position: absolute;
+    bottom: 50px; /* Espacio para el botón "Hover Me" */
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: #333333; /* Fondo oscuro para buen contraste */
+    color: #fca311; /* Texto en naranja para contraste */
+    text-align: left;
+    font-size: 1.1rem;
+    transition: bottom 0.3s ease; /* Transición suave */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transform: translateY(100%); /* Oculto inicialmente */
+}
+
+/* Efecto hover: muestra el overlay y la información */
+.auction-card:hover::before {
+    opacity: 1;
+}
+
+.auction-card:hover .info-section {
+    bottom: 0; /* Muestra la información al hacer hover */
+}
+
+/* Estilo de los detalles del producto */
+.info-section span {
+    display: block;
+    color: #fca311;
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
 .info-section {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    font-size: 14px;
-}
-
-.bid-button,
-.buy-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 15px;
-    transition: background-color 0.3s;
-}
-
-.bid-button {
-    background-color: #fca311;
-    color: #000000;
-}
-
-.bid-button:hover {
-    background-color: #e5e5e5;
-    color: #000000;
-}
-
-.buy-button {
-    background-color: #32e0c4;
-    color: #000000;
-}
-
-.buy-button:hover {
-    background-color: #29b8a6;
-    color: #ffffff;
+    position: absolute;
+    bottom: -100%; /* Oculto fuera de la vista inicial */
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fca311;
+    text-align: center;
+    transition: bottom 0.3s ease; /* Transición suave para revelar */
 }
 
 .pagination-container {
     /* Si necesitas agregar estilos de paginación aquí */
 }
 
-.contact-section {
-    /* Si tienes una sección de contacto puedes ajustarla aquí */
+/* Estilo del botón Hover Me */
+.hover-me-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #333333;
+    color: #fca311;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    position: absolute;
+    bottom: 10px; /* Ubicación en la parte inferior de la tarjeta */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: background-color 0.3s;
+}
+
+.hover-me-button:hover {
+    background-color: #444444;
 }
 
 @media (max-width: 768px) {
     .auction-cards {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 }
 
@@ -195,40 +190,27 @@ body {
     }
 }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+.hover-text {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 90%;
-    position: relative;
-}
-
-.close-modal {
+    background-color: #333;
+    color: #fca311;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 10px 0;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 
-.modal-content img {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 10px;
+.hover-icon {
+    margin-right: 5px;
+    color: #89cff0;
+}
+
+/* Ocultar hover-text al hacer hover y mostrar la info-section */
+.auction-card:hover .hover-text {
+    display: none;
 }
