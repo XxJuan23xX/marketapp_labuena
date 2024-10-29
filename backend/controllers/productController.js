@@ -89,4 +89,28 @@ exports.getProductById = async (req, res) => {
     }
 };
 
+  };
+
+  // Función para actualizar solo el estado (isActive) del producto
+  exports.updateProductStatus = async (req, res) => {
+    const { id } = req.params;
+    const { isActive } = req.body;
+  
+    try {
+      const product = await Product.findByIdAndUpdate(
+        id,
+        { isActive },
+        { new: true } // Retorna el documento actualizado
+      );
+  
+      if (!product) {
+        return res.status(404).json({ message: 'Producto no encontrado' });
+      }
+  
+      res.json({ message: 'Estado del producto actualizado', product });
+    } catch (error) {
+      res.status(500).json({ message: 'Error al actualizar el estado del producto', error });
+    }
+  };
+  
 

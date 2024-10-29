@@ -8,6 +8,9 @@ router.post('/createproducts', authMiddleware, productController.createProduct);
 router.get('/products', productController.getProducts);
 router.get('/user-products', authMiddleware, productController.getProductsByUser);
 router.post('/products/create', authMiddleware, productController.createProduct);
+// Ruta para actualizar solo el estado (isActive) del producto
+router.patch('/:id/status', productController.updateProductStatus);
+
 
 
 router.get('/api/products/:productId', productController.getProductById);

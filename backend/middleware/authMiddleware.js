@@ -4,18 +4,18 @@ const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
+    console.log("Token is missing"); // Mensaje de depuración
     return res.status(401).json({ message: 'No token, authorization denied' });
     onsole.log("Received token:", token); // Agregar esta línea para depuración
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded token:", decoded); // Verifica el contenido del token
-    req.user = decoded; // Debería contener { id, role }
+    req.user = decoded;
     next();
   } catch (error) {
-    console.error("Token verification error:", error); // Agregar esta línea
-    res.status(401).json({ message: 'Token is not valid' });
+    console.error("Invalid token:", error.message); // Mensaje de error más detallado
+    return res.status(401).json({ message: 'Token is not valid' });
   }
 };
 

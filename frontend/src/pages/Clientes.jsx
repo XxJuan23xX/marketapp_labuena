@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
-import axios from 'axios';
+import api from '../../api'; // Importa `api` en lugar de `axios`
 import './Clientes.css';
 
 const Clientes = () => {
@@ -13,7 +13,7 @@ const Clientes = () => {
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users');
+        const response = await api.get('/users'); // Usa `api` para realizar la solicitud
         setClientes(response.data);
       } catch (error) {
         console.error("Error al obtener los clientes:", error);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
-import axios from 'axios';
+import api from '../../api'; // Importamos `api` en lugar de `axios`
 import CategoriesModal from '../components/CategoriesButton/CategoriesModal'; // Asegúrate de que la ruta es correcta
 import './AdminProduct.css';
 
@@ -17,7 +17,7 @@ const Productos = () => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products'); // URL de tu endpoint
+        const response = await api.get('/products'); // Usamos `api` para la solicitud
         setProductos(response.data);
       } catch (error) {
         console.error("Error al obtener los productos:", error);

@@ -48,6 +48,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/wishlists', wishlistRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/products', productRoutes);
 
 // Iniciar el servidor
 app.listen(PORT, () => {
