@@ -12,6 +12,17 @@ import Dashboard from './pages/Dashboard';
 import Pedidos from './pages/Pedidos';
 import Clientes from './pages/Clientes';
 import Productos from './pages/AdminProduct';
+
+import Subastas from './pages/Subastas';
+import DetallesAllProducts from './pages/DetallesallProduct';
+import CrearSubasta from './pages/CrearSubasta';
+import AllProducts from './pages/AllProducts';
+
+
+
+
+
+
 import ProtectedRoute from './components/RutasAdmin/ProtectedRoute'; // Asegúrate que la ruta sea correcta
 
 const App = () => {
@@ -24,6 +35,45 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/products" element={<Products />} />
             <Route path="/createproducts" element={<CreateProduccion />} />
+
+
+
+
+        <Route path="/subastasderrapin" element={<Subastas/>}/>
+
+        <Route path="/" element={<AllProducts />} />
+        <Route path="/detallesallproducts/:productId" element={<DetallesAllProducts />} />
+
+
+
+        <Route path="/crearderrapin" element={<CrearSubasta/>}/>
+
+
+        <Route path="/allderrapin" element={<AllProducts/>}/>
+
+   
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <Route path="/register" element={<Register />} />
             <Route path="/Account" element={<UserProfile />} />
             

@@ -6,6 +6,7 @@ const authMiddleware = (req, res, next) => {
   if (!token) {
     console.log("Token is missing"); // Mensaje de depuración
     return res.status(401).json({ message: 'No token, authorization denied' });
+    onsole.log("Received token:", token); // Agregar esta línea para depuración
   }
 
   try {

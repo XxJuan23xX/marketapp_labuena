@@ -1,0 +1,76 @@
+/* src/pages/DetallesAllProducts.css */
+
+.product-details-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.product-details-container h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.product-details-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-details-container p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0.5rem 0;
+}
+
+.product-details-container p strong {
+    color: #333;
+}
+
+.product-details-container .price {
+    font-size: 1.5rem;
+    color: #e63946;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.product-details-container .discount {
+    font-size: 1.1rem;
+    color: #1d3557;
+}
+
+.product-details-container .auction-details {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f1f5f9;
+    border-radius: 8px;
+}
+
+.product-details-container .auction-details p {
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .product-details-container {
+        padding: 1.5rem;
+    }
+
+    .product-details-container h2 {
+        font-size: 1.75rem;
+    }
+
+    .product-details-container p {
+        font-size: 1rem;
+    }
+
+    .product-details-container .price {
+        font-size: 1.25rem;
+    }
+}
