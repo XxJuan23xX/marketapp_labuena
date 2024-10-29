@@ -14,7 +14,7 @@ const CreateProduct = () => {
     images: [],
     type: 'venta',
     price: '',
-    discount: '',
+    stock: '', // Agregamos el campo stock
     startingPrice: '',
     auctionStartTime: '',
     auctionEndTime: '',
@@ -87,7 +87,7 @@ const CreateProduct = () => {
       images: [],
       type: 'venta',
       price: '',
-      discount: '',
+      stock: '', // Resetea el stock después de enviar
       startingPrice: '',
       auctionStartTime: '',
       auctionEndTime: '',
@@ -179,6 +179,16 @@ const CreateProduct = () => {
                 type="number"
                 name="price"
                 value={product.price}
+                onChange={handleChange}
+                required
+                className="create-product-input"
+              />
+
+              <label className="create-product-label">Stock:</label> {/* Agregar campo de stock */}
+              <input
+                type="number"
+                name="stock"
+                value={product.stock}
                 onChange={handleChange}
                 required
                 className="create-product-input"

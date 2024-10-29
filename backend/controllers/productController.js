@@ -10,7 +10,7 @@ exports.createProduct = [
 
     async (req, res) => {
         try {
-            const { name, description, category, type, price, discount, startingPrice, auctionEndTime } = req.body;
+            const { name, description, category, type, price, stock, startingPrice, auctionEndTime } = req.body;
             const images = req.files.map(file => file.path);
 
             const userId = req.user.id;
@@ -22,7 +22,7 @@ exports.createProduct = [
                 type,
                 images,
                 price: type === 'venta' ? price : undefined,
-                discount: type === 'venta' ? discount : undefined,
+                stock: type === 'venta' ? stock : undefined, // Agregar el campo stock
                 startingPrice: type === 'subasta' ? startingPrice : undefined,
                 auctionEndTime: type === 'subasta' ? auctionEndTime : undefined,
                 seller_id: userId,
@@ -35,6 +35,7 @@ exports.createProduct = [
         }
     }
 ];
+
 
 exports.getProducts = async (req, res) => {
     try {
