@@ -14,10 +14,9 @@ import Clientes from './pages/Clientes';
 import Productos from './pages/AdminProduct';
 
 import Subastas from './pages/Subastas';
-import DetailsSubastas from './pages/DetailsSubasts';
+import DetallesAllProducts from './pages/DetallesallProduct';
 import CrearSubasta from './pages/CrearSubasta';
 import AllProducts from './pages/AllProducts';
-
 
 
 
@@ -42,14 +41,17 @@ const App = () => {
 
         <Route path="/subastasderrapin" element={<Subastas/>}/>
 
+        <Route path="/" element={<AllProducts />} />
+        <Route path="/detallesallproducts/:productId" element={<DetallesAllProducts />} />
 
-        <Route path="/detailsderrapin" element={<DetailsSubastas/>}/>
 
 
         <Route path="/crearderrapin" element={<CrearSubasta/>}/>
 
 
         <Route path="/allderrapin" element={<AllProducts/>}/>
+
+   
 
 
         

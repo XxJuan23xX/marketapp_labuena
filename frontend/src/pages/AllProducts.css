@@ -11,8 +11,35 @@ body {
     min-height: 100vh;
     text-align: center;
     color: #ffffff;
+    padding-bottom: 80px; /* Espacio extra para el footer */
+}
+/* Botón de corazón */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
 }
 
+.heart-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+}
+
+/* Icono de corazón sin seleccionar */
+.heart-icon {
+    color: #ffffff; /* Color del corazón sin seleccionar */
+    font-size: 1.5rem;
+    transition: color 0.3s;
+}
+
+/* Icono de corazón cuando está seleccionado */
+.heart-icon.filled {
+    color: red; /* Color rojo cuando está en modo "favorito" */
+}
 .subastas-controls {
     display: flex;
     justify-content: center;
@@ -68,6 +95,7 @@ body {
     margin-top: 40px;
     max-width: 1000px;
     margin: 0 auto;
+    padding-bottom: 40px; /* Agrega margen inferior a las tarjetas */
 }
 
 .auction-card {
@@ -127,7 +155,6 @@ body {
     transition: background-color 0.3s;
 }
 
-/* Estilo para botón de puja (subasta) */
 .bid-button {
     background-color: #fca311;
     color: #000000;
@@ -138,26 +165,24 @@ body {
     color: #000000;
 }
 
-/* Estilo para botón de compra (venta) */
 .buy-button {
     background-color: #32e0c4;
     color: #000000;
 }
+
 .buy-button:hover {
     background-color: #29b8a6;
     color: #ffffff;
 }
 
-/* Otros estilos */
 .pagination-container {
-    /* ... */
+    /* Si necesitas agregar estilos de paginación aquí */
 }
 
 .contact-section {
-    /* ... */
+    /* Si tienes una sección de contacto puedes ajustarla aquí */
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
     .auction-cards {
         grid-template-columns: repeat(2, 1fr);
@@ -168,4 +193,42 @@ body {
     .auction-cards {
         grid-template-columns: 1fr;
     }
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-content img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }

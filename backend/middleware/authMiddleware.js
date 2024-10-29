@@ -5,6 +5,7 @@ const authMiddleware = (req, res, next) => {
 
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });
+    onsole.log("Received token:", token); // Agregar esta línea para depuración
   }
 
   try {
@@ -13,6 +14,7 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded; // Debería contener { id, role }
     next();
   } catch (error) {
+    console.error("Token verification error:", error); // Agregar esta línea
     res.status(401).json({ message: 'Token is not valid' });
   }
 };

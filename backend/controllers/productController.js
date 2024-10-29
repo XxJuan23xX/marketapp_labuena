@@ -49,13 +49,44 @@ exports.getProducts = async (req, res) => {
 
 exports.getProductsByUser = async (req, res) => {
     try {
-      const userId = req.user.id; // Esto debería obtener el `userId` del token
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ error: "Usuario no autenticado" });
+      }
+
+      const userId = req.user.id;
       console.log("User ID:", userId); // Verifica el userId
+
+      // Verificar que `Product` esté correctamente definido
+      if (!Product) {
+        console.error("El modelo Product no está definido.");
+        return res.status(500).json({ error: "Error en el servidor: modelo no encontrado." });
+      }
+
       const products = await Product.find({ seller_id: userId }).populate('seller_id', 'name email');
+      
+      if (!products) {
+        return res.status(404).json({ error: "No se encontraron productos para este usuario." });
+      }
+      
       res.status(200).json(products);
     } catch (error) {
+      console.error("Error en getProductsByUser:", error.message);
       res.status(500).json({ error: 'Error obteniendo los productos del usuario: ' + error.message });
     }
-  };
-  
+};
+
+exports.getProductById = async (req, res) => {
+    try {
+        const productId = req.params.id;  
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.status(200).json(product);
+    } catch (error) {
+        console.error('Error al obtener el producto:', error);
+        res.status(500).json({ message: 'Error al obtener el producto' });
+    }
+};
+
 
