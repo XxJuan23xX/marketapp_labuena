@@ -3,20 +3,19 @@ const router = express.Router();
 const productController = require('../controllers/productController');
 const authMiddleware = require('../middleware/authMiddleware');
 
+// Obtener todos los productos
+router.get('/', productController.getProducts); // Ruta para obtener todos los productos
 
-router.post('/createproducts', authMiddleware, productController.createProduct);
-router.get('/products', productController.getProducts);
+// Crear un nuevo producto (requiere autenticación)
+router.post('/create', authMiddleware, productController.createProduct);
+
+// Obtener productos por usuario (requiere autenticación)
 router.get('/user-products', authMiddleware, productController.getProductsByUser);
-router.post('/products/create', authMiddleware, productController.createProduct);
-// Ruta para actualizar solo el estado (isActive) del producto
-router.patch('/:id/status', productController.updateProductStatus);
 
+// Actualizar el estado del producto (requiere autenticación)
+router.patch('/:id/status', authMiddleware, productController.updateProductStatus);
 
-
-router.get('/api/products/:productId', productController.getProductById);
-router.get('/products/:id', productController.getProductById);
-
-
-
+// Obtener producto por ID
+router.get('/:productId', productController.getProductById);
 
 module.exports = router;

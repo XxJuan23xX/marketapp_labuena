@@ -3,7 +3,7 @@ import './CreateProduct.css';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { UserProductsContext } from '../../context/UserProductsContext';
-import api from '../../../api'; // Cambiamos a `api`
+import api from '../../../api';
 
 const CreateProduct = () => {
   const { addProduct } = useContext(UserProductsContext); // Accede a la función addProduct del contexto
@@ -30,6 +30,7 @@ const CreateProduct = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get('/categories'); // usa `api` para la solicitud
+        console.log("Categorías obtenidas:", response.data); // Verifica los datos obtenidos
         setCategories(response.data);
       } catch (error) {
         console.error("Error al obtener las categorías:", error);
@@ -37,6 +38,7 @@ const CreateProduct = () => {
     };
     fetchCategories();
   }, []);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,33 +70,32 @@ const CreateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Convierte los datos del producto a FormData para manejar archivos
     const formData = new FormData();
-    Object.keys(product).forEach((key) => {
-      if (key === 'images') {
-        product.images.forEach((file) => formData.append('images', file));
-      } else {
-        formData.append(key, product[key]);
-      }
-    });
+    
+    // Agregar todos los campos de texto y numéricos
+    formData.append('name', product.name);
+    formData.append('description', product.description);
+    formData.append('category', product.category);
+    formData.append('type', product.type);
+    formData.append('price', product.price);
+    formData.append('stock', product.stock);
+    formData.append('startingPrice', product.startingPrice);
+    formData.append('auctionStartTime', product.auctionStartTime);
+    formData.append('auctionEndTime', product.auctionEndTime);
 
-    await addProduct(formData); // Usa addProduct del contexto para enviar el producto
+    // Agregar las imágenes
+    product.images.forEach((file) => formData.append('images', file));
 
-    setProduct({
-      name: '',
-      description: '',
-      category: '',
-      images: [],
-      type: 'venta',
-      price: '',
-      stock: '', // Resetea el stock después de enviar
-      startingPrice: '',
-      auctionStartTime: '',
-      auctionEndTime: '',
-    });
-    setImagePreviews([]);
-    setMainImage(null);
-  };
+    // Debugging para verificar el FormData
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+    }
+
+    // Intentar enviar los datos
+    await addProduct(formData);
+};
+
+
 
   return (
     <div className="create-product-container">
@@ -184,7 +185,7 @@ const CreateProduct = () => {
                 className="create-product-input"
               />
 
-              <label className="create-product-label">Stock:</label> {/* Agregar campo de stock */}
+              <label className="create-product-label">Stock:</label>
               <input
                 type="number"
                 name="stock"

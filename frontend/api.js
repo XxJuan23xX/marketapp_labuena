@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const api = axios.create({
     baseURL: 'http://localhost:5000/api', // Cambia esto por tu URL de API
+    withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {

@@ -1,17 +1,68 @@
-// controllers/productController.js
+const multer = require('multer');
+const { Storage } = require('@google-cloud/storage');
+const path = require('path');
+const Product = require('../models/Product'); // Ajusta la ruta según la estructura de tu proyecto
 
-const upload = require('../uploads/multerConfig'); // Importa configuración de Multer para imágenes
 
-const Product = require('../models/Product');
-const jwt = require('jsonwebtoken');
+// Configuración de Google Cloud Storage
+const storage = new Storage({
+  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+});
 
+// Configuración de multer con Google Cloud Storage
+const multerStorage = multer.memoryStorage();
+
+const upload = multer({
+  storage: multerStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limitar tamaño a 5MB
+});
+
+async function uploadImageToGCS(file) {
+  const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME;
+  console.log("Nombre del bucket:", bucketName);
+const bucket = storage.bucket(bucketName);
+
+
+  const blob = bucket.file(`products/${Date.now()}_${path.basename(file.originalname)}`);
+  const blobStream = blob.createWriteStream({
+    resumable: false,
+    contentType: file.mimetype, // Establece el tipo de contenido correcto
+  });
+
+  return new Promise((resolve, reject) => {
+    blobStream.on('error', (err) => {
+      console.error('Error subiendo a GCS:', err);
+      reject(err);
+    });
+
+    blobStream.on('finish', () => {
+      // La URL pública del archivo
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+      resolve(publicUrl);
+    });
+
+    blobStream.end(file.buffer);
+  });
+}
+
+
+// Crear producto con imágenes en Google Cloud Storage
 exports.createProduct = [
-    upload.array('images', 5),
-
+    upload.array('images', 5), // Permite hasta 5 imágenes
     async (req, res) => {
+        console.log("Datos recibidos en el cuerpo (req.body):", req.body);
+        console.log("Archivos recibidos (req.files):", req.files);
+
         try {
             const { name, description, category, type, price, stock, startingPrice, auctionEndTime } = req.body;
-            const images = req.files.map(file => file.path);
+
+            // Si los datos obligatorios no están presentes, devuelve un error.
+            if (!name || !description || !category || !type) {
+                return res.status(400).json({ error: 'Faltan datos obligatorios' });
+            }
+
+            const images = await Promise.all(req.files.map(file => uploadImageToGCS(file)));
 
             const userId = req.user.id;
 
@@ -22,7 +73,7 @@ exports.createProduct = [
                 type,
                 images,
                 price: type === 'venta' ? price : undefined,
-                stock: type === 'venta' ? stock : undefined, // Agregar el campo stock
+                stock: type === 'venta' ? stock : undefined,
                 startingPrice: type === 'subasta' ? startingPrice : undefined,
                 auctionEndTime: type === 'subasta' ? auctionEndTime : undefined,
                 seller_id: userId,
@@ -31,85 +82,76 @@ exports.createProduct = [
             await newProduct.save();
             res.status(201).json(newProduct);
         } catch (error) {
+            console.error("Error en la creación del producto:", error);
             res.status(400).json({ error: 'Error creando el producto: ' + error.message });
         }
     }
 ];
 
 
+
+
+
+// Obtener todos los productos
 exports.getProducts = async (req, res) => {
     try {
         const products = await Product.find().populate('seller_id', 'name email');
-        console.log("Productos con seller_id:", products);
         res.status(200).json(products);
     } catch (error) {
-        res.status(500).json({ error: 'Error obteniendo los productos: ' + error.message });
+        console.error("Error al obtener los productos:", error.message);
+        res.status(500).json({ error: 'Error al obtener los productos' });
     }
 };
 
-// En tu productController.js
-
+// Obtener productos por usuario
 exports.getProductsByUser = async (req, res) => {
     try {
-      if (!req.user || !req.user.id) {
-        return res.status(401).json({ error: "Usuario no autenticado" });
-      }
-
-      const userId = req.user.id;
-      console.log("User ID:", userId); // Verifica el userId
-
-      // Verificar que `Product` esté correctamente definido
-      if (!Product) {
-        console.error("El modelo Product no está definido.");
-        return res.status(500).json({ error: "Error en el servidor: modelo no encontrado." });
-      }
-
-      const products = await Product.find({ seller_id: userId }).populate('seller_id', 'name email');
-      
-      if (!products) {
-        return res.status(404).json({ error: "No se encontraron productos para este usuario." });
-      }
-      
-      res.status(200).json(products);
+        const userId = req.user.id;
+        const userProducts = await Product.find({ seller_id: userId });
+        
+        res.status(200).json(userProducts);
     } catch (error) {
-      console.error("Error en getProductsByUser:", error.message);
-      res.status(500).json({ error: 'Error obteniendo los productos del usuario: ' + error.message });
+        console.error("Error al obtener los productos del usuario:", error.message);
+        res.status(500).json({ error: 'Error al obtener los productos del usuario' });
     }
 };
 
-exports.getProductById = async (req, res) => {
+// Actualizar el estado del producto (activo/desactivado)
+exports.updateProductStatus = async (req, res) => {
+    const { id } = req.params;
+    const { isActive } = req.body;
+
     try {
-        const productId = req.params.id;  
-        const product = await Product.findById(productId);
+        const product = await Product.findByIdAndUpdate(
+            id,
+            { isActive: isActive },
+            { new: true }
+        );
+
         if (!product) {
             return res.status(404).json({ message: 'Producto no encontrado' });
         }
-        res.status(200).json(product);
+
+        res.json({ message: 'Estado del producto actualizado', product });
     } catch (error) {
-        console.error('Error al obtener el producto:', error);
-        res.status(500).json({ message: 'Error al obtener el producto' });
+        console.error('Error al actualizar el estado del producto:', error.message);
+        res.status(500).json({ message: 'Error al actualizar el estado del producto', error });
     }
 };
-  // Función para actualizar solo el estado (isActive) del producto
-  exports.updateProductStatus = async (req, res) => {
-    const { id } = req.params;
-    const { isActive } = req.body;
-  
-    try {
-      const product = await Product.findByIdAndUpdate(
-        id,
-        { isActive },
-        { new: true } // Retorna el documento actualizado
-      );
-  
-      if (!product) {
-        return res.status(404).json({ message: 'Producto no encontrado' });
-      }
-  
-      res.json({ message: 'Estado del producto actualizado', product });
-    } catch (error) {
-      res.status(500).json({ message: 'Error al actualizar el estado del producto', error });
-    }
-  };
-  
 
+// Obtener un producto por ID
+exports.getProductById = async (req, res) => {
+    try {
+        const productId = req.params.productId;
+        const product = await Product.findById(productId).populate('seller_id', 'name email');
+
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        console.error('Error al obtener el producto:', error.message);
+        res.status(500).json({ message: 'Error al obtener el producto', error });
+    }
+};

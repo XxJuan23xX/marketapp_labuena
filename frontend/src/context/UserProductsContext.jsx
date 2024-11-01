@@ -39,23 +39,27 @@ export const UserProductsProvider = ({ children }) => {
 
   const addProduct = async (productData) => {
     try {
-      const response = await api.post('/products/create', productData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Aseguramos el tipo para el manejo de archivos
-        },
-      });
+        console.log("Enviando FormData:", productData); // Para verificar los datos antes de enviar
+        const response = await api.post('/products/create', productData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Asegura el tipo de contenido correcto
+            },
+        });
 
-      if (response.status === 201) {
-        const newProduct = response.data;
-        setUserProducts((prevProducts) => [...prevProducts, newProduct]);
-        console.log("Producto añadido:", newProduct);
-      } else {
-        console.error('Error al crear el producto. Código de respuesta:', response.status);
-      }
+        if (response.status === 201) {
+            const newProduct = response.data;
+            setUserProducts((prevProducts) => [...prevProducts, newProduct]);
+            console.log("Producto añadido:", newProduct);
+        } else {
+            console.error('Error al crear el producto. Código de respuesta:', response.status);
+        }
     } catch (error) {
-      console.error('Error al conectar con el backend:', error);
+        console.error('Error al conectar con el backend:', error);
     }
-  };
+};
+
+
+
 
   return (
     <UserProductsContext.Provider value={{ userProducts, globalProducts, addProduct }}>

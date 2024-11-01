@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
+// Importar rutas
 const userRoutes = require('./routes/userRoutes'); 
 const productRoutes = require('./routes/productRoutes'); 
 const orderRoutes = require('./routes/orderRoutes'); 
@@ -16,6 +17,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 // Configurar CORS
 app.use(cors({
     origin: 'http://localhost:5173', // Cambia esto por el origen de tu frontend
@@ -24,8 +26,6 @@ app.use(cors({
 
 // Middleware para leer JSON
 app.use(express.json());
-
-app.use('/uploads', express.static('uploads'));
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -37,18 +37,15 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rutas para cada recurso
 app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes); // Esto permitirá acceder a /api/products y sus subrutas
 
-app.use('/api/users/login', userRoutes);
-app.use('/api', productRoutes);
-// Rutas para órdenes
 app.use('/api/orders', orderRoutes);
 app.use('/api/messages', messageRoutes);
-app.use('/api', categoryRoutes);
+app.use('/api', categoryRoutes); // Ajuste para consistencia
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/wishlists', wishlistRoutes);
 app.use('/api/notifications', notificationRoutes);
-app.use('/api/products', productRoutes);
 
 // Iniciar el servidor
 app.listen(PORT, () => {
