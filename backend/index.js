@@ -28,9 +28,12 @@ app.use(cors({
 app.use(express.json());
 
 // Conexión a MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Conectado a MongoDB'))
-    .catch(err => console.error('Error conectando a MongoDB:', err));
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Conexión exitosa a MongoDB Atlas"))
+  .catch(err => console.error("Error al conectar a MongoDB Atlas:", err));
 
 // Servir archivos estáticos desde la carpeta `uploads`
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
