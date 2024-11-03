@@ -103,7 +103,7 @@ const AllProducts = () => {
         {filteredProducts.map(product => (
             <div key={product._id} className="auction-card" onClick={() => goToDetails(product._id)}>
                 <img 
-                    src={`http://localhost:5000/${product.images[0]}`} 
+                    src={product.images[0]} 
                     alt={product.name} 
                     className="placeholder-image" 
                 />

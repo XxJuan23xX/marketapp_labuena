@@ -43,7 +43,7 @@ const DetallesAllProducts = () => {
                     {product.images.map((img, index) => (
                         <img
                             key={index}
-                            src={`http://localhost:5000/${img}`}
+                            src={img}
                             alt={`${product.name} thumbnail ${index + 1}`}
                             className={`thumbnail-image ${selectedImage === img ? 'selected' : ''}`}
                             onClick={() => setSelectedImage(img)} // Cambia la imagen principal al hacer clic
