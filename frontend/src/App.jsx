@@ -14,7 +14,7 @@ import Clientes from './pages/Clientes';
 import Productos from './pages/AdminProduct';
 
 import Subastas from './pages/Subastas';
-import DetallesAllProducts from './pages/DetallesallProduct';
+import DetallesAllProducts from './pages/DetallesAllProduct';
 import CrearSubasta from './pages/CrearSubasta';
 import AllProducts from './pages/AllProducts';
 
