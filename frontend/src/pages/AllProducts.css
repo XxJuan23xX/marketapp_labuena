@@ -1,182 +1,162 @@
+/* Contenedor general de todos los productos */
 .all-products-container {
-    background-color: #416285 !important;
+    background-color: #416285;
     margin: 0;
     min-height: 100vh;
     font-family: Arial, sans-serif;
-    padding-top: 100px;
     text-align: center;
     color: #ffffff;
     padding-bottom: 80px; /* Espacio extra para el footer */
 }
 
-.subastas-controls {
+/* Contenedor para los filtros */
+.filters-container {
     display: flex;
     justify-content: center;
-    gap: 200px;
+    flex-wrap: wrap;
+    gap: 15px;
     padding: 10px;
     background-color: #14213d;
-    border-radius: 10px;
-    max-width: 925px;
-    margin: 0 auto 20px;
+   
+   
     border: 1px solid #000000;
 }
 
-.select-box,
-.search-box {
+/* Botones de filtro por tipo (Venta, Subasta) */
+.type-filter, .category-filter {
     display: flex;
-    align-items: center;
-    background-color: #14213d;
-    border: 1px solid #fca311;
-    border-radius: 5px;
-    padding: 8px 12px;
-    color: #ffffff;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.select-box select,
-.search-box input {
-    background: transparent;
+.type-button, .category-button {
+    background-color: transparent;
     border: none;
     color: #ffffff;
-    outline: none;
-    padding: 5px;
-}
-
-.search-box button {
-    background-color: #fca311;
-    border: none;
-    color: #000000;
-    padding: 5px 10px;
-    border-radius: 5px;
+    font-size: 0.9rem;
     cursor: pointer;
-    margin-left: 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
     transition: background-color 0.3s;
 }
 
-.search-box button:hover {
-    background-color: #e5e5e5;
-    color: #000000;
+.type-button:hover, .category-button:hover {
+    background-color: #fca311;
+    color: #000;
 }
 
+.type-button.active, .category-button.active {
+    background-color: #fca311;
+    color: #000;
+}
+
+/* Sección de productos */
+.product-section {
+    margin: 0 auto;
+    padding: 20px;
+    text-align: left;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+/* Estilo de tarjetas de productos */
 .auction-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px; /* Espacio entre las tarjetas */
-    margin-top: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-bottom: 40px; /* Agrega margen inferior a las tarjetas */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: none;
+    
 }
 
 .auction-card {
-    background-color: #22245d;
-    border: 1px solid #333;
-    border-radius: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     overflow: hidden;
-    position: relative;
-    color: #fff;
-    width: 100%;
-    max-width: 300px;
+    color: #333;
+    padding: 10px;
+    text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin: 0 auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .auction-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+    transform: scale(1.03);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Contenedor de la imagen */
-.auction-card img {
+/* Contenedor de la imagen de producto */
+.product-image-container {
     width: 100%;
-    height: auto;
-    transition: opacity 0.3s ease;
-}
-
-/* Overlay oscuro */
-.auction-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-/* Información oculta por defecto */
-.auction-card .info-section {
-    position: absolute;
-    bottom: 50px; /* Espacio para el botón "Hover Me" */
-    left: 0;
-    width: 100%;
-    padding: 20px;
-    background: #333333; /* Fondo oscuro para buen contraste */
-    color: #fca311; /* Texto en naranja para contraste */
-    text-align: left;
-    font-size: 1.1rem;
-    transition: bottom 0.3s ease; /* Transición suave */
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    transform: translateY(100%); /* Oculto inicialmente */
-}
-
-/* Efecto hover: muestra el overlay y la información */
-.auction-card:hover::before {
-    opacity: 1;
-}
-
-.auction-card:hover .info-section {
-    bottom: 0; /* Muestra la información al hacer hover */
-}
-
-/* Estilo de los detalles del producto */
-.info-section span {
-    display: block;
-    color: #fca311;
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-.info-section {
-    position: absolute;
-    bottom: -100%; /* Oculto fuera de la vista inicial */
-    left: 0;
-    width: 100%;
-    padding: 10px;
-    background-color: #333;
-    color: #fca311;
-    text-align: center;
-    transition: bottom 0.3s ease; /* Transición suave para revelar */
-}
-
-.pagination-container {
-    /* Si necesitas agregar estilos de paginación aquí */
-}
-
-/* Estilo del botón Hover Me */
-.hover-me-button {
+    height: 180px;
+    overflow: hidden;
+    border-radius: 8px;
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 5px;
-    background-color: #333333;
-    color: #fca311;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 5px;
+    background-color: #f0f0f0;
+}
+
+.product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Nombre del producto */
+.product-name {
     font-size: 1rem;
-    position: absolute;
-    bottom: 10px; /* Ubicación en la parte inferior de la tarjeta */
-    left: 50%;
-    transform: translateX(-50%);
-    transition: background-color 0.3s;
+    font-weight: bold;
+    color: #000 !important;
+    margin: 10px 0 5px;
 }
 
-.hover-me-button:hover {
-    background-color: #444444;
+/* Precio del producto */
+.product-price {
+    font-size: 1.25rem;
+    color: #e63946;
+    font-weight: bold;
 }
 
+/* Categoría del producto */
+.product-category {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+/* Estado del producto (Venta o Subasta) */
+.product-status {
+    font-size: 0.875rem;
+    color: #28a745;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Colores específicos para los diferentes estados de la subasta */
+.product-status.subasta-en-curso {
+    color: #e63946; /* Color para "Subasta en curso" */
+}
+
+.product-status.subasta-finalizada {
+    color: #999; /* Color para "Subasta finalizada" */
+}
+
+/* Fecha de inicio de la subasta */
+.auction-start-date, .auction-end-date {
+    font-size: 0.875rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Responsive: Ajustes para pantallas más pequeñas */
 @media (max-width: 768px) {
     .auction-cards {
         grid-template-columns: repeat(2, 1fr);
@@ -188,29 +168,4 @@
     .auction-cards {
         grid-template-columns: 1fr;
     }
-}
-
-.hover-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #333;
-    color: #fca311;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 10px 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-
-.hover-icon {
-    margin-right: 5px;
-    color: #89cff0;
-}
-
-/* Ocultar hover-text al hacer hover y mostrar la info-section */
-.auction-card:hover .hover-text {
-    display: none;
 }
