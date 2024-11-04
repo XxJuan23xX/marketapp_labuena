@@ -79,8 +79,8 @@
 .main-image {
     width: 90%;
     max-width: 600px;
-    height: 400px; /* Tamaño fijo para la imagen principal */
-    object-fit: cover; /* Recorta si es necesario */
+    height: 400px;
+    object-fit: cover;
     transition: transform 0.3s ease;
 }
 
@@ -95,12 +95,29 @@
     justify-content: center;
 }
 
-/* Resto de estilos de información del producto */
-.product-info h2 {
+/* Título del producto y el ícono de corazón */
+.product-title {
+    display: flex;
+    align-items: center;
+    gap: 17.8rem;
+}
+
+.product-title h2 {
     font-size: 1.75rem;
     font-weight: bold;
-    margin-bottom: 1rem;
     color: #111;
+}
+
+/* Ícono de favorito */
+.favorite-icon {
+    font-size: 1.5rem;
+    color: #bbb; /* Gris cuando no está seleccionado */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.favorite-icon.favorite {
+    color: #ff0000; /* Rojo cuando está seleccionado */
 }
 
 .product-category {
@@ -168,6 +185,13 @@
 .bid-button:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
+}
+
+.current-bid {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #8B0000;
+    margin: 1rem 0;
 }
 
 /* Responsive design */
