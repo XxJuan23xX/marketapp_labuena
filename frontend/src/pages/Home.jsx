@@ -2,10 +2,9 @@
 import React from 'react';
 import Banner from '../components/home/BannerCarousel';
 import DailyDeals from '../components/home/DailyDeals';
-import PopularCategories from '../components/home/PopularCategories';
 import Recommendations from '../components/home/Recommendations';
-import CategoryCarousel from '../components/home/CategoryCarousel';
-import SpecialOffers from '../components/home/SpecialOffers';
+import CategoriesSection from '../components/home/CategoriesSection';
+import LocalMarketsCarousel from '../components/home/LocalMarketsCarousel';
 import './Home.css';
 import Navbar from '../components/navbar/navbarComponent';
 import Footer from '../components/footer/Footer';
@@ -16,10 +15,9 @@ const Home = () => {
             <Navbar></Navbar>
             <Banner />
             <DailyDeals />
-            <PopularCategories />
+            <CategoriesSection />
             <Recommendations />
-            <CategoryCarousel />
-            <SpecialOffers />
+            <LocalMarketsCarousel />
             <Footer></Footer>
         </div>
     );

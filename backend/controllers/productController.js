@@ -159,11 +159,12 @@ exports.getProductById = async (req, res) => {
 // Obtener las ofertas del día
 exports.getDailyDeals = async (req, res) => {
     try {
-        // Puedes ajustar el criterio de selección según tus necesidades
-        // Aquí seleccionamos 3 productos al azar como ejemplo
-        const dailyDeals = await Product.aggregate([{ $sample: { size: 3 } }]);
-        
-        // Si deseas incluir más detalles del vendedor
+        // Filtrar solo productos de tipo venta y seleccionar tres productos aleatorios
+        const dailyDeals = await Product.aggregate([
+            { $match: { type: 'venta' } }, // Filtra solo ventas
+            { $sample: { size: 4 } } // Selecciona solo tres productos
+        ]);
+
         await Product.populate(dailyDeals, { path: 'seller_id', select: 'name email' });
 
         res.status(200).json(dailyDeals);
@@ -172,4 +173,37 @@ exports.getDailyDeals = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener las ofertas del día', error });
     }
 };
+
+exports.getDailyAuctions = async (req, res) => {
+    try {
+        // Filtrar solo productos de tipo subasta y seleccionar dos productos aleatorios
+        const dailyAuctions = await Product.aggregate([
+            { $match: { type: 'subasta' } }, // Filtra solo subastas
+            { $sample: { size: 3 } } // Selecciona solo dos productos
+        ]);
+
+        await Product.populate(dailyAuctions, { path: 'seller_id', select: 'name email' });
+
+        res.status(200).json(dailyAuctions);
+    } catch (error) {
+        console.error('Error al obtener las subastas del día:', error.message);
+        res.status(500).json({ message: 'Error al obtener las subastas del día', error });
+    }
+};
+
+// Controlador en el backend
+exports.getRecommendedProducts = async (req, res) => {
+    try {
+        // Selecciona 6 productos aleatorios, mezclando "venta" y "subasta"
+        const recommendedProducts = await Product.aggregate([{ $sample: { size: 6 } }]);
+        await Product.populate(recommendedProducts, { path: 'seller_id', select: 'name email' });
+        
+        res.status(200).json(recommendedProducts);
+    } catch (error) {
+        console.error('Error al obtener productos recomendados:', error.message);
+        res.status(500).json({ message: 'Error al obtener productos recomendados', error });
+    }
+};
+
+
 

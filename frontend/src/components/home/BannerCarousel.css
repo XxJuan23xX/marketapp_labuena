@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #f5f5f5bc;
   }
   
   .carousel-content {
@@ -24,7 +25,7 @@
     margin-top: 20px;
   }
   
-  .carousel-button {
+  .carousel-button1 {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -38,21 +39,21 @@
     transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
   }
   
-  .carousel-button:hover {
+  .carousel-button1:hover {
     background: #1ae242; /* Cambia el fondo a azul en hover */
     color: #ffffff; /* Cambia el color del icono a blanco en hover */
     transform: translateY(-50%) scale(1.05); /* Añade un ligero aumento */
   }
   
-  .carousel-button.left {
+  .carousel-button1.left {
     left: 20px;
   }
   
-  .carousel-button.right {
+  .carousel-button1.right {
     right: 20px;
   }
   
-  .carousel-button:focus {
+  .carousel-button1:focus {
     outline: none; /* Elimina el borde de enfoque */
   }
   

@@ -18,8 +18,14 @@ router.patch('/:id/status', authMiddleware, productController.updateProductStatu
 // Ruta para obtener las ofertas del día
 router.get('/daily-deals', productController.getDailyDeals);
 
+router.get('/daily-auctions', productController.getDailyAuctions);
+
+// Ruta en el backend
+router.get('/recommendations', productController.getRecommendedProducts);
+
 // Obtener producto por ID
 router.get('/:productId', productController.getProductById);
+
 
 
 

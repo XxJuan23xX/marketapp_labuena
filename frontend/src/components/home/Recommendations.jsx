@@ -1,28 +1,48 @@
-// src/components/Recommendations.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../../../api';
 import './Recommendations.css';
 
 const Recommendations = () => {
-    const recommendedProducts = [
-        { id: 1, name: 'Producto A', price: 59.99, image: '/path/to/imageA.jpg' },
-        { id: 2, name: 'Producto B', price: 89.99, image: '/path/to/imageB.jpg' },
-        // Agrega más productos según sea necesario
-    ];
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
-    return (
-        <div className="recommendations">
-            <h2>Recomendados para Ti</h2>
-            <div className="recommendations-container">
-                {recommendedProducts.map(product => (
-                    <div key={product.id} className="recommendation-card">
-                        <img src={product.image} alt={product.name} className="recommendation-image" />
-                        <h3 className="recommendation-name">{product.name}</h3>
-                        <p className="recommendation-price">${product.price}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+  useEffect(() => {
+    const fetchRecommendedProducts = async () => {
+      try {
+        const response = await api.get('/products/recommendations');
+        setRecommendedProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching recommended products:', error);
+      }
+    };
+
+    fetchRecommendedProducts();
+  }, []);
+
+  return (
+    <div className="recommendations-section">
+      <h2 className="recommendations-title">Recomendaciones para ti</h2>
+      <div className="recommendations-grid">
+        {recommendedProducts.slice(0, 6).map((product) => (
+          <div className="recommendation-card" key={product._id}>
+            <img
+              src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/150'}
+              alt={product.name}
+              className="product-image"
+            />
+            <h3 className="product-name">{product.name}</h3>
+            {product.type === 'venta' ? (
+              <p className="product-price">${product.price}</p>
+            ) : (
+              <div className="auction-info">
+                <p className="product-starting-price">Precio inicial: ${product.startingPrice}</p>
+                <p className="auction-end-time">Termina: {new Date(product.auctionEndTime).toLocaleDateString()}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Recommendations;

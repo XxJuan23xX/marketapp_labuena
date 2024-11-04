@@ -19,11 +19,11 @@ const BannerCarousel = () => {
   return (
     <div className="banner-carousel">
       <div className="carousel-content">
-        <button className="carousel-button left" onClick={handlePrevious}>&lt;</button>
+        <button className="carousel-button1 left" onClick={handlePrevious}>&lt;</button>
         
         <img src={banners[currentIndex]} alt={`Banner ${currentIndex + 1}`} className="banner-image" />
         
-        <button className="carousel-button right" onClick={handleNext}>&gt;</button>
+        <button className="carousel-button1 right" onClick={handleNext}>&gt;</button>
       </div>
       
       <div className="carousel-indicators">
