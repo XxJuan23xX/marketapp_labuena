@@ -155,3 +155,21 @@ exports.getProductById = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener el producto', error });
     }
 };
+
+// Obtener las ofertas del día
+exports.getDailyDeals = async (req, res) => {
+    try {
+        // Puedes ajustar el criterio de selección según tus necesidades
+        // Aquí seleccionamos 3 productos al azar como ejemplo
+        const dailyDeals = await Product.aggregate([{ $sample: { size: 3 } }]);
+        
+        // Si deseas incluir más detalles del vendedor
+        await Product.populate(dailyDeals, { path: 'seller_id', select: 'name email' });
+
+        res.status(200).json(dailyDeals);
+    } catch (error) {
+        console.error('Error al obtener las ofertas del día:', error.message);
+        res.status(500).json({ message: 'Error al obtener las ofertas del día', error });
+    }
+};
+

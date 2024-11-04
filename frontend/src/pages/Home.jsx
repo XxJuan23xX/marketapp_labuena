@@ -1,24 +1,28 @@
-// pages/HomePage.js
-import React from "react";
-import Navbar from "../components/navbar/navbarComponent";
-import AnimatedBackground from "../components/backgroundHome/AnimatedBackground";
-import FirstContentSection from "../components/ContentHome/FirstContentSection";
-import SecondContentSection from "../components/ContentHome/SecondContentSection";
-import MysteryBoxComponent from "../components/MysteryBoxAnimation/MysteryBoxComponent";
-import Footer from "../components/footer/Footer";
+// src/pages/Home.jsx
+import React from 'react';
+import Banner from '../components/home/BannerCarousel';
+import DailyDeals from '../components/home/DailyDeals';
+import PopularCategories from '../components/home/PopularCategories';
+import Recommendations from '../components/home/Recommendations';
+import CategoryCarousel from '../components/home/CategoryCarousel';
+import SpecialOffers from '../components/home/SpecialOffers';
 import './Home.css';
+import Navbar from '../components/navbar/navbarComponent';
+import Footer from '../components/footer/Footer';
 
-const HomePage = () => {
-  return (
-    <div className="home-container">
-      <Navbar />
-      <AnimatedBackground />
-      <FirstContentSection />
-      <SecondContentSection />
-      <MysteryBoxComponent />
-      <Footer />
-    </div>
-  );
+const Home = () => {
+    return (
+        <div className="home-page">
+            <Navbar></Navbar>
+            <Banner />
+            <DailyDeals />
+            <PopularCategories />
+            <Recommendations />
+            <CategoryCarousel />
+            <SpecialOffers />
+            <Footer></Footer>
+        </div>
+    );
 };
 
-export default HomePage;
+export default Home;

@@ -4,34 +4,12 @@ import { FaBell, FaStore } from 'react-icons/fa';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { AuthContext } from '../../context/AuthContext';
 
-const decryptText = (element, originalText) => {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let iterations = 0;
-  const interval = setInterval(() => {
-    element.innerHTML = originalText
-      .split('')
-      .map((letter, index) => {
-        if (index < iterations) {
-          return originalText[index];
-        }
-        return letters[Math.floor(Math.random() * letters.length)];
-      })
-      .join('');
-    if (iterations >= originalText.length) {
-      clearInterval(interval);
-      element.innerHTML = originalText;
-    }
-    iterations += 1 / 3;
-  }, 20);
-};
-
 const Navbar = () => {
   const { isAuthenticated, userRole, userId, logout } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [avatar, setAvatar] = useState('/uploads/avatar-default.webp');
   const [isVendedorMode, setIsVendedorMode] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
-  const [fadeOut, setFadeOut] = useState(false); // Nuevo estado para el desvanecimiento
 
   useEffect(() => {
     const fetchAvatar = async () => {
@@ -53,36 +31,14 @@ const Navbar = () => {
     fetchAvatar();
   }, [userId]);
 
-  useEffect(() => {
-    const links = document.querySelectorAll('.navbar-links a');
-    links.forEach(link => {
-      const originalText = link.getAttribute('data-original-text');
-      link.addEventListener('mouseover', () => decryptText(link, originalText));
-    });
-  }, [isVendedorMode]);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
-
-  const toggleVendedorMode = () => {
-    setLoadingMessage(isVendedorMode ? 'Cambiando a modo Comprador...' : 'Cambiando a modo Vendedor...');
-    setFadeOut(false);
-
-    setTimeout(() => {
-      setFadeOut(true); // Inicia el desvanecimiento después de 1.5 segundos
-      setTimeout(() => {
-        setIsVendedorMode(!isVendedorMode);
-        setLoadingMessage('');
-      }, 500); // Espera 0.5 segundos adicionales para el desvanecimiento
-    }, 1500); // Duración de la pantalla de carga
-  };
 
   return (
     <div className="navbar-container">
       <nav className="navbar">
         <ul className="navbar-links">
           <li><a href="/" data-original-text="Inicio">Inicio</a></li>
-          
           {isVendedorMode ? (
             <>
               <li><a href="/products" data-original-text="Mis Productos">Mis Productos</a></li>
@@ -114,7 +70,7 @@ const Navbar = () => {
                 </div>
               </>
             )}
-            <button className="sell-button" onClick={toggleVendedorMode}>
+            <button className="sell-button" onClick={() => setIsVendedorMode(!isVendedorMode)}>
               <FaStore className="sell-icon" /> {isVendedorMode ? "Comprar" : "Vender"}
             </button>
           </>
@@ -138,16 +94,9 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          <a href="/login" className="launch-app-btn">Iniciar Sesión ↗</a>
+          <a href="/login" className="login-btn">Iniciar Sesión ↗</a>
         )}
       </nav>
-
-      {loadingMessage && (
-        <div className={`loading-screen ${fadeOut ? 'fade-out' : ''}`}>
-          <div className="spinner"></div>
-          <div className="loading-message">{loadingMessage}</div>
-        </div>
-      )}
     </div>
   );
 };
