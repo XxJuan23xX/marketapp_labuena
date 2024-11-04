@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/navbarComponent";
 import Footer from "../components/footer/Footer";
 import axios from "axios";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaHeart } from "react-icons/fa"; // Importa el ícono de corazón
 import "../pages/DetallesAllProducts.css";
 
 const DetallesAllProducts = () => {
@@ -11,6 +11,8 @@ const DetallesAllProducts = () => {
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [highestBid, setHighestBid] = useState(null);
+    const [isFavorite, setIsFavorite] = useState(false); // Estado para el corazón
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -18,6 +20,16 @@ const DetallesAllProducts = () => {
                 const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
                 setProduct(response.data);
                 setSelectedImage(response.data.images[0]);
+
+                if (response.data.type === "subasta") {
+                    const bidResponse = await axios.get(`http://localhost:5000/api/bids/${productId}/bids`);
+                    if (bidResponse.data.length > 0) {
+                        const maxBid = Math.max(...bidResponse.data.map(bid => bid.bidAmount));
+                        setHighestBid(maxBid);
+                    } else {
+                        setHighestBid(response.data.startingPrice);
+                    }
+                }
             } catch (error) {
                 console.error("Error al cargar el producto:", error);
             }
@@ -25,6 +37,15 @@ const DetallesAllProducts = () => {
 
         fetchProduct();
     }, [productId]);
+
+    const handleEnterAuction = () => {
+        navigate(`/auction/${productId}`);
+    };
+
+    // Función para cambiar el estado del ícono de favorito
+    const toggleFavorite = () => {
+        setIsFavorite(!isFavorite);
+    };
 
     if (!product) return <div>Cargando...</div>;
 
@@ -44,7 +65,7 @@ const DetallesAllProducts = () => {
                             src={img}
                             alt={`${product.name} thumbnail ${index + 1}`}
                             className="thumbnail-image"
-                            onMouseEnter={() => setSelectedImage(img)} // Cambia la imagen al pasar el cursor
+                            onMouseEnter={() => setSelectedImage(img)}
                         />
                     ))}
                 </div>
@@ -60,13 +81,21 @@ const DetallesAllProducts = () => {
                 </div>
 
                 <div className="product-info">
-                    <h2>{product.name}</h2>
+                    <div className="product-title">
+                        <h2>{product.name}</h2>
+                        <FaHeart
+                            onClick={toggleFavorite}
+                            className={`favorite-icon ${isFavorite ? "favorite" : ""}`}
+                        />
+                    </div>
                     <p className="product-description">{product.description}</p>
                     <p className="product-category">Categoría: {product.category}</p>
-                    
-                    {/* Muestra el precio o el precio inicial en función del tipo de producto */}
-                    {product.type === 'subasta' ? (
-                        <p className="product-price">Precio inicial: ${product.startingPrice}</p>
+
+                    {product.type === "subasta" ? (
+                        <>
+                            <p className="product-price">Precio inicial: ${product.startingPrice}</p>
+                            <p className="current-bid">Valor actual: ${highestBid}</p>
+                        </>
                     ) : (
                         <p className="product-price">Precio: ${product.price}</p>
                     )}
@@ -82,10 +111,12 @@ const DetallesAllProducts = () => {
                     )}
 
                     <div className="button-container">
-                        {product.type === 'venta' ? (
+                        {product.type === "venta" ? (
                             <button className="buy-button">Comprar</button>
                         ) : (
-                            <button className="bid-button">Pujar</button>
+                            <button className="bid-button" onClick={handleEnterAuction}>
+                                Entrar a Subasta
+                            </button>
                         )}
                     </div>
                 </div>

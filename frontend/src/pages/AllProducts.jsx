@@ -110,7 +110,11 @@ const AllProducts = () => {
                 </h2>
                 <div className="auction-cards">
                     {filteredProducts.map(product => (
-                        <div key={product._id} className="auction-card" onClick={() => goToDetails(product._id)}>
+                        <div 
+                            key={product._id} 
+                            className="auction-card" 
+                            onClick={() => goToDetails(product._id)}
+                        >
                             <div className="product-image-container">
                                 <img 
                                     src={product.images[0]} 

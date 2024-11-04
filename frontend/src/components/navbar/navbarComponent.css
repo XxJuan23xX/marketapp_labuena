@@ -1,114 +1,134 @@
+/* Contenedor principal del navbar */
 .navbar-container {
   display: flex;
   justify-content: center;
-  position: fixed;
-  top: 20px;
   width: 100%;
+  background: linear-gradient(90deg, #FFFFFF, #F5F5F5);
+  padding: 10px 0;
   z-index: 100;
 }
 
+/* Estructura del navbar */
 .navbar {
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 50px;
-  padding: 10px 30px;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  width: 60%;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 1200px;
 }
 
+/* Links del navbar */
 .navbar-links {
   list-style: none;
   display: flex;
-  gap: 2rem;
-  margin-right: 2rem;
+  gap: 1.5rem;
 }
 
 .navbar-links a {
-  color: #ffffff;
+  color: #333333;
   text-decoration: none;
   font-size: 1rem;
+  font-weight: 500;
   transition: color 0.3s ease;
-  position: relative;
-  cursor: pointer;
 }
 
+.navbar-links a:hover {
+  color: #7ED321;
+}
+
+/* Contenedor de la barra de búsqueda centrada */
+.search-container {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Barra de búsqueda */
 .search-bar1 {
   padding: 8px 16px;
   border-radius: 20px;
-  border: none;
+  border: 1px solid #ddd;
   outline: none;
-  width: 150px;
-  background-color: #ffffff90;
-  color: white;
+  width: 60%; /* Ajuste para centrar la barra de búsqueda */
+  max-width: 300px;
+  background-color: #FFFFFF;
+  color: #333;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-
-.heart-icon {
-  font-size: 1.5rem;
-  color: white;
-  margin-left: 1.5rem;
+/* Iconos de notificación y favoritos */
+.notification-icon, .heart-icon {
+  font-size: 1.4rem;
+  color: #333333;
   cursor: pointer;
+  transition: color 0.3s ease;
+  margin-left: 15px;
 }
 
+.notification-icon:hover, .heart-icon:hover {
+  color: #FFA500;
+}
+
+/* Botón de vender */
 .sell-button {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
-  border-radius: 30px;
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 1rem;
+  background-color: rgba(125, 221, 33, 0.15);
+  padding: 8px 20px;
+  border-radius: 20px;
+  color: #333333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-left: 1.5rem;
 }
 
 .sell-button:hover {
-  background-color: #48e5e4;
+  background-color: #7ED321;
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.launch-app-btn {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
-  border-radius: 30px;
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 1.5rem;
-  width: 120px;
-}
-
-.launch-app-btn:hover {
-  background-color: #48e5e4;
-}
-
-.logout-button {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
-  border-radius: 30px;
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 1.5rem;
+/* Botón de iniciar sesión */
+.login-btn {
+  background-color: #f0f0f0;
+  padding: 8px 24px;
+  border-radius: 20px;
+  color: #333333;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border: 1px solid #d1d1d1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1.5rem;
 }
 
-.logout-button:hover {
-  background-color: #e53935;
+.login-btn:hover {
+  background-color: #7ED321;
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+.login-btn a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Avatar de usuario */
 .avatar-container {
   display: flex;
   align-items: center;
   position: relative;
   cursor: pointer;
+  margin-left: 1.5rem;
 }
 
 .user-avatar {
@@ -117,102 +137,36 @@
   border-radius: 50%;
   object-fit: cover;
   transition: transform 0.3s ease;
-  margin-left: 40px;
 }
 
 .user-avatar:hover {
   transform: scale(1.1);
 }
 
+/* Menú desplegable del avatar */
 .dropdown-menu {
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  z-index: 100;
   display: flex;
   flex-direction: column;
   padding: 10px 0;
   width: 150px;
+  z-index: 100;
 }
 
 .dropdown-menu a {
   padding: 10px 20px;
-  color: #333;
+  color: #333333;
   text-decoration: none;
-  display: flex;
-  align-items: center;
+  font-size: 0.9rem;
   transition: background-color 0.3s ease;
 }
 
 .dropdown-menu a:hover {
-  background-color: #f0f0f0;
+  background-color: #F5F5F5;
 }
-
-.dropdown-menu a:active {
-  background-color: #e0e0e0;
-}
-
-.notification-icon {
-  font-size: 1.5rem;
-  color: white;
-  margin-left: 1.5rem;
-  cursor: pointer;
-}
-
-.notification-icon:hover {
-  color: #ccc; /* Un ligero cambio de color al pasar el cursor */
-}
-
-.loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, #141e30, #243b55);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  color: #ffffff;
-  font-size: 1.5em;
-  transition: opacity 0.5s ease; /* Transición suave */
-  opacity: 1;
-}
-
-.fade-out {
-  opacity: 0;
-}
-
-.spinner {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid #ffffff;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading-message {
-  text-align: center;
-  font-size: 1.2em;
-  animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-

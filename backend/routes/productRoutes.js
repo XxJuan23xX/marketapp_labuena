@@ -15,7 +15,12 @@ router.get('/user-products', authMiddleware, productController.getProductsByUser
 // Actualizar el estado del producto (requiere autenticación)
 router.patch('/:id/status', authMiddleware, productController.updateProductStatus);
 
+// Ruta para obtener las ofertas del día
+router.get('/daily-deals', productController.getDailyDeals);
+
 // Obtener producto por ID
 router.get('/:productId', productController.getProductById);
+
+
 
 module.exports = router;

@@ -14,6 +14,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const paymentRoutes = require('./routes/paymentRoutes'); 
 const wishlistRoutes = require('./routes/wishlistRoutes'); 
 const notificationRoutes = require('./routes/notificationRoutes'); 
+const bidRoutes = require("./routes/bidRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,6 +50,9 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/wishlists', wishlistRoutes);
 app.use('/api/notifications', notificationRoutes);
+
+
+app.use("/api/bids", bidRoutes);
 
 // Iniciar el servidor
 app.listen(PORT, () => {

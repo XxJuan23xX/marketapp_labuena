@@ -12,7 +12,7 @@ import Dashboard from './pages/Dashboard';
 import Pedidos from './pages/Pedidos';
 import Clientes from './pages/Clientes';
 import Productos from './pages/AdminProduct';
-
+import AuctionDetails from "./pages/AuctionDetails";
 import Subastas from './pages/Subastas';
 import DetallesAllProducts from './pages/DetallesAllProduct';
 import CrearSubasta from './pages/CrearSubasta';
@@ -42,6 +42,8 @@ const App = () => {
         <Route path="/allderrapin" element={<AllProducts/>}/>
             <Route path="/register" element={<Register />} />
             <Route path="/Account" element={<UserProfile />} />
+            <Route path="/auction/:productId" element={<AuctionDetails />} />
+
             
             {/* Rutas protegidas */}
             <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />
