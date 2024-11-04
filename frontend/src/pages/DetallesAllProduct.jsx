@@ -1,4 +1,3 @@
-// src/pages/DetallesAllProducts.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/navbarComponent";
@@ -11,14 +10,14 @@ const DetallesAllProducts = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
-    const [selectedImage, setSelectedImage] = useState(null); // Estado para la imagen seleccionada
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
                 setProduct(response.data);
-                setSelectedImage(response.data.images[0]); // Setea la primera imagen como principal por defecto
+                setSelectedImage(response.data.images[0]);
             } catch (error) {
                 console.error("Error al cargar el producto:", error);
             }
@@ -30,44 +29,48 @@ const DetallesAllProducts = () => {
     if (!product) return <div>Cargando...</div>;
 
     return (
-        <div>
+        <div className="full-screen">
             <Navbar />
-            {/* Botón de regresar */}
-            <button className="back-button" onClick={() => navigate(-1)}>
-                <FaArrowLeft /> Regresar
-            </button>
-
             <div className="product-details-container">
-                {/* Columna de miniaturas */}
+                <div className="header">
+                    <button className="back-button" onClick={() => navigate(-1)}>
+                        <FaArrowLeft /> Regresar
+                    </button>
+                </div>
                 <div className="thumbnail-column">
                     {product.images.map((img, index) => (
                         <img
                             key={index}
                             src={img}
                             alt={`${product.name} thumbnail ${index + 1}`}
-                            className={`thumbnail-image ${selectedImage === img ? 'selected' : ''}`}
-                            onClick={() => setSelectedImage(img)} // Cambia la imagen principal al hacer clic
+                            className="thumbnail-image"
+                            onMouseEnter={() => setSelectedImage(img)} // Cambia la imagen al pasar el cursor
                         />
                     ))}
                 </div>
 
-                {/* Contenedor de la imagen principal */}
                 <div className="main-image-container">
                     {selectedImage && (
                         <img
-                            src={`http://localhost:5000/${selectedImage}`}
+                            src={selectedImage}
                             alt={product.name}
                             className="main-image"
                         />
                     )}
                 </div>
 
-                {/* Información del producto */}
                 <div className="product-info">
                     <h2>{product.name}</h2>
                     <p className="product-description">{product.description}</p>
                     <p className="product-category">Categoría: {product.category}</p>
-                    <p className="product-price">Precio: ${product.price}</p>
+                    
+                    {/* Muestra el precio o el precio inicial en función del tipo de producto */}
+                    {product.type === 'subasta' ? (
+                        <p className="product-price">Precio inicial: ${product.startingPrice}</p>
+                    ) : (
+                        <p className="product-price">Precio: ${product.price}</p>
+                    )}
+
                     <p className="product-stock">Stock: {product.stock}</p>
                     <p className="product-status">Estado: {product.isActive ? "Activo" : "Inactivo"}</p>
 
@@ -93,4 +96,3 @@ const DetallesAllProducts = () => {
 };
 
 export default DetallesAllProducts;
-    

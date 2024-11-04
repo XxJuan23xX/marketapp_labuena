@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import Navbar from "../components/navbar/navbarComponent";
 import "../pages/AllProducts.css";
 import Footer from "../components/footer/Footer";
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -12,8 +11,7 @@ const AllProducts = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const [selectedType, setSelectedType] = useState("All");
-    const [favorites, setFavorites] = useState({});
+    const [selectedType, setSelectedType] = useState("venta"); // Mostrar "venta" por defecto
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,90 +37,109 @@ const AllProducts = () => {
         fetchCategories();
     }, []);
 
-    const handleCategoryChange = (e) => {
-        setSelectedCategory(e.target.value);
+    const handleCategoryChange = (category) => {
+        setSelectedCategory(category);
     };
 
-    const toggleFavorite = (productId) => {
-        setFavorites(prevFavorites => ({
-            ...prevFavorites,
-            [productId]: !prevFavorites[productId]
-        }));
+    const handleTypeChange = (type) => {
+        setSelectedType(type);
     };
 
     const goToDetails = (productId) => {
         navigate(`/detallesallproducts/${productId}`);
     };
 
-    // Filtrar productos según el tipo, categoría y seller_id
-    const filteredProducts = products.filter(product => {
-        const sellerId = product.seller_id._id || product.seller_id;
-        return (selectedCategory === "All" || product.category === selectedCategory) &&
-               (selectedType === "All" || product.type === selectedType) &&
-               (sellerId.toString() !== userId.toString());
-    });
+    const getAuctionStatus = (auctionEndTime) => {
+        const now = new Date();
+        const endDate = new Date(auctionEndTime);
+
+        if (now >= endDate) {
+            return "Subasta finalizada";
+        } else {
+            return "Subasta en curso";
+        }
+    };
+
+    // Filtrar productos según el tipo y la categoría seleccionada
+    const filteredProducts = products.filter(product => 
+        (selectedCategory === "All" || product.category === selectedCategory) &&
+        product.type === selectedType &&
+        (product.seller_id._id || product.seller_id) !== userId
+    );
 
     return (
         <div className="all-products-container">
             <Navbar />
-            <div className="subastas-controls">
-                <div className="filter-buttons">
+            <div className="filters-container">
+                <div className="type-filter">
                     <button 
-                        className={`filter-button ${selectedType === "venta" ? "active" : ""}`} 
-                        onClick={() => setSelectedType("venta")}
+                        className={`type-button ${selectedType === "venta" ? "active" : ""}`} 
+                        onClick={() => handleTypeChange("venta")}
                     >
                         Venta
                     </button>
                     <button 
-                        className={`filter-button ${selectedType === "subasta" ? "active" : ""}`} 
-                        onClick={() => setSelectedType("subasta")}
+                        className={`type-button ${selectedType === "subasta" ? "active" : ""}`} 
+                        onClick={() => handleTypeChange("subasta")}
                     >
                         Subasta
                     </button>
                 </div>
-
-                <div className="select-box">
-                    <label>Sort By :</label>
-                    <select value={selectedCategory} onChange={handleCategoryChange}>
-                        <option value="All">All</option>
-                        {categories.map(category => (
-                            <option key={category._id} value={category.name}>{category.name}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="search-box">
-                    <input type="text" placeholder="Item Name..." />
-                    <button>🔍</button>
-                </div>
-            </div>
-
-            <div className="product-list">
-    <h2>Productos en Venta</h2>
-    <div className="auction-cards">
-        {filteredProducts.map(product => (
-            <div key={product._id} className="auction-card" onClick={() => goToDetails(product._id)}>
-                <img 
-                    src={product.images[0]} 
-                    alt={product.name} 
-                    className="placeholder-image" 
-                />
-                <h3>{product.name}</h3>
-                <div className="dotted-line"></div>
-
-                <div className="hover-text">
-                    <span className="hover-icon">⏸️</span> Hover Me
-                </div>
-                
-                <div className="info-section">
-                    <span>Precio:</span>
-                    <span className="sale-price">${product.price}</span>
+                <div className="category-filter">
+                    <button 
+                        className={`category-button ${selectedCategory === "All" ? "active" : ""}`} 
+                        onClick={() => handleCategoryChange("All")}
+                    >
+                        Todas
+                    </button>
+                    {categories.map(category => (
+                        <button 
+                            key={category._id} 
+                            className={`category-button ${selectedCategory === category.name ? "active" : ""}`} 
+                            onClick={() => handleCategoryChange(category.name)}
+                        >
+                            {category.name}
+                        </button>
+                    ))}
                 </div>
             </div>
-        ))}
-    </div>
-</div>
 
+            <div className="product-section">
+                <h2 className="section-title">
+                    {selectedType === "venta" ? "Productos en Venta" : "Productos en Subasta"}
+                </h2>
+                <div className="auction-cards">
+                    {filteredProducts.map(product => (
+                        <div key={product._id} className="auction-card" onClick={() => goToDetails(product._id)}>
+                            <div className="product-image-container">
+                                <img 
+                                    src={product.images[0]} 
+                                    alt={product.name} 
+                                    className="product-image" 
+                                />
+                            </div>
+                            <h3 className="product-name">{product.name}</h3>
+                            <p className="product-category">Categoría: {product.category}</p>
+                            
+                            {product.type === 'venta' ? (
+                                <>
+                                    <p className="product-price">Precio: ${product.price}</p>
+                                    <p className="product-status">Aún en venta</p>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="product-price">Precio inicial: ${product.startingPrice}</p>
+                                    <p className="product-status">
+                                        {product.auctionEndTime 
+                                            ? getAuctionStatus(product.auctionEndTime) 
+                                            : 'Fecha de finalización no disponible'}
+                                    </p>
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             <Footer />
         </div>
