@@ -22,8 +22,22 @@ const MyProducts = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setProducts(response.data);
-        setFilteredProducts(response.data);
+
+        // Agrega una llamada adicional para obtener el `orderId` de cada producto
+        const productsWithOrders = await Promise.all(
+          response.data.map(async (product) => {
+            try {
+              const orderResponse = await api.get(`/orders/product/${product._id}`);
+              return { ...product, orderId: orderResponse.data[0]?._id || null };
+            } catch (error) {
+              console.error(`Error obteniendo órdenes para producto ${product._id}:`, error);
+              return product;
+            }
+          })
+        );
+
+        setProducts(productsWithOrders);
+        setFilteredProducts(productsWithOrders);
       } catch (error) {
         console.error("Error al obtener productos:", error);
       } finally {
@@ -122,7 +136,13 @@ const MyProducts = () => {
                   <td>${product.price}</td>
                   <td>{product.isActive ? 'Activo' : 'Inactivo'}</td>
                   <td>
-                    <Link to={`/PedidoEstado/${product._id}`} className="action-button">Detalles</Link>
+                    {product.orderId ? (
+                      <Link to={`/PedidoEstado/${product.orderId}`} className="action-button">
+                        Detalles
+                      </Link>
+                    ) : (
+                      'Sin orden'
+                    )}
                     <button className="action-button delete" onClick={() => handleDelete(product._id)}>Eliminar</button>
                     {product.isActive ? (
                       <button

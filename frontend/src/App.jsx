@@ -41,9 +41,11 @@ const App = () => {
             <Route path="/Account" element={<UserProfile />} />
             <Route path="/auction/:productId" element={<AuctionDetails />} />
             
-            {/* Ruta sin protección para el historial de compras */}
+            {/* Ruta para historial de compras y detalles de compra */}
             <Route path="/Historial" element={<Compras />} />
-            <Route path="/PedidoEstado/:productId" element={<PedidoEstado />} />
+            <Route path="/compras/:orderId" element={<Compras />} />  {/* Muestra los detalles de la compra */}
+
+            <Route path="/PedidoEstado/:orderId" element={<PedidoEstado />} />
 
             {/* Rutas protegidas */}
             <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />

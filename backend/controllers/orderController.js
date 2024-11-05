@@ -65,17 +65,35 @@ exports.getOrderById = async (req, res) => {
     }
 };
 
-// Actualizar el estado de una orden (pendiente, completado, etc.)
-exports.updateOrderStatus = async (req, res) => {
+// Endpoint para finalizar la venta
+exports.finalizeOrder = async (req, res) => {
     try {
-        const { status, confirmation } = req.body;
-        const order = await Order.findByIdAndUpdate(req.params.id, { status, confirmation }, { new: true });
-        if (!order) return res.status(404).json({ message: 'Orden no encontrada' });
-        res.status(200).json(order);
+      const orderId = req.params.id;
+      const updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        { status: 'completado' },
+        { new: true }
+      );
+  
+      if (!updatedOrder) {
+        return res.status(404).json({ message: 'Orden no encontrada' });
+      }
+  
+      // Crear la notificación para el comprador
+      const notification = new Notification({
+        user_id: updatedOrder.buyer_id,
+        message: 'Su compra ha sido confirmada y finalizada.'
+      });
+      await notification.save();
+  
+      res.status(200).json(updatedOrder);
     } catch (error) {
-        res.status(400).json({ error: 'Error actualizando la orden: ' + error.message });
+      console.error("Error al finalizar la orden:", error);
+      res.status(500).json({ error: 'Error al finalizar la orden' });
     }
-};
+  };
+  
+
 
 // Eliminar una orden por ID
 exports.deleteOrder = async (req, res) => {
@@ -171,3 +189,23 @@ exports.getMonthlySales = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener las ventas mensuales: ' + error.message });
     }
 };
+
+exports.getOrdersByProductId = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const orders = await Order.find({ product_id: productId })
+            .populate('buyer_id', 'name email')
+            .populate('seller_id', 'name email')
+            .populate('product_id', 'name price'); // Populamos datos del producto si es necesario
+
+        if (orders.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron órdenes para este producto' });
+        }
+
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error("Error al obtener las órdenes por productId:", error.message);
+        res.status(500).json({ error: 'Error al obtener las órdenes del producto' });
+    }
+};
+

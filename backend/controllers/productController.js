@@ -2,6 +2,7 @@ const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 const path = require('path');
 const Product = require('../models/Product'); // Ajusta la ruta según la estructura de tu proyecto
+const Order = require('../models/Order');
 
 
 // Configuración de Google Cloud Storage
@@ -210,5 +211,17 @@ exports.getRecommendedProducts = async (req, res) => {
     }
 };
 
+exports.getUserProducts = async (req, res) => {
+    try {
+        const products = await Product.find({ seller_id: req.user.id })
+            .populate({
+                path: 'order', // Asegúrate de que 'order' sea un campo en el esquema de Product
+                select: '_id status buyer_id', // Selecciona solo los campos necesarios de Order
+            });
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los productos del usuario' });
+    }
+};
 
 

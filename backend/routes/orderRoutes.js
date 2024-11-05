@@ -13,12 +13,12 @@ router.get('/last-sold-products', orderController.getLastSoldProducts);
 
 // Obtener ventas mensuales
 router.get('/monthly-sales', orderController.getMonthlySales);
-
+router.get('/product/:productId', orderController.getOrdersByProductId);
 // Obtener una orden por ID
 router.get('/:id', orderController.getOrderById);
 
 // Actualizar el estado de una orden por ID
-router.put('/:id', orderController.updateOrderStatus);
+router.put('/finalize/:id', orderController.finalizeOrder);
 
 // Eliminar una orden por ID
 router.delete('/:id', orderController.deleteOrder);
