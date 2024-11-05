@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 5000;
 
 // Configurar CORS
 app.use(cors({
-    origin: 'https://marketapp-backend.onrender.com', // Cambia esto por el origen de tu frontend
+    origin: 'https://marketapp-frontend.vercel.app/', // Cambia esto por el origen de tu frontend
     credentials: true,
 }));
 
