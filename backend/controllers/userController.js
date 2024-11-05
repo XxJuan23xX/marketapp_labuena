@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const Role = require('../models/Role'); // Importar el modelo de Role
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer'); // Para manejar la carga de archivos
 
