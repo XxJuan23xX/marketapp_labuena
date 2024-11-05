@@ -2,15 +2,17 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/navbarComponent";
 import Footer from "../components/footer/Footer";
-import api from "../../api";
-import { AuthContext } from '../context/AuthContext'; // Asegúrate de importar el contexto si tienes autenticación
+import { AuthContext } from '../context/AuthContext';
 import { FaArrowLeft, FaHeart } from "react-icons/fa";
 import "../pages/DetallesAllProducts.css";
+
+// URL directa del backend
+const BASE_URL = 'https://marketapp-backend.onrender.com';
 
 const DetallesAllProducts = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
-    const { userId } = useContext(AuthContext); // Obtiene el ID del usuario desde el contexto
+    const { userId } = useContext(AuthContext);
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [highestBid, setHighestBid] = useState(null);
@@ -19,17 +21,19 @@ const DetallesAllProducts = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await api.get(`/products/${productId}`);
-                setProduct(response.data);
-                setSelectedImage(response.data.images[0]);
+                const response = await fetch(`${BASE_URL}/api/products/${productId}`);
+                const productData = await response.json();
+                setProduct(productData);
+                setSelectedImage(productData.images[0]);
 
-                if (response.data.type === "subasta") {
-                    const bidResponse = await api.get(`/bids/${productId}/bids`);
-                    if (bidResponse.data.length > 0) {
-                        const maxBid = Math.max(...bidResponse.data.map(bid => bid.bidAmount));
+                if (productData.type === "subasta") {
+                    const bidResponse = await fetch(`${BASE_URL}/api/bids/${productId}/bids`);
+                    const bidData = await bidResponse.json();
+                    if (bidData.length > 0) {
+                        const maxBid = Math.max(...bidData.map(bid => bid.bidAmount));
                         setHighestBid(maxBid);
                     } else {
-                        setHighestBid(response.data.startingPrice);
+                        setHighestBid(productData.startingPrice);
                     }
                 }
             } catch (error) {
@@ -63,18 +67,23 @@ const DetallesAllProducts = () => {
                 price: product.price,
             };
 
-            // Agrega un console.log para ver el contenido de orderData
             console.log("Datos de la orden que se están enviando:", orderData);
 
-            const response = await api.post("/orders", orderData);
+            const response = await fetch(`${BASE_URL}/api/orders`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData),
+            });
 
-            // Notificación al comprador
-            alert("¡Compra en proceso! El vendedor confirmará tu compra.");
-
-            // Notificación al vendedor
-            console.log("Notificación enviada al vendedor.");
-
-            navigate("/Historial"); // Redirige a la página de historial de compras
+            if (response.ok) {
+                alert("¡Compra en proceso! El vendedor confirmará tu compra.");
+                navigate("/Historial");
+            } else {
+                console.error("Error al procesar la compra:", await response.json());
+                alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");
+            }
         } catch (error) {
             console.error("Error al procesar la compra:", error);
             alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");
