@@ -21,7 +21,7 @@ export const UserProductsProvider = ({ children }) => {
 
   const loadUserProducts = async () => {
     try {
-      const response = await api.get('/user-products'); // Usa `api` con el interceptor para añadir el token automáticamente
+      const response = await api.get('/products/user-products'); // Usa `api` con el interceptor para añadir el token automáticamente
       setUserProducts(response.data);
       console.log("Productos del usuario cargados:", response.data);
     } catch (error) {

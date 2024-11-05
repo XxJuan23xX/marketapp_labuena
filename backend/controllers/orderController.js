@@ -1,16 +1,42 @@
 const Order = require('../models/Order');
+const Notification = require('../models/Notification');
 
-// Crear una nueva orden
+// Crear una nueva orden y generar notificaciones
 exports.createOrder = async (req, res) => {
     try {
+        console.log("Datos recibidos en el backend:", req.body); // Agrega este log
         const { product_id, buyer_id, seller_id, price } = req.body;
+
+        // Verifica que todos los campos estén presentes
+        if (!product_id || !buyer_id || !seller_id || typeof price !== 'number') {
+            return res.status(400).json({ error: 'Faltan campos requeridos o el precio no es un número.' });
+        }
+
+        // Crear la nueva orden
         const newOrder = new Order({ product_id, buyer_id, seller_id, price });
         await newOrder.save();
+
+        // Crear notificación para el comprador
+        const buyerNotification = new Notification({
+            user_id: buyer_id,
+            message: `Tu compra está en proceso.`
+        });
+        await buyerNotification.save();
+
+        // Crear notificación para el vendedor
+        const sellerNotification = new Notification({
+            user_id: seller_id,
+            message: `Un usuario ha comprado tu producto, clic aquí para ver detalles.`
+        });
+        await sellerNotification.save();
+
         res.status(201).json(newOrder);
     } catch (error) {
-        res.status(400).json({ error: 'Error creando la orden: ' + error.message });
+        console.error("Error al crear la orden y notificaciones:", error.message);
+        res.status(400).json({ error: 'Error creando la orden y notificaciones: ' + error.message });
     }
 };
+
 
 // Obtener todas las órdenes
 exports.getOrders = async (req, res) => {
@@ -39,7 +65,7 @@ exports.getOrderById = async (req, res) => {
     }
 };
 
-// Actualizar el estado de una orden (envío, entrega, etc.)
+// Actualizar el estado de una orden (pendiente, completado, etc.)
 exports.updateOrderStatus = async (req, res) => {
     try {
         const { status, confirmation } = req.body;
@@ -62,7 +88,7 @@ exports.deleteOrder = async (req, res) => {
     }
 };
 
-// Obtener las ganancias totales y el cambio porcentual en el último mes
+// Obtener ganancias totales y cambio porcentual en el último mes
 exports.getGanancias = async (req, res) => {
     try {
         const fechaActual = new Date();
@@ -70,7 +96,6 @@ exports.getGanancias = async (req, res) => {
         const primerDiaMesAnterior = new Date(fechaActual.getFullYear(), fechaActual.getMonth() - 1, 1);
         const ultimoDiaMesAnterior = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 0);
 
-        // Obtener las órdenes completadas del mes actual y del mes anterior
         const ordenesMesActual = await Order.find({
             status: 'completado',
             created_at: { $gte: primerDiaMesActual }
@@ -81,19 +106,17 @@ exports.getGanancias = async (req, res) => {
             created_at: { $gte: primerDiaMesAnterior, $lte: ultimoDiaMesAnterior }
         });
 
-        // Calcular las ganancias del mes actual y del mes anterior
         const gananciasMesActual = ordenesMesActual.reduce((total, order) => total + order.price, 0);
         const gananciasMesAnterior = ordenesMesAnterior.reduce((total, order) => total + order.price, 0);
 
-        // Calcular el cambio porcentual
         let cambioPorcentual = 0;
         if (gananciasMesAnterior > 0) {
             cambioPorcentual = ((gananciasMesActual - gananciasMesAnterior) / gananciasMesAnterior) * 100;
         }
 
         res.status(200).json({
-            total: gananciasMesActual || 0,  // Devuelve 0 si no hay ganancias
-            cambioPorcentual: parseFloat(cambioPorcentual.toFixed(2)) || 0  // Devuelve 0 si no hay cambio
+            total: gananciasMesActual || 0,
+            cambioPorcentual: parseFloat(cambioPorcentual.toFixed(2)) || 0
         });
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener las ganancias: ' + error.message });
@@ -103,7 +126,6 @@ exports.getGanancias = async (req, res) => {
 // Obtener el número total de productos vendidos
 exports.getProductosVendidos = async (req, res) => {
     try {
-        // Contamos todas las órdenes cuyo estado sea 'completado'
         const totalProductosVendidos = await Order.countDocuments({ status: 'completado' });
         res.status(200).json({ total: totalProductosVendidos });
     } catch (error) {
@@ -114,10 +136,10 @@ exports.getProductosVendidos = async (req, res) => {
 // Obtener los últimos 3 productos vendidos
 exports.getLastSoldProducts = async (req, res) => {
     try {
-        const lastSoldProducts = await Order.find({ status: 'completado' }) // Solo pedidos completados
+        const lastSoldProducts = await Order.find({ status: 'completado' })
             .sort({ created_at: -1 })
             .limit(3)
-            .populate('product_id', 'title'); // Obteniendo el título del producto
+            .populate('product_id', 'title');
 
         res.status(200).json(lastSoldProducts);
     } catch (error) {
@@ -128,30 +150,24 @@ exports.getLastSoldProducts = async (req, res) => {
 // Obtener las ventas mensuales
 exports.getMonthlySales = async (req, res) => {
     try {
-      const sales = await Order.aggregate([
-        {
-          $match: { status: 'completado' } // Solo pedidos completados
-        },
-        {
-          $group: {
-            _id: { $month: '$created_at' },
-            totalSales: { $sum: '$price' }
-          }
-        },
-        {
-          $sort: { _id: 1 } // Ordenar por mes
-        }
-      ]);
-  
-      const formattedSales = sales.map(sale => ({
-        month: sale._id,
-        totalSales: sale.totalSales
-      }));
-  
-      res.status(200).json(formattedSales);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al obtener las ventas mensuales: ' + error.message });
-    }
-  };
-  
+        const sales = await Order.aggregate([
+            { $match: { status: 'completado' } },
+            {
+                $group: {
+                    _id: { $month: '$created_at' },
+                    totalSales: { $sum: '$price' }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
 
+        const formattedSales = sales.map(sale => ({
+            month: sale._id,
+            totalSales: sale.totalSales
+        }));
+
+        res.status(200).json(formattedSales);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener las ventas mensuales: ' + error.message });
+    }
+};

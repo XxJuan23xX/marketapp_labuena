@@ -25,7 +25,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #0056b3;
+  background-color: #d0cfcfbc;
 }
 
 .register-container {
@@ -43,11 +43,13 @@ body {
   padding: 20px;
   width: 50%;
   animation: slideInLeft 1s ease-out;
+  background-color: #ffffffbc;
 }
 
 .form-section h2 {
   margin-bottom: 15px;
   animation: slideInLeft 1s ease-out 0.2s both;
+  color: black;
 }
 
 .form-section label {
@@ -107,7 +109,7 @@ body {
 .form-section button {
   width: 100%;
   padding: 8px;
-  background: linear-gradient(9deg, rgba(68,195,88,1) 0%, rgba(2,0,36,1) 100%);
+  background: linear-gradient(9deg, rgb(66, 214, 88) 0%, rgba(2, 0, 36, 0.634) 100%);
   color: white;
   border: none;
   border-radius: 5px;

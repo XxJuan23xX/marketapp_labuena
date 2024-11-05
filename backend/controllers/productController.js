@@ -106,6 +106,10 @@ exports.getProducts = async (req, res) => {
 // Obtener productos por usuario
 exports.getProductsByUser = async (req, res) => {
     try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ error: 'No autorizado: Usuario no autenticado' });
+        }
+
         const userId = req.user.id;
         const userProducts = await Product.find({ seller_id: userId });
         
@@ -115,6 +119,7 @@ exports.getProductsByUser = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los productos del usuario' });
     }
 };
+
 
 // Actualizar el estado del producto (activo/desactivado)
 exports.updateProductStatus = async (req, res) => {

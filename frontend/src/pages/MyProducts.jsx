@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import './MyProducts.css';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../../api'; // Importa la instancia configurada de api
+import api from '../../api';
 import { AuthContext } from '../context/AuthContext';
 
 const MyProducts = () => {
@@ -16,8 +16,15 @@ const MyProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get('/user-products');
-        console.log("Response from /api/user-products:", response.data);
+        const token = localStorage.getItem('token'); // Obtén el token del almacenamiento local o del contexto de autenticación
+    
+        const response = await api.get('/products/user-products', {
+          headers: {
+            Authorization: `Bearer ${token}`, // Asegúrate de enviar el token con el prefijo 'Bearer '
+          },
+        });
+    
+        console.log("Response from /api/products/user-products:", response.data);
         setProducts(response.data);
         setFilteredProducts(response.data);
       } catch (error) {
@@ -26,6 +33,7 @@ const MyProducts = () => {
         setLoading(false);
       }
     };
+    
 
     if (userId) {
       console.log("User ID from AuthContext:", userId);
@@ -64,22 +72,16 @@ const MyProducts = () => {
 
   const handleToggleStatus = async (productId, currentStatus) => {
     try {
-      // Alterna el valor del estado actual
       const newStatus = !currentStatus;
-  
       const response = await api.patch(`/products/${productId}/status`, { isActive: newStatus });
-      
-      // Actualiza el estado del producto en el frontend
       setProducts(products.map(product => 
         product._id === productId ? { ...product, isActive: newStatus } : product
       ));
-  
       console.log("Product status updated:", productId, newStatus);
     } catch (error) {
       console.error("Error al cambiar estado del producto:", error);
     }
   };
-  
 
   return (
     <div className="my-products-page">
@@ -129,34 +131,33 @@ const MyProducts = () => {
               </tr>
             </thead>
             <tbody>
-  {filteredProducts.map((product) => (
-    <tr key={product._id}>
-      <td>{product.name}</td>
-      <td>${product.price}</td>
-      <td>{product.isActive ? 'Activo' : 'Inactivo'}</td>
-      <td>
-        <Link to={`/edit-product/${product._id}`} className="action-button">Editar</Link>
-        <button className="action-button delete" onClick={() => handleDelete(product._id)}>Eliminar</button>
-        {product.isActive ? (
-          <button
-            className="action-button deactivate"
-            onClick={() => handleToggleStatus(product._id, product.isActive)}
-          >
-            Desactivar
-          </button>
-        ) : (
-          <button
-            className="action-button activate"
-            onClick={() => handleToggleStatus(product._id, product.isActive)}
-          >
-            Activar
-          </button>
-        )}
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+              {filteredProducts.map((product) => (
+                <tr key={product._id}>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.isActive ? 'Activo' : 'Inactivo'}</td>
+                  <td>
+                    <Link to={`/edit-product/${product._id}`} className="action-button">Editar</Link>
+                    <button className="action-button delete" onClick={() => handleDelete(product._id)}>Eliminar</button>
+                    {product.isActive ? (
+                      <button
+                        className="action-button deactivate"
+                        onClick={() => handleToggleStatus(product._id, product.isActive)}
+                      >
+                        Desactivar
+                      </button>
+                    ) : (
+                      <button
+                        className="action-button activate"
+                        onClick={() => handleToggleStatus(product._id, product.isActive)}
+                      >
+                        Activar
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         )}
       </div>

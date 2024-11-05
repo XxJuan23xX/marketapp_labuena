@@ -12,6 +12,7 @@ router.post('/create', authMiddleware, productController.createProduct);
 // Obtener productos por usuario (requiere autenticación)
 router.get('/user-products', authMiddleware, productController.getProductsByUser);
 
+
 // Actualizar el estado del producto (requiere autenticación)
 router.patch('/:id/status', authMiddleware, productController.updateProductStatus);
 

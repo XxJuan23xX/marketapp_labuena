@@ -3,42 +3,27 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
     product_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product', // Referencia al producto comprado
+        ref: 'Product',
         required: true
     },
     buyer_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Referencia al comprador
+        ref: 'User',
         required: true
     },
     seller_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Referencia al vendedor
+        ref: 'User',
         required: true
     },
     price: {
-        type: Number, // Precio final de la compra
+        type: Number,
         required: true
     },
-    
     status: {
         type: String,
-        enum: ['pendiente', 'enviado', 'entregado', 'completado'],
+        enum: ['pendiente', 'confirmado_por_vendedor', 'completado'],
         default: 'pendiente'
-    },
-    confirmation: {
-        shipped: {
-            type: Boolean,
-            default: false // Confirmación de envío por el vendedor
-        },
-        delivered: {
-            type: Boolean,
-            default: false // Confirmación de entrega por el comprador
-        },
-        reviewed: {
-            type: Boolean,
-            default: false // Confirmación de reseña del comprador
-        }
     },
     created_at: {
         type: Date,

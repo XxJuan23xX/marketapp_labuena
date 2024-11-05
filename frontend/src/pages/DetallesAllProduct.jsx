@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/navbarComponent";
 import Footer from "../components/footer/Footer";
-import axios from "axios";
-import { FaArrowLeft, FaHeart } from "react-icons/fa"; // Importa el ícono de corazón
+import api from "../../api";
+import { AuthContext } from '../context/AuthContext'; // Asegúrate de importar el contexto si tienes autenticación
+import { FaArrowLeft, FaHeart } from "react-icons/fa";
 import "../pages/DetallesAllProducts.css";
 
 const DetallesAllProducts = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
+    const { userId } = useContext(AuthContext); // Obtiene el ID del usuario desde el contexto
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [highestBid, setHighestBid] = useState(null);
-    const [isFavorite, setIsFavorite] = useState(false); // Estado para el corazón
+    const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
+                const response = await api.get(`/products/${productId}`);
                 setProduct(response.data);
                 setSelectedImage(response.data.images[0]);
 
                 if (response.data.type === "subasta") {
-                    const bidResponse = await axios.get(`http://localhost:5000/api/bids/${productId}/bids`);
+                    const bidResponse = await api.get(`/bids/${productId}/bids`);
                     if (bidResponse.data.length > 0) {
                         const maxBid = Math.max(...bidResponse.data.map(bid => bid.bidAmount));
                         setHighestBid(maxBid);
@@ -42,9 +44,41 @@ const DetallesAllProducts = () => {
         navigate(`/auction/${productId}`);
     };
 
-    // Función para cambiar el estado del ícono de favorito
     const toggleFavorite = () => {
         setIsFavorite(!isFavorite);
+    };
+
+    const handlePurchase = async () => {
+        try {
+            if (!userId) {
+                alert("Por favor inicia sesión para realizar la compra.");
+                navigate("/login");
+                return;
+            }
+
+            const orderData = {
+                product_id: productId,
+                buyer_id: userId,
+                seller_id: product.seller_id?._id || product.seller_id,
+                price: product.price,
+            };
+
+            // Agrega un console.log para ver el contenido de orderData
+            console.log("Datos de la orden que se están enviando:", orderData);
+
+            const response = await api.post("/orders", orderData);
+
+            // Notificación al comprador
+            alert("¡Compra en proceso! El vendedor confirmará tu compra.");
+
+            // Notificación al vendedor
+            console.log("Notificación enviada al vendedor.");
+
+            navigate("/Historial"); // Redirige a la página de historial de compras
+        } catch (error) {
+            console.error("Error al procesar la compra:", error);
+            alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");
+        }
     };
 
     if (!product) return <div>Cargando...</div>;
@@ -112,7 +146,7 @@ const DetallesAllProducts = () => {
 
                     <div className="button-container">
                         {product.type === "venta" ? (
-                            <button className="buy-button">Comprar</button>
+                            <button className="buy-button" onClick={handlePurchase}>Comprar</button>
                         ) : (
                             <button className="bid-button" onClick={handleEnterAuction}>
                                 Entrar a Subasta

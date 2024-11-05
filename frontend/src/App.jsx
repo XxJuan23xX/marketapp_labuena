@@ -17,13 +17,9 @@ import Subastas from './pages/Subastas';
 import DetallesAllProducts from './pages/DetallesAllProduct';
 import CrearSubasta from './pages/CrearSubasta';
 import AllProducts from './pages/AllProducts';
+import Compras from './pages/Compras';
 
-
-
-
-
-
-import ProtectedRoute from './components/RutasAdmin/ProtectedRoute'; // Asegúrate que la ruta sea correcta
+import ProtectedRoute from './components/RutasAdmin/ProtectedRoute';
 
 const App = () => {
   return (
@@ -35,16 +31,18 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/products" element={<Products />} />
             <Route path="/createproducts" element={<CreateProduccion />} />
-        <Route path="/subastasderrapin" element={<Subastas/>}/>
-        <Route path="/" element={<AllProducts />} />
-        <Route path="/detallesallproducts/:productId" element={<DetallesAllProducts />} />
-        <Route path="/crearderrapin" element={<CrearSubasta/>}/>
-        <Route path="/allderrapin" element={<AllProducts/>}/>
+            <Route path="/subastasderrapin" element={<Subastas/>}/>
+            <Route path="/" element={<AllProducts />} />
+            <Route path="/detallesallproducts/:productId" element={<DetallesAllProducts />} />
+            <Route path="/crearderrapin" element={<CrearSubasta/>}/>
+            <Route path="/allderrapin" element={<AllProducts/>}/>
             <Route path="/register" element={<Register />} />
             <Route path="/Account" element={<UserProfile />} />
             <Route path="/auction/:productId" element={<AuctionDetails />} />
-
             
+            {/* Ruta sin protección para el historial de compras */}
+            <Route path="/Historial" element={<Compras />} />
+
             {/* Rutas protegidas */}
             <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />
             <Route path="/Pedidos" element={<ProtectedRoute component={Pedidos} />} />

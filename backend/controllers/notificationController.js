@@ -33,6 +33,15 @@ exports.markAsRead = async (req, res) => {
     }
 };
 
+exports.markAllAsRead = async (req, res) => {
+    try {
+        await Notification.updateMany({ user_id: req.params.user_id, read: false }, { $set: { read: true } });
+        res.status(200).json({ message: 'Notificaciones marcadas como leídas' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error marcando las notificaciones como leídas: ' + error.message });
+    }
+};
+
 // Eliminar una notificación por ID
 exports.deleteNotification = async (req, res) => {
     try {
