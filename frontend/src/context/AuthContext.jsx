@@ -24,9 +24,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
+    console.log("Token inicial encontrado en localStorage:", token); // Log para verificar el token inicial
+
     if (token) {
       const decodedToken = decodeToken(token);
       if (decodedToken) {
+        console.log("Token decodificado correctamente:", decodedToken);
         setUserId(decodedToken.id);
         setUserRole(decodedToken.role);
         setIsAuthenticated(true);
@@ -35,7 +38,11 @@ export const AuthProvider = ({ children }) => {
 
         const storedFavorites = JSON.parse(localStorage.getItem(`favorites_${decodedToken.id}`)) || [];
         setFavorites(storedFavorites);
+      } else {
+        console.log("Error: No se pudo decodificar el token.");
       }
+    } else {
+      console.log("No se encontró token en localStorage.");
     }
   }, []);
 
@@ -44,6 +51,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       const decodedToken = decodeToken(token);
       const isTokenExpired = decodedToken && decodedToken.exp * 1000 < Date.now();
+      console.log("Verificación de expiración del token:", isTokenExpired);
 
       if (isTokenExpired) {
         refreshAccessToken();
@@ -54,6 +62,11 @@ export const AuthProvider = ({ children }) => {
   const refreshAccessToken = async () => {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) {
+        console.log("No se encontró refresh token.");
+        return logout();
+      }
+
       const response = await axios.post(`${backendUrl}/api/refresh-token`, { refreshToken });
       const { accessToken, newRefreshToken } = response.data;
       if (accessToken && newRefreshToken) {
@@ -64,7 +77,9 @@ export const AuthProvider = ({ children }) => {
         setUserId(decodedToken.id);
         setUserRole(decodedToken.role);
         setIsAuthenticated(true);
+        console.log("Token refrescado y actualizado correctamente.");
       } else {
+        console.log("Error: No se obtuvieron tokens al refrescar.");
         logout();
       }
     } catch (error) {
@@ -74,6 +89,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = (accessToken, refreshToken, avatar) => {
+    console.log("Iniciando sesión con token:", accessToken);
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('avatar', avatar);
@@ -87,10 +103,15 @@ export const AuthProvider = ({ children }) => {
 
       const storedFavorites = JSON.parse(localStorage.getItem(`favorites_${decodedToken.id}`)) || [];
       setFavorites(storedFavorites);
+      console.log("Inicio de sesión exitoso, usuario autenticado.");
+    } else {
+      console.log("Error: No se pudo decodificar el token en login.");
+      logout();
     }
   };
 
   const logout = () => {
+    console.log("Cerrando sesión, limpiando tokens.");
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('avatar');
