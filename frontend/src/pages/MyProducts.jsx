@@ -3,11 +3,10 @@ import './MyProducts.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
-// URL directa del backend con el prefijo `/api`
 const BASE_URL = 'https://marketapp-backend.onrender.com/api';
 
 const MyProducts = () => {
-  const { userId } = useContext(AuthContext);
+  const { isAuthenticated, userId, logout } = useContext(AuthContext); // Añadido logout para manejar expiración del token
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,47 +15,47 @@ const MyProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login"); // Redirige al login si el usuario no está autenticado
+      return;
+    }
+
     const fetchProducts = async () => {
       try {
-          const token = localStorage.getItem('token');
-          if (!token) {
-              console.error("Token no encontrado");
-              navigate("/login"); // Redirige al login si no hay token
-              return;
-          }
-  
-          const response = await fetch('https://marketapp-backend.onrender.com/api/products/user-products', {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-              },
-          });
-  
-          if (response.status === 401) {
-              console.error("No autorizado: Token inválido o expirado");
-              navigate("/login"); // Redirige al login si la autenticación falla
-              return;
-          }
-  
-          const data = await response.json();
-  
-          if (Array.isArray(data)) {
-              setProducts(data);
-              setFilteredProducts(data);
-          } else {
-              console.error("Error: La respuesta no es un array como se esperaba:", data);
-          }
+        const token = localStorage.getItem('accessToken');
+        
+        const response = await fetch(`${BASE_URL}/products/user-products`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 401) {
+          console.error("No autorizado: Token inválido o expirado");
+          logout(); // Llama a logout si el token es inválido o expirado
+          navigate("/login");
+          return;
+        }
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setProducts(data);
+          setFilteredProducts(data);
+        } else {
+          console.error("Error: La respuesta no es un array como se esperaba:", data);
+        }
       } catch (error) {
-          console.error("Error al obtener productos:", error);
+        console.error("Error al obtener productos:", error);
       } finally {
-          setLoading(false);
+        setLoading(false);
       }
-  };
-  
+    };
 
     if (userId) {
       fetchProducts();
     }
-  }, [userId]);
+  }, [isAuthenticated, userId, navigate, logout]);
 
   useEffect(() => {
     const filtered = products.filter(product =>
@@ -73,6 +72,9 @@ const MyProducts = () => {
     try {
       await fetch(`${BASE_URL}/products/${productId}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
       });
       setProducts(products.filter(product => product._id !== productId));
     } catch (error) {
@@ -87,6 +89,7 @@ const MyProducts = () => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
         body: JSON.stringify({ isActive: newStatus }),
       });
