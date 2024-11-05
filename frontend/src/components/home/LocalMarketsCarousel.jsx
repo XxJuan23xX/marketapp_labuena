@@ -20,7 +20,7 @@ const LocalMarketsCarousel = () => {
 
   return (
     <div className="local-markets-section">
-      <h2 className="section-title">Algunos tianguis en la ciudad</h2>
+      <h2 className="section-title1">Algunos tianguis en la ciudad</h2>
       <div className="carousel-container">
         <button className="carousel-button left" onClick={handlePrev}>&lt;</button>
         

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../../api';
 import './Recommendations.css';
 
 const Recommendations = () => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecommendedProducts = async () => {
@@ -18,12 +20,21 @@ const Recommendations = () => {
     fetchRecommendedProducts();
   }, []);
 
+  const goToDetails = (productId) => {
+    navigate(`/detallesallproducts/${productId}`);
+  };
+
   return (
     <div className="recommendations-section">
       <h2 className="recommendations-title">Recomendaciones para ti</h2>
       <div className="recommendations-grid">
         {recommendedProducts.slice(0, 6).map((product) => (
-          <div className="recommendation-card" key={product._id}>
+          <div 
+            className="recommendation-card" 
+            key={product._id} 
+            onClick={() => goToDetails(product._id)}
+            style={{ cursor: 'pointer' }} // Añadimos estilo de cursor para indicar que es clickeable
+          >
             <img
               src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/150'}
               alt={product.name}

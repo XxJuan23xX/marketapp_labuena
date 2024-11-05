@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../../api';
 import './DailyDeals.css';
 
 const DailyDeals2 = () => {
   const [dailyDeals, setDailyDeals] = useState([]);
   const [dailyAuctions, setDailyAuctions] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch daily deals (ventas)
@@ -32,13 +34,22 @@ const DailyDeals2 = () => {
     fetchDailyAuctions();
   }, []);
 
+  const handleProductClick = (productId) => {
+    navigate(`/detallesallproducts/${productId}`);
+  };
+
   return (
     <div className="deals-section-container">
       <div className="daily-deals-container">
         <h2 className="daily-deals-title">Ventas del Día</h2>
         <div className="daily-deals-grid">
           {dailyDeals.map((product) => (
-            <div className="daily-deal-card" key={product._id}>
+            <div
+              className="daily-deal-card"
+              key={product._id}
+              onClick={() => handleProductClick(product._id)}
+              style={{ cursor: 'pointer' }} // Para indicar que es clickeable
+            >
               <img
                 src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/150'}
                 alt={product.name}
@@ -55,7 +66,12 @@ const DailyDeals2 = () => {
         <h2 className="daily-auctions-title">Subastas del Día</h2>
         <div className="daily-deals-grid">
           {dailyAuctions.map((product) => (
-            <div className="daily-deal-card" key={product._id}>
+            <div
+              className="daily-deal-card"
+              key={product._id}
+              onClick={() => handleProductClick(product._id)}
+              style={{ cursor: 'pointer' }} // Para indicar que es clickeable
+            >
               <img
                 src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/150'}
                 alt={product.name}

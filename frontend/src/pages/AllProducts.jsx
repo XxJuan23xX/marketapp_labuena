@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from "../components/navbar/navbarComponent";
 import "../pages/AllProducts.css";
 import Footer from "../components/footer/Footer";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import api from '../../api'; // Asegúrate de usar api.js aquí para las solicitudes
 import { AuthContext } from '../context/AuthContext';
 
 const AllProducts = () => {
@@ -12,12 +12,13 @@ const AllProducts = () => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [selectedType, setSelectedType] = useState("venta"); // Mostrar "venta" por defecto
+    const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/products');
+                const response = await api.get('/products');
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error al cargar los productos:', error);
@@ -26,7 +27,7 @@ const AllProducts = () => {
 
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/categories');
+                const response = await api.get('/categories');
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error al cargar las categorías:', error);
@@ -36,6 +37,13 @@ const AllProducts = () => {
         fetchProducts();
         fetchCategories();
     }, []);
+
+    // Verifica si hay una categoría seleccionada pasada en la navegación
+    useEffect(() => {
+        if (location.state?.selectedCategory) {
+            setSelectedCategory(location.state.selectedCategory);
+        }
+    }, [location.state]);
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);

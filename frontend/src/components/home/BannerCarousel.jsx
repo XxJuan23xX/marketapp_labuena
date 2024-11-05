@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './BannerCarousel.css';
 import banner1 from '../../assets/banners/banner1.jpg';
 import banner2 from '../../assets/banners/banner2.png';
 
-const banners = [banner1, banner2]; // Añade aquí todas tus imágenes de banners
+const banners = [
+  { image: banner1, productId: '67296054fb4606e93299ba70' }, // Reemplaza con el ID real del producto
+  { image: banner2, productId: '6729652efb4606e93299bb4a' }, // Reemplaza con el ID real del producto
+];
 
 const BannerCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   const handlePrevious = () => {
     setCurrentIndex(currentIndex === 0 ? banners.length - 1 : currentIndex - 1);
@@ -16,12 +21,22 @@ const BannerCarousel = () => {
     setCurrentIndex(currentIndex === banners.length - 1 ? 0 : currentIndex + 1);
   };
 
+  const handleBannerClick = (productId) => {
+    navigate(`/detallesallproducts/${productId}`);
+  };
+
   return (
     <div className="banner-carousel">
       <div className="carousel-content">
         <button className="carousel-button1 left" onClick={handlePrevious}>&lt;</button>
         
-        <img src={banners[currentIndex]} alt={`Banner ${currentIndex + 1}`} className="banner-image" />
+        <img
+          src={banners[currentIndex].image}
+          alt={`Banner ${currentIndex + 1}`}
+          className="banner-image"
+          onClick={() => handleBannerClick(banners[currentIndex].productId)}
+          style={{ cursor: 'pointer' }} // Agrega un cursor para indicar que es clickeable
+        />
         
         <button className="carousel-button1 right" onClick={handleNext}>&gt;</button>
       </div>

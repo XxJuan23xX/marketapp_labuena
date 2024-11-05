@@ -4,10 +4,11 @@
     background-color: #f5f5f5bc;
 }
 
-.section-title {
+.section-title1 {
     font-size: 1.8rem;
     color: #333333;
     margin-bottom: 20px;
+    margin-top: 0px;
 }
 
 .carousel-container {
