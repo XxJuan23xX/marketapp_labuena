@@ -4,7 +4,7 @@ import api from '../../api';
 import './PedidoEstado.css';
 
 const PedidoEstado = () => {
-  const { orderId } = useParams(); // Cambiamos a orderId
+  const { orderId } = useParams(); // Obtenemos orderId desde la URL
   const [order, setOrder] = useState(null);
   const [orderStatus, setOrderStatus] = useState(2); // Comienza en fase 2: Venta en proceso
 
@@ -75,9 +75,9 @@ const PedidoEstado = () => {
         </div>
 
         <div className="product-info">
-          <p><strong> </strong> {order.product_id.title}</p>
+          <p><strong>Producto:</strong> {order.product_id?.name || "Nombre del producto no disponible"}</p>
           <p><strong>Precio:</strong> ${order.price}</p>
-          <p><strong>Comprador:</strong> {order.buyer_id.name}</p>
+          <p><strong>Comprador:</strong> {order.buyer_id?.name || "Nombre del comprador no disponible"}</p>
         </div>
 
         {orderStatus < 3 && (
