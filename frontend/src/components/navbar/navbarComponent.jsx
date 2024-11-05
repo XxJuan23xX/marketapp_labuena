@@ -32,7 +32,7 @@ const Navbar = () => {
     const fetchAvatar = async () => {
       try {
         if (userId) {
-          const response = await fetch('https://marketapp-frontend.vercel.app/api/users/${userId}/avatar', {
+          const response = await fetch(`https://marketapp-frontend.vercel.app/api/users/${userId}/avatar`, {
             credentials: 'include',
           });
           const data = await response.json();
