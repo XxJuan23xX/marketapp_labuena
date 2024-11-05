@@ -3,7 +3,7 @@ import axios from 'axios';
 console.log("Backend URL:", process.env.REACT_APP_BACKEND_URL);
 const api = axios.create({
 
-    baseURL: process.env.REACT_APP_BACKEND_URL, // Cambia esto por tu URL de API
+    baseURL: 'https://marketapp-backend.onrender.com', // Cambia esto por tu URL de API
     withCredentials: true,
 });
 
