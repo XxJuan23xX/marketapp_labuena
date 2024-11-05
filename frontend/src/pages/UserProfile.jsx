@@ -4,7 +4,7 @@ import './UserProfile.css';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const UserProfile = () => {
-  const { userRole, logout, userId, updateUserAvatar } = useContext(AuthContext);
+  const { userRole, logout, userId, updateUserAvatar, userName } = useContext(AuthContext);
   const [avatar, setAvatar] = useState('/uploads/avatar-default.webp');
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -84,7 +84,7 @@ const UserProfile = () => {
             </button>
           </div>
           <div className="user-info">
-            <h3>Juan Manuel</h3>
+            <h3>{userName}</h3> {/* Display dynamic username */}
             <p>{userRole === 'admin' ? 'Admin' : 'Cliente'}</p>
           </div>
           <ul className="menu">

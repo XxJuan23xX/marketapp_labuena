@@ -1,6 +1,6 @@
 /* Contenedor general de todos los productos */
 .all-products-container {
-    background-color: #416285;
+    background-color: #dde0e3;
     margin: 0;
     min-height: 100vh;
     font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@
     flex-wrap: wrap;
     gap: 15px;
     padding: 10px;
-    background-color: #14213d;
+    background-color: #0ba41f;
    
    
     border: 1px solid #000000;
@@ -41,12 +41,12 @@
 }
 
 .type-button:hover, .category-button:hover {
-    background-color: #fca311;
+    background-color: #82fc11;
     color: #000;
 }
 
 .type-button.active, .category-button.active {
-    background-color: #fca311;
+    background-color:  #82fc11;
     color: #000;
 }
 
@@ -60,7 +60,7 @@
 .section-title {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #ffffff;
+    color: #000000;
     margin-bottom: 20px;
     margin-top: 0;
 }
@@ -89,6 +89,7 @@
 .auction-card:hover {
     transform: scale(1.03);
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: #6ec479;
 }
 
 /* Contenedor de la imagen de producto */

@@ -4,6 +4,7 @@ import { FaBell, FaStore } from 'react-icons/fa';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../../api';
+import logo from '../../assets/logo.png'; // Import the logo image
 
 const Navbar = () => {
   const { isAuthenticated, userRole, userId, logout } = useContext(AuthContext);
@@ -88,6 +89,13 @@ const Navbar = () => {
 
       <div className="navbar-container">
         <nav className="navbar">
+          {/* Logo on the left */}
+          <div className="logo-container">
+            <a href="/">
+              <img src={logo} alt="Logo" className="navbar-logo" />
+            </a>
+          </div>
+
           <ul className="navbar-links">
             <li><a href="/" data-original-text="Inicio">Inicio</a></li>
             {isVendedorMode ? (
