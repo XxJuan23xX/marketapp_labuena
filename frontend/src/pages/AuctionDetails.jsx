@@ -22,7 +22,7 @@ const AuctionDetails = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products/${productId}`);
                 setProduct(response.data);
                 setSelectedImage(response.data.images[0]);
             } catch (error) {
@@ -32,7 +32,7 @@ const AuctionDetails = () => {
 
         const fetchBids = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/bids/${productId}/bids`);
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bids`);
                 setBids(response.data);
 
                 if (response.data.length > 0) {
@@ -88,16 +88,19 @@ const AuctionDetails = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/bids/${productId}/bid`, {
-                userId: userId,
-                bidAmount: parseFloat(bidAmount),
-            });
+            const response = await axios.post(
+                `${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bid`, 
+                {
+                    userId: userId,
+                    bidAmount: parseFloat(bidAmount),
+                }
+            );
             setBids([response.data, ...bids]);
             setHighestBid(parseFloat(bidAmount));
             setBidAmount("");
         } catch (error) {
             console.error("Error al hacer la puja:", error);
-        }
+        }        
     };
 
     const handleIncreaseBy100 = () => {

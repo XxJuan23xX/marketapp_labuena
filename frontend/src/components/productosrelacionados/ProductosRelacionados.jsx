@@ -10,7 +10,7 @@ const ProductosRelacionados = () => {
     useEffect(() => {
         const fetchProductos = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/products"); // Cambia la URL a la de tu API
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products`); // Cambia la URL a la de tu API
                 setProductos(response.data);
             } catch (error) {
                 console.error("Error al obtener los productos:", error);

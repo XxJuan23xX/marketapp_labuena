@@ -77,7 +77,7 @@ const Clientes = () => {
                   <td>{indexOfFirstClient + index + 1}</td>
                   <td>
                     <img
-                      src={`http://localhost:5000/${client.avatar}`}
+                      src={`${process.env.REACT_APP_BACKEND_URL}/${client.avatar}`}
                       alt="Avatar"
                       className="avatar-img"
                     />

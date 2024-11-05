@@ -32,12 +32,12 @@ const Navbar = () => {
     const fetchAvatar = async () => {
       try {
         if (userId) {
-          const response = await fetch(`http://localhost:5000/api/users/${userId}/avatar`, {
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}/avatar`, {
             credentials: 'include',
           });
           const data = await response.json();
           if (data.avatar) {
-            setAvatar(`http://localhost:5000/${data.avatar}`);
+            setAvatar(`${process.env.REACT_APP_BACKEND_URL}/${data.avatar}`);
           }
         }
       } catch (error) {

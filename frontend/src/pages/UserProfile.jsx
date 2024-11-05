@@ -12,10 +12,10 @@ const UserProfile = () => {
     if (userId) {
       const fetchAvatar = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/api/users/${userId}/avatar`, { credentials: 'include' });
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}/avatar`, { credentials: 'include' });
           const data = await response.json();
           if (data.avatar) {
-            setAvatar(`http://localhost:5000/${data.avatar}`);
+            setAvatar(`${process.env.REACT_APP_BACKEND_URL}/${data.avatar}`);
           }
         } catch (error) {
           console.error('Error al obtener el avatar:', error);
@@ -49,14 +49,14 @@ const UserProfile = () => {
       formData.append('avatar', selectedFile);
 
       try {
-        const response = await fetch(`http://localhost:5000/api/users/${userId}/avatar`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}/avatar`, {
           method: 'PUT',
           body: formData,
           credentials: 'include',
         });
         const data = await response.json();
         if (data.user && data.user.avatar) {
-          const newAvatar = `http://localhost:5000/${data.user.avatar}`;
+          const newAvatar = `${process.env.REACT_APP_BACKEND_URL}/${data.user.avatar}`;
           setAvatar(newAvatar);
           updateUserAvatar(newAvatar); // Actualiza el avatar en AuthContext
         }
