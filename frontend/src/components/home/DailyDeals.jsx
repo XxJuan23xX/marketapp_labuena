@@ -12,7 +12,7 @@ const DailyDeals2 = () => {
     // Fetch daily deals (ventas)
     const fetchDailyDeals = async () => {
       try {
-        const response = await api.get('/products/daily-deals');
+        const response = await api.get('/api/products/daily-deals');
         const filteredDeals = response.data.filter((product) => product.type === 'venta');
         setDailyDeals(filteredDeals);
       } catch (error) {
@@ -23,7 +23,7 @@ const DailyDeals2 = () => {
     // Fetch daily auctions (subastas)
     const fetchDailyAuctions = async () => {
       try {
-        const response = await api.get('/products/daily-auctions');
+        const response = await api.get('/api/products/daily-auctions');
         setDailyAuctions(response.data);
       } catch (error) {
         console.error('Error fetching daily auctions:', error);
