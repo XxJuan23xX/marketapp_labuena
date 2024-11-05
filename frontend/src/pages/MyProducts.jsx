@@ -3,8 +3,8 @@ import './MyProducts.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
-// URL directa del backend
-const BASE_URL = 'https://marketapp-backend.onrender.com';
+// URL directa del backend con el prefijo `/api`
+const BASE_URL = 'https://marketapp-backend.onrender.com/api';
 
 const MyProducts = () => {
   const { userId } = useContext(AuthContext);
@@ -19,7 +19,7 @@ const MyProducts = () => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('https://marketapp-backend.onrender.com/api/products/user-products', {
+        const response = await fetch(`${BASE_URL}/products/user-products`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -30,7 +30,7 @@ const MyProducts = () => {
         const productsWithOrders = await Promise.all(
           data.map(async (product) => {
             try {
-              const orderResponse = await fetch(`https://marketapp-backend.onrender.com/api/orders/product/${product._id}`);
+              const orderResponse = await fetch(`${BASE_URL}/orders/product/${product._id}`);
               const orderData = await orderResponse.json();
               return { ...product, orderId: orderData[0]?._id || null };
             } catch (error) {
@@ -67,7 +67,7 @@ const MyProducts = () => {
 
   const handleDelete = async (productId) => {
     try {
-      await fetch(`${BASE_URL}/api/products/${productId}`, {
+      await fetch(`${BASE_URL}/products/${productId}`, {
         method: 'DELETE',
       });
       setProducts(products.filter(product => product._id !== productId));
@@ -79,7 +79,7 @@ const MyProducts = () => {
   const handleToggleStatus = async (productId, currentStatus) => {
     try {
       const newStatus = !currentStatus;
-      await fetch(`${BASE_URL}/api/products/${productId}/status`, {
+      await fetch(`${BASE_URL}/products/${productId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
