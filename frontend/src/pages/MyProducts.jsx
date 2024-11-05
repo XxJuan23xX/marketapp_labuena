@@ -18,36 +18,40 @@ const MyProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${BASE_URL}/products/user-products`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-
-        const productsWithOrders = await Promise.all(
-          data.map(async (product) => {
-            try {
-              const orderResponse = await fetch(`${BASE_URL}/orders/product/${product._id}`);
-              const orderData = await orderResponse.json();
-              return { ...product, orderId: orderData[0]?._id || null };
-            } catch (error) {
-              console.error(`Error obteniendo órdenes para producto ${product._id}:`, error);
-              return product;
-            }
-          })
-        );
-
-        setProducts(productsWithOrders);
-        setFilteredProducts(productsWithOrders);
+          const token = localStorage.getItem('token');
+          if (!token) {
+              console.error("Token no encontrado");
+              navigate("/login"); // Redirige al login si no hay token
+              return;
+          }
+  
+          const response = await fetch('https://marketapp-backend.onrender.com/api/products/user-products', {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          });
+  
+          if (response.status === 401) {
+              console.error("No autorizado: Token inválido o expirado");
+              navigate("/login"); // Redirige al login si la autenticación falla
+              return;
+          }
+  
+          const data = await response.json();
+  
+          if (Array.isArray(data)) {
+              setProducts(data);
+              setFilteredProducts(data);
+          } else {
+              console.error("Error: La respuesta no es un array como se esperaba:", data);
+          }
       } catch (error) {
-        console.error("Error al obtener productos:", error);
+          console.error("Error al obtener productos:", error);
       } finally {
-        setLoading(false);
+          setLoading(false);
       }
-    };
+  };
+  
 
     if (userId) {
       fetchProducts();
