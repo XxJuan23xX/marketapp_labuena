@@ -18,6 +18,7 @@ import DetallesAllProducts from './pages/DetallesAllProduct';
 import CrearSubasta from './pages/CrearSubasta';
 import AllProducts from './pages/AllProducts';
 import Compras from './pages/Compras';
+import PedidoEstado from './pages/PedidoEstado';
 
 import ProtectedRoute from './components/RutasAdmin/ProtectedRoute';
 
@@ -42,6 +43,7 @@ const App = () => {
             
             {/* Ruta sin protección para el historial de compras */}
             <Route path="/Historial" element={<Compras />} />
+            <Route path="/PedidoEstado/:productId" element={<PedidoEstado />} />
 
             {/* Rutas protegidas */}
             <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />

@@ -16,15 +16,12 @@ const MyProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const token = localStorage.getItem('token'); // Obtén el token del almacenamiento local o del contexto de autenticación
-    
+        const token = localStorage.getItem('token');
         const response = await api.get('/products/user-products', {
           headers: {
-            Authorization: `Bearer ${token}`, // Asegúrate de enviar el token con el prefijo 'Bearer '
+            Authorization: `Bearer ${token}`,
           },
         });
-    
-        console.log("Response from /api/products/user-products:", response.data);
         setProducts(response.data);
         setFilteredProducts(response.data);
       } catch (error) {
@@ -33,13 +30,9 @@ const MyProducts = () => {
         setLoading(false);
       }
     };
-    
 
     if (userId) {
-      console.log("User ID from AuthContext:", userId);
       fetchProducts();
-    } else {
-      console.log("User ID is not set in AuthContext.");
     }
   }, [userId]);
 
@@ -49,22 +42,15 @@ const MyProducts = () => {
       (statusFilter === 'todos' || (product.isActive ? 'activo' : 'inactivo') === statusFilter)
     );
     setFilteredProducts(filtered);
-    console.log("Filtered Products:", filtered);
   }, [searchTerm, statusFilter, products]);
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleStatusFilter = (e) => {
-    setStatusFilter(e.target.value);
-  };
+  const handleSearch = (e) => setSearchTerm(e.target.value);
+  const handleStatusFilter = (e) => setStatusFilter(e.target.value);
 
   const handleDelete = async (productId) => {
     try {
       await api.delete(`/products/${productId}`);
       setProducts(products.filter(product => product._id !== productId));
-      console.log("Product deleted successfully:", productId);
     } catch (error) {
       console.error("Error al eliminar producto:", error);
     }
@@ -73,11 +59,10 @@ const MyProducts = () => {
   const handleToggleStatus = async (productId, currentStatus) => {
     try {
       const newStatus = !currentStatus;
-      const response = await api.patch(`/products/${productId}/status`, { isActive: newStatus });
-      setProducts(products.map(product => 
+      await api.patch(`/products/${productId}/status`, { isActive: newStatus });
+      setProducts(products.map(product =>
         product._id === productId ? { ...product, isActive: newStatus } : product
       ));
-      console.log("Product status updated:", productId, newStatus);
     } catch (error) {
       console.error("Error al cambiar estado del producto:", error);
     }
@@ -137,7 +122,7 @@ const MyProducts = () => {
                   <td>${product.price}</td>
                   <td>{product.isActive ? 'Activo' : 'Inactivo'}</td>
                   <td>
-                    <Link to={`/edit-product/${product._id}`} className="action-button">Editar</Link>
+                    <Link to={`/PedidoEstado/${product._id}`} className="action-button">Detalles</Link>
                     <button className="action-button delete" onClick={() => handleDelete(product._id)}>Eliminar</button>
                     {product.isActive ? (
                       <button
