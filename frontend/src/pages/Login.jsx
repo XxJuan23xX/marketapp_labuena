@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaGoogle, FaFacebookF, FaApple, FaSteam, FaArrowLeft } from 'react-icons/fa';
 import { AuthContext } from '../context/AuthContext';
 import './Login.css';
@@ -8,13 +9,13 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
   
     try {
       const response = await fetch('https://marketapp-backend.onrender.com/api/users/login', {
-
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,8 +37,8 @@ const Login = () => {
         // Llama a la función `login` con `token` y `avatar` desde `user`
         login(data.token, data.token, data.user.avatar || '/uploads/avatar-default.webp'); // Usa el token para ambos y un avatar por defecto si no existe
   
-        // Redirige al dashboard o a la página principal
-        window.location.href = '/';
+        // Redirige al dashboard o a la página principal usando useNavigate
+        navigate('/');
       } else {
         setErrorMessage('Error: Datos de usuario incompletos.');
         console.error('Datos de usuario incompletos:', data); // Log adicional en caso de error
@@ -48,11 +49,10 @@ const Login = () => {
     }
   };
   
-  
   return (
     <div className="login-page">
       <div>
-        <FaArrowLeft className="back-icon" onClick={() => (window.location.href = '/')} />
+        <FaArrowLeft className="back-icon" onClick={() => navigate('/')} />
       </div>
       <div className="left-section"></div>
       <div className="right-section">
