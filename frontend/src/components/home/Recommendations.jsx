@@ -10,7 +10,7 @@ const Recommendations = () => {
   useEffect(() => {
     const fetchRecommendedProducts = async () => {
       try {
-        const response = await api.get('/products/recommendations');
+        const response = await api.get('/api/products/recommendations');
         setRecommendedProducts(response.data);
       } catch (error) {
         console.error('Error fetching recommended products:', error);

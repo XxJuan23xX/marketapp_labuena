@@ -19,7 +19,7 @@ const CategoriesSection = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await api.get('/categories'); // Endpoint para obtener categorías
+                const response = await api.get('/api/categories'); // Endpoint para obtener categorías
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
