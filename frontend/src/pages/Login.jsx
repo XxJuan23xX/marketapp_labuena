@@ -14,6 +14,7 @@ const Login = () => {
   
     try {
       const response = await fetch('https://marketapp-backend.onrender.com/api/users/login', {
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
