@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 const BASE_URL = 'https://marketapp-backend.onrender.com/api';
 
 const MyProducts = () => {
-  const { isAuthenticated, userId, logout } = useContext(AuthContext); // Añadido logout para manejar expiración del token
+  const { isAuthenticated, userId, logout } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,55 +15,49 @@ const MyProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Log para confirmar el estado actual
-    console.log("Estado de autenticación:", isAuthenticated);
-    console.log("ID de usuario:", userId);
-
-    if (!isAuthenticated) {
-      console.warn("Redirigiendo al login porque no está autenticado.");
-      navigate("/login"); // Redirige al login si el usuario no está autenticado
-      return;
+    // Si isAuthenticated es false y userId es null, espera antes de redirigir
+    if (isAuthenticated === false && !userId) {
+      console.warn("Esperando a la autenticación completa antes de redirigir.");
+      return; // No hacemos nada hasta que se complete la autenticación
     }
 
-    const fetchProducts = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        
-        if (!token) {
-          console.warn("Token no encontrado en localStorage.");
-          navigate("/login");
-          return;
+    if (isAuthenticated && userId) {
+      const fetchProducts = async () => {
+        try {
+          const token = localStorage.getItem('accessToken');
+          if (!token) {
+            console.warn("Token no encontrado en localStorage.");
+            navigate("/login");
+            return;
+          }
+
+          const response = await fetch(`${BASE_URL}/products/user-products`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.status === 401) {
+            console.error("No autorizado: Token inválido o expirado");
+            logout();
+            navigate("/login");
+            return;
+          }
+
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            setProducts(data);
+            setFilteredProducts(data);
+          } else {
+            console.error("Error: La respuesta no es un array como se esperaba:", data);
+          }
+        } catch (error) {
+          console.error("Error al obtener productos:", error);
+        } finally {
+          setLoading(false);
         }
+      };
 
-        const response = await fetch(`${BASE_URL}/products/user-products`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 401) {
-          console.error("No autorizado: Token inválido o expirado");
-          logout(); // Llama a logout si el token es inválido o expirado
-          navigate("/login");
-          return;
-        }
-
-        const data = await response.json();
-
-        if (Array.isArray(data)) {
-          setProducts(data);
-          setFilteredProducts(data);
-        } else {
-          console.error("Error: La respuesta no es un array como se esperaba:", data);
-        }
-      } catch (error) {
-        console.error("Error al obtener productos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userId && isAuthenticated) {
       fetchProducts();
     }
   }, [isAuthenticated, userId, navigate, logout]);
