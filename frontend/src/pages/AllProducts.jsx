@@ -3,8 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from "../components/navbar/navbarComponent";
 import "../pages/AllProducts.css";
 import Footer from "../components/footer/Footer";
-import api from '../../api'; // Asegúrate de usar api.js aquí para las solicitudes
 import { AuthContext } from '../context/AuthContext';
+
+// URL directa de tu backend en lugar de `process.env`
+const BASE_URL = 'https://marketapp-backend.onrender.com';
 
 const AllProducts = () => {
     const { userId } = useContext(AuthContext);
@@ -18,8 +20,9 @@ const AllProducts = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await api.get('/products');
-                setProducts(response.data);
+                const response = await fetch(`${BASE_URL}/api/products`);
+                const data = await response.json();
+                setProducts(data);
             } catch (error) {
                 console.error('Error al cargar los productos:', error);
             }
@@ -27,8 +30,9 @@ const AllProducts = () => {
 
         const fetchCategories = async () => {
             try {
-                const response = await api.get('/categories');
-                setCategories(response.data);
+                const response = await fetch(`${BASE_URL}/api/categories`);
+                const data = await response.json();
+                setCategories(data);
             } catch (error) {
                 console.error('Error al cargar las categorías:', error);
             }
