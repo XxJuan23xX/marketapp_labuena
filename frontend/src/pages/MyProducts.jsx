@@ -19,7 +19,7 @@ const MyProducts = () => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${BASE_URL}/api/products/user-products`, {
+        const response = await fetch('https://marketapp-backend.onrender.com/api/products/user-products', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -30,7 +30,7 @@ const MyProducts = () => {
         const productsWithOrders = await Promise.all(
           data.map(async (product) => {
             try {
-              const orderResponse = await fetch(`${BASE_URL}/api/orders/product/${product._id}`);
+              const orderResponse = await fetch(`https://marketapp-backend.onrender.com/api/orders/product/${product._id}`);
               const orderData = await orderResponse.json();
               return { ...product, orderId: orderData[0]?._id || null };
             } catch (error) {
