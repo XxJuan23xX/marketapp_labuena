@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, {
+      const response = await fetch('https://marketapp-backend.onrender.com/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
