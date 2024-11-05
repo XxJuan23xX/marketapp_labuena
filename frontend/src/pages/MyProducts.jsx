@@ -15,7 +15,12 @@ const MyProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Log para confirmar el estado actual
+    console.log("Estado de autenticación:", isAuthenticated);
+    console.log("ID de usuario:", userId);
+
     if (!isAuthenticated) {
+      console.warn("Redirigiendo al login porque no está autenticado.");
       navigate("/login"); // Redirige al login si el usuario no está autenticado
       return;
     }
@@ -24,6 +29,12 @@ const MyProducts = () => {
       try {
         const token = localStorage.getItem('accessToken');
         
+        if (!token) {
+          console.warn("Token no encontrado en localStorage.");
+          navigate("/login");
+          return;
+        }
+
         const response = await fetch(`${BASE_URL}/products/user-products`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +63,7 @@ const MyProducts = () => {
       }
     };
 
-    if (userId) {
+    if (userId && isAuthenticated) {
       fetchProducts();
     }
   }, [isAuthenticated, userId, navigate, logout]);
