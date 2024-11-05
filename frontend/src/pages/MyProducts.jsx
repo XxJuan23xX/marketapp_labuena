@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import './MyProducts.css';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../../api';
 import { AuthContext } from '../context/AuthContext';
+
+// URL directa del backend
+const BASE_URL = 'https://marketapp-backend.onrender.com';
 
 const MyProducts = () => {
   const { userId } = useContext(AuthContext);
@@ -17,18 +19,20 @@ const MyProducts = () => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await api.get('/products/user-products', {
+        const response = await fetch(`${BASE_URL}/api/products/user-products`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        // Agrega una llamada adicional para obtener el `orderId` de cada producto
+        const data = await response.json();
+
         const productsWithOrders = await Promise.all(
-          response.data.map(async (product) => {
+          data.map(async (product) => {
             try {
-              const orderResponse = await api.get(`/orders/product/${product._id}`);
-              return { ...product, orderId: orderResponse.data[0]?._id || null };
+              const orderResponse = await fetch(`${BASE_URL}/api/orders/product/${product._id}`);
+              const orderData = await orderResponse.json();
+              return { ...product, orderId: orderData[0]?._id || null };
             } catch (error) {
               console.error(`Error obteniendo órdenes para producto ${product._id}:`, error);
               return product;
@@ -63,7 +67,9 @@ const MyProducts = () => {
 
   const handleDelete = async (productId) => {
     try {
-      await api.delete(`/products/${productId}`);
+      await fetch(`${BASE_URL}/api/products/${productId}`, {
+        method: 'DELETE',
+      });
       setProducts(products.filter(product => product._id !== productId));
     } catch (error) {
       console.error("Error al eliminar producto:", error);
@@ -73,7 +79,13 @@ const MyProducts = () => {
   const handleToggleStatus = async (productId, currentStatus) => {
     try {
       const newStatus = !currentStatus;
-      await api.patch(`/products/${productId}/status`, { isActive: newStatus });
+      await fetch(`${BASE_URL}/api/products/${productId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isActive: newStatus }),
+      });
       setProducts(products.map(product =>
         product._id === productId ? { ...product, isActive: newStatus } : product
       ));
