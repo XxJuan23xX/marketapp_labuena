@@ -12,16 +12,16 @@ const PedidoEstado = () => {
     const fetchOrderDetails = async () => {
       try {
         const response = await api.get(`/orders/${orderId}`);
+        console.log("Datos de la orden:", response.data); // Verifica que datos recibes aquí
         setOrder(response.data);
-
-        // Cambia el estado a completado si el status ya es 'completado'
+    
         if (response.data.status === 'completado') {
           setOrderStatus(3);
         }
       } catch (error) {
         console.error("Error al obtener detalles de la orden:", error);
       }
-    };
+    };    
 
     fetchOrderDetails();
   }, [orderId]);

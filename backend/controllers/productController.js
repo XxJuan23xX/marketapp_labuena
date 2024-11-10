@@ -185,7 +185,7 @@ exports.getDailyAuctions = async (req, res) => {
         // Filtrar solo productos de tipo subasta y seleccionar dos productos aleatorios
         const dailyAuctions = await Product.aggregate([
             { $match: { type: 'subasta' } }, // Filtra solo subastas
-            { $sample: { size: 3 } } // Selecciona solo dos productos
+            { $sample: { size: 4 } } // Selecciona solo dos productos
         ]);
 
         await Product.populate(dailyAuctions, { path: 'seller_id', select: 'name email' });
