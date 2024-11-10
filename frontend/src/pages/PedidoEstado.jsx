@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../../api';
 import './PedidoEstado.css';
+import Navbar from '../components/navbar/navbarComponent';
 
 const PedidoEstado = () => {
   const { orderId } = useParams(); // Obtenemos orderId desde la URL
@@ -54,6 +55,7 @@ const PedidoEstado = () => {
 
   return (
     <div className="pedido-estado-page">
+      <Navbar></Navbar>
       {/* Breadcrumb */}
       <div className="breadcrumb">
         <Link to="/products" className="breadcrumb-link">← Volver a Mis Productos</Link>
