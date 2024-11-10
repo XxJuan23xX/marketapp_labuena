@@ -141,8 +141,11 @@
 }
 
 .breadcrumb {
-    margin-bottom: 20px;
+    margin: 20px 0;
     font-size: 14px;
+    position: absolute;
+    top: 80px; /* Ajusta según el alto del Navbar */
+    left: 20px;
   }
   
   .breadcrumb-link {
