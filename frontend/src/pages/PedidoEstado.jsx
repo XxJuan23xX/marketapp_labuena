@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../../api';
 import './PedidoEstado.css';
 
@@ -21,7 +21,7 @@ const PedidoEstado = () => {
       } catch (error) {
         console.error("Error al obtener detalles de la orden:", error);
       }
-    };    
+    };
 
     fetchOrderDetails();
   }, [orderId]);
@@ -54,6 +54,11 @@ const PedidoEstado = () => {
 
   return (
     <div className="pedido-estado-page">
+      {/* Breadcrumb */}
+      <div className="breadcrumb">
+        <Link to="/products" className="breadcrumb-link">← Volver a Mis Productos</Link>
+      </div>
+
       <div className="pedido-estado-card">
         <h1>Detalles del Pedido</h1>
         <div className="phase-indicator">
