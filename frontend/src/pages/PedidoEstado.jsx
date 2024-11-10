@@ -75,7 +75,6 @@ const PedidoEstado = () => {
         </div>
 
         <div className="product-info">
-          <p><strong>Producto:</strong> {order.product_id?.name || "Nombre del producto no disponible"}</p>
           <p><strong>Precio:</strong> ${order.price}</p>
           <p><strong>Comprador:</strong> {order.buyer_id?.name || "Nombre del comprador no disponible"}</p>
         </div>
