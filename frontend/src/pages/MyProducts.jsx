@@ -25,7 +25,7 @@ const MyProducts = () => {
             return;
           }
 
-          const response = await fetch(`${BASE_URL}/api/products/user-products`, {
+          const response = await fetch(`${BASE_URL}/products/user-products`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
