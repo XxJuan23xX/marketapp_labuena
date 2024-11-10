@@ -11,7 +11,7 @@ const PedidoEstado = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await api.get(`/orders/${orderId}`);
+        const response = await api.get(`/api/orders/${orderId}`);
         console.log("Datos de la orden:", response.data); // Verifica que datos recibes aquí
         setOrder(response.data);
     
@@ -28,7 +28,7 @@ const PedidoEstado = () => {
 
   const handleFinalizeSale = async () => {
     try {
-      await api.put(`/orders/finalize/${orderId}`, { status: 'completado' });
+      await api.put(`/api/orders/finalize/${orderId}`, { status: 'completado' });
       alert("Venta finalizada con éxito.");
       setOrderStatus(3); // Cambiar a estado de venta finalizada
     } catch (error) {
