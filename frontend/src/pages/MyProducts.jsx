@@ -15,12 +15,6 @@ const MyProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Si isAuthenticated es false y userId es null, espera antes de redirigir
-    if (isAuthenticated === false && !userId) {
-      console.warn("Esperando a la autenticación completa antes de redirigir.");
-      return; // No hacemos nada hasta que se complete la autenticación
-    }
-
     if (isAuthenticated && userId) {
       const fetchProducts = async () => {
         try {
@@ -46,8 +40,26 @@ const MyProducts = () => {
 
           const data = await response.json();
           if (Array.isArray(data)) {
-            setProducts(data);
-            setFilteredProducts(data);
+            // Verificar órdenes para cada producto
+            const productsWithOrders = await Promise.all(
+              data.map(async (product) => {
+                try {
+                  const orderResponse = await fetch(`${BASE_URL}/orders/product/${product._id}`, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  });
+                  const orders = await orderResponse.json();
+                  return { ...product, orderId: orders.length > 0 ? orders[0]._id : null };
+                } catch (error) {
+                  console.error(`Error obteniendo órdenes para producto ${product._id}:`, error);
+                  return product;
+                }
+              })
+            );
+
+            setProducts(productsWithOrders);
+            setFilteredProducts(productsWithOrders);
           } else {
             console.error("Error: La respuesta no es un array como se esperaba:", data);
           }
