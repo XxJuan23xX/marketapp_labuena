@@ -15,7 +15,7 @@ const Compras = () => {
   useEffect(() => {
     const fetchPurchases = async () => {
       try {
-        const response = await api.get(`/orders?buyer_id=${userId}`);
+        const response = await api.get(`/api/orders?buyer_id=${userId}`);
         const purchases = response.data;
 
         const active = purchases.filter(purchase => purchase.status !== 'completado');
@@ -37,7 +37,7 @@ const Compras = () => {
     const fetchPurchaseDetails = async () => {
       if (orderId) {
         try {
-          const response = await api.get(`/orders/${orderId}`);
+          const response = await api.get(`/api/orders/${orderId}`);
           setSelectedPurchase(response.data);
         } catch (error) {
           console.error("Error al obtener los detalles de la compra:", error);
