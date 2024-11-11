@@ -4,6 +4,7 @@ import { FaBell, FaStore } from 'react-icons/fa';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../../api';
+import logo from '../../assets/logo.png'; // Import the logo image
 
 const Navbar = () => {
   const { isAuthenticated, userRole, userId, logout } = useContext(AuthContext);
@@ -12,7 +13,7 @@ const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isVendedorMode, setIsVendedorMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Estado de carga
   const [avatar, setAvatar] = useState('/uploads/avatar-default.webp');
 
   useEffect(() => {
@@ -32,16 +33,16 @@ const Navbar = () => {
     const fetchAvatar = async () => {
       try {
         if (userId) {
-          const response = await fetch(`https://marketapp-backend.onrender.com/api/users/${userId}/avatar`, {
+          const response = await fetch(`http://localhost:5000/api/users/${userId}/avatar`, {
             credentials: 'include',
           });
           const data = await response.json();
           if (data.avatar) {
-            setAvatar(`https://marketapp-backend.onrender.com/${data.avatar}`);
+            setAvatar(`http://localhost:5000/${data.avatar}`);
           }
         }
       } catch (error) {
-        console.error('Error al obtener el avatar:', error);
+        console.error('Error fetching avatar:', error);
       }
     };
 
@@ -70,11 +71,11 @@ const Navbar = () => {
   };
 
   const toggleVendedorMode = () => {
-    setIsLoading(true);
+    setIsLoading(true); // Activar pantalla de carga
     setTimeout(() => {
       setIsVendedorMode(!isVendedorMode);
-      setIsLoading(false);
-    }, 2000);
+      setIsLoading(false); // Desactivar pantalla de carga
+    }, 2000); // Simular un retraso de 2 segundos
   };
 
   return (
@@ -88,6 +89,13 @@ const Navbar = () => {
 
       <div className="navbar-container">
         <nav className="navbar">
+          {/* Logo on the left */}
+          <div className="logo-container">
+            <a href="/">
+              <img src={logo} alt="Logo" className="navbar-logo" />
+            </a>
+          </div>
+
           <ul className="navbar-links">
             <li><a href="/" data-original-text="Inicio">Inicio</a></li>
             {isVendedorMode ? (
@@ -106,9 +114,9 @@ const Navbar = () => {
               </>
             )}
           </ul>
-
+    
           <input type="text" placeholder="Buscar productos..." className="search-bar1" />
-
+    
           {userRole !== 'admin' && (
             <>
               {!isVendedorMode && (
@@ -153,7 +161,7 @@ const Navbar = () => {
               </button>
             </>
           )}
-
+    
           {isAuthenticated ? (
             <div className="avatar-container" onClick={handleAccountMenuClick}>
               <img
