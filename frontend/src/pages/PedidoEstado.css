@@ -142,18 +142,38 @@
 
 .breadcrumb {
     margin: 20px 0;
-    font-size: 14px;
     position: absolute;
     top: 80px; /* Ajusta según el alto del Navbar */
     left: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    background-color: #f1f1f1; /* Fondo suave */
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  .breadcrumb:hover {
+    background-color: #e2e2e2;
   }
   
   .breadcrumb-link {
     color: #007bff;
     text-decoration: none;
+    display: flex;
+    align-items: center;
   }
   
   .breadcrumb-link:hover {
     text-decoration: underline;
+  }
+  
+  .breadcrumb-icon {
+    margin-right: 8px;
+    font-size: 16px;
+    color: #007bff;
   }
   

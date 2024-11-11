@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { FaChevronLeft } from 'react-icons/fa'; // Importar icono para el breadcrumb
 import api from '../../api';
 import Navbar from '../components/navbar/navbarComponent';
 import './PedidoEstado.css';
@@ -58,9 +59,12 @@ const PedidoEstado = () => {
       <Navbar />
       <div className="pedido-estado-page">
         
-        {/* Breadcrumb */}
+        {/* Breadcrumb con icono */}
         <div className="breadcrumb">
-          <Link to="/products" className="breadcrumb-link">← Volver a Mis Productos</Link>
+          <Link to="/products" className="breadcrumb-link">
+            <FaChevronLeft className="breadcrumb-icon" />
+            Volver a Mis Productos
+          </Link>
         </div>
 
         <div className="pedido-estado-card">
