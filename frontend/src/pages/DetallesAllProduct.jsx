@@ -79,7 +79,6 @@ const DetallesAllProducts = () => {
 
             if (response.ok) {
                 alert("¡Compra en proceso! El vendedor confirmará tu compra.");
-                navigate("/Historial");
             } else {
                 console.error("Error al procesar la compra:", await response.json());
                 alert("Hubo un problema al realizar la compra. Inténtalo de nuevo.");

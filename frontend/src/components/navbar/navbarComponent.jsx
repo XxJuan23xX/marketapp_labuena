@@ -19,7 +19,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await api.get(`/notifications/user/${userId}`);
+        const response = await api.get(`/api/notifications/user/${userId}`);
         const allNotifications = response.data;
         setNotifications(allNotifications);
 
@@ -56,7 +56,7 @@ const Navbar = () => {
 
     if (unreadCount > 0) {
       try {
-        await api.put(`/notifications/user/${userId}/read`);
+        await api.put(`/api/notifications/user/${userId}/read`);
         setNotifications(notifications.map(notification => ({ ...notification, read: true })));
         setUnreadCount(0);
       } catch (error) {
