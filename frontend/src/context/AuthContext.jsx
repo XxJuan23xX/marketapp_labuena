@@ -157,6 +157,6 @@ export const AuthProvider = ({ children }) => {
       refreshAccessToken
     }}>
       {children}
-    </AuthContext.Provider>
+    </AuthContext.Provider> 
   );
 };
