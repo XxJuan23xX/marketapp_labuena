@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { UserProductsContext } from '../../context/UserProductsContext';
 import api from '../../../api';
 
-
 const BASE_URL = 'https://marketapp-backend.onrender.com';
 
 const CreateProduct = () => {
@@ -43,7 +42,6 @@ const CreateProduct = () => {
     };
     fetchCategories();
   }, []);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,10 +72,10 @@ const CreateProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const formData = new FormData();
     
-    // Agregar todos los campos del producto
+    // Agregar todos los campos del producto al formData
     formData.append('name', product.name);
     formData.append('description', product.description);
     formData.append('category', product.category);
@@ -86,28 +84,40 @@ const CreateProduct = () => {
     formData.append('stock', product.stock);
     formData.append('startingPrice', product.startingPrice);
     formData.append('auctionStartTime', product.auctionStartTime);
-    
+
     // Calcular y agregar la fecha de fin de la subasta (si es subasta flash)
     if (product.auctionType === 'flash') {
-      // Calculamos la hora de fin de la subasta flash
       const auctionEndTime = new Date(product.auctionStartTime);
-      auctionEndTime.setMinutes(auctionEndTime.getMinutes() + parseInt(product.flashDuration)); // Duración en minutos
-      formData.append('auctionEndTime', auctionEndTime.toISOString());  // Asegúrate de enviar la fecha en formato ISO
+      auctionEndTime.setMinutes(auctionEndTime.getMinutes() + parseInt(product.flashDuration));
+      formData.append('auctionEndTime', auctionEndTime.toISOString());
     }
 
-    formData.append('auctionType', product.auctionType); // Nuevo campo
-    formData.append('flashDuration', product.flashDuration); // Nuevo campo
+    formData.append('auctionType', product.auctionType); 
+    formData.append('flashDuration', product.flashDuration);
 
     // Agregar las imágenes
     product.images.forEach((file) => formData.append('images', file));
 
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);  // Asegúrate de ver los valores de `auctionType` y `flashDuration`
-    }
+    // Enviar la solicitud POST para crear el producto
+    try {
+      const response = await api.post(`${BASE_URL}/api/products/create`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // Si necesitas agregar un token de autenticación, agrégalo aquí
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, // O el método que uses para el token
+        }
+      });
 
-    // Intentar enviar los datos
-    await addProduct(formData);
-};
+      if (response.status === 201) {
+        // Si la creación es exitosa, puedes agregar el producto al contexto o redirigir al usuario
+        addProduct(response.data); // Si tienes una función para añadir el producto al contexto
+        navigate('/'); // Redirigir a la página principal
+      }
+    } catch (error) {
+      console.error('Error al crear el producto:', error);
+      alert('Hubo un problema al crear el producto. Inténtalo nuevamente.');
+    }
+  };
 
   return (
     <div className="create-product-container">
@@ -265,28 +275,17 @@ const CreateProduct = () => {
             </>
           )}
 
-          <label className="create-product-label">Imágenes:</label>
-          <div className="file-input-container">
-            <input
-              type="file"
-              name="images"
-              onChange={handleFileChange}
-              multiple
-              accept="image/*"
-              className="create-product-file-input"
-              id="file"
-            />
-            <label htmlFor="file" className="file-input-label">
-              Elegir archivos
-            </label>
-            <span className="file-selected">
-              {product.images.length > 0
-                ? `${product.images.length} archivo(s) seleccionado(s)`
-                : "No se ha seleccionado ningún archivo."}
-            </span>
-          </div>
+          {/* Campo para seleccionar imágenes */}
+          <label className="create-product-label">Imágenes del Producto:</label>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleFileChange}
+            className="create-product-file-input"
+          />
 
-          <button type="submit" className="create-product-button">Crear Producto</button>
+          <button type="submit" className="create-product-submit">Crear Producto</button>
         </form>
       </div>
     </div>
