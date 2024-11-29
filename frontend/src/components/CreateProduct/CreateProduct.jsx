@@ -276,14 +276,26 @@ const CreateProduct = () => {
           )}
 
           {/* Campo para seleccionar imágenes */}
-          <label className="create-product-label">Imágenes del Producto:</label>
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleFileChange}
-            className="create-product-file-input"
-          />
+          <label className="create-product-label">Imágenes:</label>
+          <div className="file-input-container">
+            <input
+              type="file"
+              name="images"
+              onChange={handleFileChange}
+              multiple
+              accept="image/*"
+              className="create-product-file-input"
+              id="file"
+            />
+            <label htmlFor="file" className="file-input-label">
+              Elegir archivos
+            </label>
+            <span className="file-selected">
+              {product.images.length > 0
+                ? `${product.images.length} archivo(s) seleccionado(s)`
+                : "No se ha seleccionado ningún archivo."}
+            </span>
+          </div>
 
           <button type="submit" className="create-product-submit">Crear Producto</button>
         </form>
