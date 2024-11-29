@@ -10,6 +10,8 @@ const PopularProducts = () => {
     const [categories, setCategories] = useState([]); // Para las categorías disponibles
     const [selectedCategory, setSelectedCategory] = useState(""); // La categoría seleccionada
     const [products, setProducts] = useState([]); // Productos de la API
+    const [loading, setLoading] = useState(false); // Estado de carga
+    const [error, setError] = useState(null); // Manejo de errores
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,19 +34,23 @@ const PopularProducts = () => {
     };
 
     const fetchProductsByCategory = async (category) => {
+        setLoading(true); // Activar el loading
+        setError(null); // Limpiar cualquier error previo
         try {
             const response = await fetch(`${BASE_URL}${category}`);
             const data = await response.json();
-            setProducts(data.results);
+            setProducts(data.results); // Actualizar los productos con la respuesta de la API
         } catch (error) {
             console.error('Error al cargar los productos:', error);
+            setError('Hubo un problema al cargar los productos. Intenta de nuevo.');
+        } finally {
+            setLoading(false); // Desactivar el loading
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (selectedCategory) {
-            // Redirigir y cargar productos de la categoría seleccionada
             fetchProductsByCategory(selectedCategory);
         }
     };
@@ -70,20 +76,30 @@ const PopularProducts = () => {
                 </form>
             </div>
 
+            {/* Mostrar errores si ocurre alguno */}
+            {error && <p className="error-message">{error}</p>}
+
+            {/* Mostrar productos o mensaje de carga */}
             <div className="product-list">
-                {products.length > 0 ? (
-                    <div className="products">
-                        {products.map(product => (
-                            <div key={product.id} className="product-card">
-                                <img src={product.thumbnail} alt={product.title} className="product-image" />
-                                <h3>{product.title}</h3>
-                                <p>Precio: ${product.price}</p>
-                                <a href={product.permalink} target="_blank" rel="noopener noreferrer">Ver más</a>
-                            </div>
-                        ))}
-                    </div>
+                {loading ? (
+                    <p>Loading...</p>
                 ) : (
-                    <p>No hay productos disponibles para esta categoría.</p>
+                    <>
+                        {products.length > 0 ? (
+                            <div className="products">
+                                {products.map(product => (
+                                    <div key={product.id} className="product-card">
+                                        <img src={product.thumbnail} alt={product.title} className="product-image" />
+                                        <h3>{product.title}</h3>
+                                        <p>Precio: ${product.price}</p>
+                                        <a href={product.permalink} target="_blank" rel="noopener noreferrer">Ver más</a>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>No hay productos disponibles para esta categoría.</p>
+                        )}
+                    </>
                 )}
             </div>
 
