@@ -56,12 +56,11 @@ exports.createProduct = [
         console.log("Archivos recibidos (req.files):", req.files);
 
         try {
-            const { name, description, category, type, price, stock, startingPrice, auctionEndTime } = req.body;
+            const { name, description, category, type, auctionType, flashDuration, price, stock, startingPrice, auctionEndTime } = req.body;
 
-            // Si los datos obligatorios no están presentes, devuelve un error.
-            if (!name || !description || !category || !type) {
-                return res.status(400).json({ error: 'Faltan datos obligatorios' });
-            }
+if (!name || !description || !category || !type || (type === 'subasta' && !auctionType) || (auctionType === 'flash' && !flashDuration)) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios' });
+}
 
             const images = await Promise.all(req.files.map(file => uploadImageToGCS(file)));
 
@@ -72,12 +71,14 @@ exports.createProduct = [
                 description,
                 category,
                 type,
+                auctionType,  // Se agrega auctionType
+                flashDuration, // Se agrega flashDuration
                 images,
                 price: type === 'venta' ? price : undefined,
                 stock: type === 'venta' ? stock : undefined,
                 startingPrice: type === 'subasta' ? startingPrice : undefined,
                 auctionEndTime: type === 'subasta' ? auctionEndTime : undefined,
-                seller_id: userId,
+                seller_id: req.user.id,
             });
 
             await newProduct.save();
@@ -185,7 +186,7 @@ exports.getDailyAuctions = async (req, res) => {
         // Filtrar solo productos de tipo subasta y seleccionar dos productos aleatorios
         const dailyAuctions = await Product.aggregate([
             { $match: { type: 'subasta' } }, // Filtra solo subastas
-            { $sample: { size: 4 } } // Selecciona solo dos productos
+            { $sample: { size: 3 } } // Selecciona solo dos productos
         ]);
 
         await Product.populate(dailyAuctions, { path: 'seller_id', select: 'name email' });
