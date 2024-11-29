@@ -78,7 +78,7 @@ const AllProducts = () => {
     // Filtrar productos según el tipo y la categoría seleccionada
     const filteredProducts = products.filter(product => 
         (selectedCategory === "All" || product.category === selectedCategory) &&
-        product.type === selectedType &&
+        (selectedType === "flash" ? product.type === "subasta" && product.isFlash : product.type === selectedType) && 
         (product.seller_id._id || product.seller_id) !== userId
     );
 
