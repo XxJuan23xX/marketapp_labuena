@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.css';
+import logo from '../../assets/logo.png'; // Asegúrate de tener la ruta correcta de tu logo
 
 const Footer = () => {
   return (
@@ -14,12 +15,10 @@ const Footer = () => {
       </div>
       <div className="footer-content">
         <div className="footer-column">
-          <h4>Links</h4>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#">Sobre Nosotros</a></li>
-            <li><a href="#">Contacto</a></li>
-          </ul>
+          <div className="footer-logo-container">
+            <img src={logo} alt="Logo" className="footer-logo" />
+          </div>
+          
         </div>
         <div className="footer-column">
           <h4>Contáctanos</h4>
