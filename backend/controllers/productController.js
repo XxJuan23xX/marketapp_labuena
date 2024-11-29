@@ -225,24 +225,4 @@ exports.getUserProducts = async (req, res) => {
     }
 };
 
-export const getProductosPopulares = async (req, res) => {
-    try {
-        const query = req.query.query || 'box';  // Término de búsqueda por defecto
-        const url = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}`;
 
-        const response = await axios.get(url);
-
-        // Transformar los resultados
-        const productos = response.data.results.map(product => ({
-            nombre: product.title,
-            precio: product.price,
-            url: product.permalink,
-            imagen: product.thumbnail,
-        }));
-
-        res.json(productos);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al obtener productos' });
-    }
-};
