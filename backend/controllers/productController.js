@@ -225,4 +225,29 @@ exports.getUserProducts = async (req, res) => {
     }
 };
 
+async function getProductosPopulares(req, res) {
+    try {
+        // Parámeteros que podrías recibir del frontend
+        const query = req.query.query || 'box'; // Ejemplo: por defecto buscamos 'box'
+        const url = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}`;
 
+        // Realizamos la consulta a la API de Mercado Libre
+        const response = await axios.get(url);
+
+        // Extraemos los productos relevantes del JSON que devuelve la API
+        const productos = response.data.results.map(product => ({
+            nombre: product.title,
+            precio: product.price,
+            url: product.permalink,  // Enlace directo al producto
+            imagen: product.thumbnail  // Imagen del producto
+        }));
+
+        // Devolvemos la lista de productos
+        res.json(productos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener productos' });
+    }
+}
+
+module.exports = { getProductosPopulares };

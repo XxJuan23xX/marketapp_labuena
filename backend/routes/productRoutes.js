@@ -6,6 +6,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 // Obtener todos los productos
 router.get('/', productController.getProducts); // Ruta para obtener todos los productos
 
+router.get('/productos-populares', getProductosPopulares);
+
 // Crear un nuevo producto (requiere autenticación)
 router.post('/create', authMiddleware, productController.createProduct);
 
