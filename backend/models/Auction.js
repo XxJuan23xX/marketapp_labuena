@@ -1,4 +1,3 @@
-// models/Auction.js
 const mongoose = require('mongoose');
 
 const auctionSchema = new mongoose.Schema({
@@ -8,6 +7,8 @@ const auctionSchema = new mongoose.Schema({
     currentBid: { type: Number, default: 0 },
     auctionEndTime: { type: Date, required: true },
     isActive: { type: Boolean, default: true },
+    auctionType: { type: String, enum: ['normal', 'flash'], required: true },  // Nuevo campo
+    flashDuration: { type: Number, enum: [30, 60, 120], default: 60 }, // Nuevo campo, duración en minutos
     bids: [
         {
             user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
