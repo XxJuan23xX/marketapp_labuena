@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 const authMiddleware = require('../middleware/authMiddleware');
-const { getProductosPopulares } = require('../controllers/productosController');
+const { getProductosPopulares } = require('../controllers/productController');
 
 // Obtener todos los productos
 router.get('/', productController.getProducts); // Ruta para obtener todos los productos
