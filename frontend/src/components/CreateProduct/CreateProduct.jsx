@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { UserProductsContext } from '../../context/UserProductsContext';
 import api from '../../../api';
 
+
+const BASE_URL = 'https://marketapp-backend.onrender.com';
+
 const CreateProduct = () => {
   const { addProduct } = useContext(UserProductsContext); // Accede a la función addProduct del contexto
   const [product, setProduct] = useState({
@@ -31,7 +34,7 @@ const CreateProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await api.get('/categories'); // usa `api` para la solicitud
+        const response = await api.get(`${BASE_URL}/api/categories`); // usa `api` para la solicitud
         console.log("Categorías obtenidas:", response.data); // Verifica los datos obtenidos
         setCategories(response.data);
       } catch (error) {
