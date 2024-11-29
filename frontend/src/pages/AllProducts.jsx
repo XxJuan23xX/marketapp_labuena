@@ -76,11 +76,19 @@ const AllProducts = () => {
     };
 
     // Filtrar productos según el tipo y la categoría seleccionada
-    const filteredProducts = products.filter(product => 
-        (selectedCategory === "All" || product.category === selectedCategory) &&
-        (selectedType === "flash" ? product.type === "subasta" && product.isFlash : product.type === selectedType) && 
-        (product.seller_id._id || product.seller_id) !== userId
-    );
+    const filteredProducts = products.filter(product => {
+        // Verificar si el producto corresponde a una subasta flash
+        const isFlash = product.type === "subasta" && product.isFlash;
+
+        return (
+            (selectedCategory === "All" || product.category === selectedCategory) &&
+            (
+                (selectedType === "flash" && isFlash) || 
+                (selectedType !== "flash" && product.type === selectedType)
+            ) &&
+            (product.seller_id._id || product.seller_id) !== userId
+        );
+    });
 
     return (
         <div className="all-products-container">
