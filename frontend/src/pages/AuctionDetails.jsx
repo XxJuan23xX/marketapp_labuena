@@ -6,6 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 import "../pages/AuctionDetails.css";
 import { FaArrowLeft } from "react-icons/fa";
 
+const BASE_URL = 'https://marketapp-backend.onrender.com';
+
 const AuctionDetails = () => {
     const { productId } = useParams();
     const { userId } = useContext(AuthContext);
@@ -21,7 +23,7 @@ const AuctionDetails = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products/${productId}`);
+                const response = await axios.get(`${BASE_URL}/api/products/${productId}`);
                 if (response.data) {
                     setProduct(response.data);
                     setSelectedImage(response.data.images && response.data.images[0]); // Asegura que haya imágenes
@@ -35,7 +37,7 @@ const AuctionDetails = () => {
 
         const fetchBids = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bids`);
+                const response = await axios.get(`${BASE_URL}/api/bids/${productId}/bids`);
                 console.log("Respuesta de pujas:", response.data); // Imprime los datos de las pujas para debug
                 if (Array.isArray(response.data)) {
                     setBids(response.data);
@@ -91,7 +93,7 @@ const AuctionDetails = () => {
         }
 
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bid`, {
+            const response = await axios.post(`${BASE_URL}/api/bids/${productId}/bid`, {
                 userId: userId,
                 bidAmount: parseFloat(bidAmount),
             });
