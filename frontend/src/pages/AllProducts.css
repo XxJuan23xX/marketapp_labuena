@@ -198,3 +198,35 @@
         grid-template-columns: 1fr;
     }
 }
+
+.price-idea-card {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.price-idea-card h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.price-idea-card p {
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+.price-idea-button {
+    background-color: #0066cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.price-idea-button:hover {
+    background-color: #004d99;
+}

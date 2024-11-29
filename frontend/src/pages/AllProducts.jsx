@@ -75,115 +75,127 @@ const AllProducts = () => {
         }
     };
 
-   // Filtrar productos según el tipo seleccionado y la categoría
-   const filteredProducts = products.filter(product => {
-    if (selectedType === "flash") {
-        return product.auctionType === "flash"; // Solo muestra subastas flash
-    }
+    // Filtrar productos según el tipo seleccionado y la categoría
+    const filteredProducts = products.filter(product => {
+        if (selectedType === "flash") {
+            return product.auctionType === "flash"; // Solo muestra subastas flash
+        }
 
-    const isCategoryMatch = selectedCategory === "All" || product.category === selectedCategory;
-    const isTypeMatch = selectedType === product.type;
-    const isSellerMatch = (product.seller_id._id || product.seller_id) !== userId;
+        const isCategoryMatch = selectedCategory === "All" || product.category === selectedCategory;
+        const isTypeMatch = selectedType === product.type;
+        const isSellerMatch = (product.seller_id._id || product.seller_id) !== userId;
 
-    return isCategoryMatch && isTypeMatch && isSellerMatch;
-});
+        return isCategoryMatch && isTypeMatch && isSellerMatch;
+    });
 
-return (
-    <div className="all-products-container">
-        <Navbar selectedType={selectedType} handleTypeChange={handleTypeChange} />
-        <div className="product-type-filters">
-            <button 
-                className={`type-button ${selectedType === "venta" ? "active" : ""}`} 
-                onClick={() => handleTypeChange("venta")}
-            >
-                Venta
-            </button>
-            <button 
-                className={`type-button ${selectedType === "subasta" ? "active" : ""}`} 
-                onClick={() => handleTypeChange("subasta")}
-            >
-                Subasta
-            </button>
-            <button 
-                className={`type-button ${selectedType === "flash" ? "active" : ""}`} 
-                onClick={() => handleTypeChange("flash")}
-            >
-                Subastas Flash
-            </button>
-        </div>
+    return (
+        <div className="all-products-container">
+            <Navbar selectedType={selectedType} handleTypeChange={handleTypeChange} />
+            <div className="product-type-filters">
+                <button 
+                    className={`type-button ${selectedType === "venta" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("venta")}
+                >
+                    Venta
+                </button>
+                <button 
+                    className={`type-button ${selectedType === "subasta" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("subasta")}
+                >
+                    Subasta
+                </button>
+                <button 
+                    className={`type-button ${selectedType === "flash" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("flash")}
+                >
+                    Subastas Flash
+                </button>
+            </div>
 
-        <div className="main-content">
-            {/* Sidebar de filtros */}
-            <div className="sidebar">
-                <div className="category-filter">
-                    <button 
-                        className={`category-button ${selectedCategory === "All" ? "active" : ""}`} 
-                        onClick={() => handleCategoryChange("All")}
-                    >
-                        Todos
-                    </button>
-                    {categories.map(category => (
+            <div className="main-content">
+                {/* Sidebar de filtros */}
+                <div className="sidebar">
+                    <div className="category-filter">
                         <button 
-                            key={category._id} 
-                            className={`category-button ${selectedCategory === category.name ? "active" : ""}`} 
-                            onClick={() => handleCategoryChange(category.name)}
+                            className={`category-button ${selectedCategory === "All" ? "active" : ""}`} 
+                            onClick={() => handleCategoryChange("All")}
                         >
-                            {category.name}
+                            Todos
                         </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Sección de productos */}
-            <div className="product-section">
-                <h2 className="section-title">
-                    {selectedType === "venta" ? "Productos en Venta" : selectedType === "subasta" ? "Productos en Subasta" : "Subastas Flash"}
-                </h2>
-                <div className="auction-cards">
-                    {filteredProducts.length === 0 ? (
-                        <p>No hay productos disponibles en esta categoría o tipo.</p>
-                    ) : (
-                        filteredProducts.map(product => (
-                            <div 
-                                key={product._id} 
-                                className="auction-card" 
-                                onClick={() => goToDetails(product._id)}
+                        {categories.map(category => (
+                            <button 
+                                key={category._id} 
+                                className={`category-button ${selectedCategory === category.name ? "active" : ""}`} 
+                                onClick={() => handleCategoryChange(category.name)}
                             >
-                                <div className="product-image-container">
-                                    <img 
-                                        src={product.images[0]} 
-                                        alt={product.name} 
-                                        className="product-image" 
-                                    />
+                                {category.name}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Tarjeta con ideas de precios */}
+                    <div className="price-idea-card">
+                        <h3>No sabes qué precio poner a tus artículos?</h3>
+                        <p>Haz clic aquí para ver ideas de precios basadas en productos populares.</p>
+                        <button 
+                            className="price-idea-button" 
+                            onClick={() => navigate('/productos-populares')}
+                        >
+                            Ver ideas de precios
+                        </button>
+                    </div>
+                </div>
+
+                {/* Sección de productos */}
+                <div className="product-section">
+                    <h2 className="section-title">
+                        {selectedType === "venta" ? "Productos en Venta" : selectedType === "subasta" ? "Productos en Subasta" : "Subastas Flash"}
+                    </h2>
+                    <div className="auction-cards">
+                        {filteredProducts.length === 0 ? (
+                            <p>No hay productos disponibles en esta categoría o tipo.</p>
+                        ) : (
+                            filteredProducts.map(product => (
+                                <div 
+                                    key={product._id} 
+                                    className="auction-card" 
+                                    onClick={() => goToDetails(product._id)}
+                                >
+                                    <div className="product-image-container">
+                                        <img 
+                                            src={product.images[0]} 
+                                            alt={product.name} 
+                                            className="product-image" 
+                                        />
+                                    </div>
+                                    <h3 className="product-name">{product.name}</h3>
+                                    <p className="product-category">Categoría: {product.category}</p>
+
+                                    {product.type === 'venta' ? (
+                                        <>
+                                            <p className="product-price">Precio: ${product.price}</p>
+                                            <p className="product-status">Aún en venta</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="product-price">Precio inicial: ${product.startingPrice}</p>
+                                            <p className="product-status">
+                                                {product.auctionEndTime 
+                                                    ? getAuctionStatus(product.auctionEndTime) 
+                                                    : 'Fecha de finalización no disponible'}
+                                            </p>
+                                        </>
+                                    )}
                                 </div>
-                                <h3 className="product-name">{product.name}</h3>
-                                <p className="product-category">Categoría: {product.category}</p>
-                                
-                                {product.type === 'venta' ? (
-                                    <>
-                                        <p className="product-price">Precio: ${product.price}</p>
-                                        <p className="product-status">Aún en venta</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p className="product-price">Precio inicial: ${product.startingPrice}</p>
-                                        <p className="product-status">
-                                            {product.auctionEndTime 
-                                                ? getAuctionStatus(product.auctionEndTime) 
-                                                : 'Fecha de finalización no disponible'}
-                                        </p>
-                                    </>
-                                )}
-                            </div>
-                        ))
-                    )}
+                            ))
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <Footer />
-    </div>
-);
+            <Footer />
+        </div>
+    );
 };
 
 export default AllProducts;
