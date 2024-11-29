@@ -139,7 +139,7 @@ const AllProducts = () => {
                         <p>Haz clic aquí para ver ideas de precios basadas en productos populares.</p>
                         <button 
                             className="price-idea-button" 
-                            onClick={() => navigate('/productos-populares')}
+                            onClick={() => navigate('/Populares')}
                         >
                             Ver ideas de precios
                         </button>
