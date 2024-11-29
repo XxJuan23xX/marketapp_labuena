@@ -1,181 +1,174 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from "../components/navbar/navbarComponent";
-import axios from "axios";
-import { AuthContext } from "../context/AuthContext";
-import "../pages/AuctionDetails.css";
-import { FaArrowLeft } from "react-icons/fa";
+import "../pages/AllProducts.css";
+import Footer from "../components/footer/Footer";
+import { AuthContext } from '../context/AuthContext';
 
-const AuctionDetails = () => {
-    const { productId } = useParams();
+// URL directa de tu backend
+const BASE_URL = 'https://marketapp-backend.onrender.com';
+
+const AllProducts = () => {
     const { userId } = useContext(AuthContext);
-    const [product, setProduct] = useState(null);
-    const [bids, setBids] = useState([]);
-    const [bidAmount, setBidAmount] = useState("");
-    const [highestBid, setHighestBid] = useState(0);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [timeRemaining, setTimeRemaining] = useState("");
-    const [auctionEnded, setAuctionEnded] = useState(false);
-    const navigate = useNavigate(); // Estado para controlar si la subasta ha finalizado
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [selectedType, setSelectedType] = useState("venta"); // Mostrar "venta" por defecto
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetchProducts = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products/${productId}`);
-                setProduct(response.data);
-                setSelectedImage(response.data.images[0]);
+                const response = await fetch(`${BASE_URL}/api/products`);
+                const data = await response.json();
+                setProducts(data || []); // Si no hay datos, se inicializa con un array vacío
             } catch (error) {
-                console.error("Error al cargar el producto:", error);
+                console.error('Error al cargar los productos:', error);
             }
         };
 
-        const fetchBids = async () => {
+        const fetchCategories = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bids`);
-                setBids(response.data);
-
-                if (response.data.length > 0) {
-                    const maxBid = Math.max(...response.data.map(bid => bid.bidAmount));
-                    setHighestBid(maxBid);
-                } else {
-                    setHighestBid(product.startingPrice);
-                }
+                const response = await fetch(`${BASE_URL}/api/categories`);
+                const data = await response.json();
+                setCategories(data || []); // Si no hay categorías, se inicializa con un array vacío
             } catch (error) {
-                console.error("Error al cargar las pujas:", error);
+                console.error('Error al cargar las categorías:', error);
             }
         };
 
-        fetchProduct();
-        fetchBids();
-    }, [productId, product?.startingPrice]);
+        fetchProducts();
+        fetchCategories();
+    }, []);
 
-    // Calcular el tiempo restante y verificar si la subasta ha terminado
+    // Verifica si hay una categoría seleccionada pasada en la navegación
     useEffect(() => {
-        if (product && product.auctionEndTime) {
-            const interval = setInterval(() => {
-                const now = new Date();
-                const endTime = new Date(product.auctionEndTime);
-                const timeDiff = endTime - now;
-
-                if (timeDiff <= 0) {
-                    clearInterval(interval);
-                    setTimeRemaining("La subasta ha finalizado");
-                    setAuctionEnded(true); // Marcar la subasta como finalizada
-                } else {
-                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-                    setTimeRemaining(`${hours}h ${minutes}m ${seconds}s`);
-                }
-            }, 1000);
-
-            return () => clearInterval(interval);
+        if (location.state?.selectedCategory) {
+            setSelectedCategory(location.state.selectedCategory);
         }
-    }, [product]);
+    }, [location.state]);
 
-    const handleBidSubmit = async (e) => {
-        e.preventDefault();
+    const handleCategoryChange = (category) => {
+        setSelectedCategory(category);
+    };
 
-        if (parseFloat(bidAmount) <= highestBid) {
-            alert("La puja debe ser mayor a la puja más alta actual.");
-            return;
-        }
+    const handleTypeChange = (type) => {
+        setSelectedType(type);
+    };
 
-        if (!userId) {
-            alert("Debes estar autenticado para hacer una puja.");
-            return;
-        }
+    const goToDetails = (productId) => {
+        navigate(`/detallesallproducts/${productId}`);
+    };
 
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bid`, {
-                userId: userId,
-                bidAmount: parseFloat(bidAmount),
-            });
-            setBids([response.data, ...bids]);
-            setHighestBid(parseFloat(bidAmount));
-            setBidAmount("");
-        } catch (error) {
-            console.error("Error al hacer la puja:", error);
+    const getAuctionStatus = (auctionEndTime) => {
+        const now = new Date();
+        const endDate = new Date(auctionEndTime);
+
+        if (now >= endDate) {
+            return "Subasta finalizada";
+        } else {
+            return "Subasta en curso";
         }
     };
 
-    const handleIncreaseBy100 = () => {
-        setBidAmount((prev) => (parseFloat(prev || highestBid) + 100).toString());
-    };
-
-    if (!product) return <div>Cargando...</div>;
+    // Filtrar productos según el tipo y la categoría seleccionada
+    const filteredProducts = products.filter(product => 
+        (selectedCategory === "All" || product.category === selectedCategory) &&
+        product.type === selectedType &&
+        (product.seller_id._id || product.seller_id) !== userId
+    );
 
     return (
-        <div className="full-screen">
+        <div className="all-products-container">
             <Navbar />
-            <div className="back-button-container">
-                <button className="back-button" onClick={() => navigate(-1)}>
-                    <FaArrowLeft /> Regresar
+            <div className="product-type-filters">
+                <button 
+                    className={`type-button ${selectedType === "venta" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("venta")}
+                >
+                    Venta
+                </button>
+                <button 
+                    className={`type-button ${selectedType === "subasta" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("subasta")}
+                >
+                    Subasta
                 </button>
             </div>
-            <div className="auction-details-container">
-                <div className="image-section">
-                    <div className="main-image-container">
-                        {selectedImage && (
-                            <img src={selectedImage} alt={product.name} className="main-image" />
+
+            <div className="main-content">
+                {/* Sidebar de filtros */}
+                <div className="sidebar">
+                    <div className="category-filter">
+                        <button 
+                            className={`category-button ${selectedCategory === "All" ? "active" : ""}`} 
+                            onClick={() => handleCategoryChange("All")}
+                        >
+                            Todos
+                        </button>
+                        {categories.map(category => (
+                            <button 
+                                key={category._id} 
+                                className={`category-button ${selectedCategory === category.name ? "active" : ""}`} 
+                                onClick={() => handleCategoryChange(category.name)}
+                            >
+                                {category.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Sección de productos */}
+                <div className="product-section">
+                    <h2 className="section-title">
+                        {selectedType === "venta" ? "Productos en Venta" : "Productos en Subasta"}
+                    </h2>
+                    <div className="auction-cards">
+                        {filteredProducts.length === 0 ? (
+                            <p>No se encontraron productos disponibles.</p>
+                        ) : (
+                            filteredProducts.map(product => (
+                                <div 
+                                    key={product._id} 
+                                    className="auction-card" 
+                                    onClick={() => goToDetails(product._id)}
+                                >
+                                    <div className="product-image-container">
+                                        <img 
+                                            src={product.images && product.images.length > 0 ? product.images[0] : "default-image.jpg"} 
+                                            alt={product.name} 
+                                            className="product-image" 
+                                        />
+                                    </div>
+                                    <h3 className="product-name">{product.name}</h3>
+                                    <p className="product-category">Categoría: {product.category}</p>
+
+                                    {product.type === 'venta' ? (
+                                        <>
+                                            <p className="product-price">Precio: ${product.price}</p>
+                                            <p className="product-status">Aún en venta</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="product-price">Precio inicial: ${product.startingPrice}</p>
+                                            <p className="product-status">
+                                                {product.auctionEndTime 
+                                                    ? getAuctionStatus(product.auctionEndTime) 
+                                                    : 'Fecha de finalización no disponible'}
+                                            </p>
+                                        </>
+                                    )}
+                                </div>
+                            ))
                         )}
                     </div>
-                    <div className="thumbnail-container">
-                        {product.images.map((img, index) => (
-                            <img
-                                key={index}
-                                src={img}
-                                alt={`${product.name} thumbnail ${index + 1}`}
-                                className="thumbnail-image"
-                                onMouseEnter={() => setSelectedImage(img)}
-                            />
-                        ))}
-                    </div>
-                </div>
-
-                <div className="auction-info">
-                    <div className="time-remaining-box">
-                        <p>Tiempo restante: {timeRemaining}</p>
-                    </div>
-
-                    <h2>{product.name}</h2>
-                    <p>Precio inicial: ${product.startingPrice}</p>
-                    <p>Fecha de fin de subasta: {new Date(product.auctionEndTime).toLocaleString()}</p>
-
-                    {auctionEnded ? (
-                        <p className="auction-ended-message">La subasta ha finalizado</p>
-                    ) : (
-                        <>
-                            <h3>Hacer una Puja</h3>
-                            <p>Monto de la puja más alta: ${highestBid}</p>
-                            <form onSubmit={handleBidSubmit}>
-                                <input
-                                    type="number"
-                                    placeholder="Cantidad de puja"
-                                    value={bidAmount}
-                                    onChange={(e) => setBidAmount(e.target.value)}
-                                    required
-                                />
-                                <button type="button" onClick={handleIncreaseBy100}>
-                                    Aumentar +$100
-                                </button>
-                                <button type="submit">Hacer Puja</button>
-                            </form>
-                        </>
-                    )}
-
-                    <h3>Pujas Actuales</h3>
-                    <ul>
-                        {bids.map((bid) => (
-                            <li key={bid._id}>
-                                {bid.userName}: ${bid.bidAmount} - {new Date(bid.bidTime).toLocaleString()}
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             </div>
+
+            <Footer />
         </div>
     );
 };
 
-export default AuctionDetails;
+export default AllProducts;
