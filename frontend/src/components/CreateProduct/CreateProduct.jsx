@@ -34,7 +34,7 @@ const CreateProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await api.get(`${BASE_URL}/api/categories`); // usa `api` para la solicitud
+        const response = await api.get(`${BASE_URL}/categories`); // usa `api` para la solicitud
         console.log("Categorías obtenidas:", response.data); // Verifica los datos obtenidos
         setCategories(response.data);
       } catch (error) {
