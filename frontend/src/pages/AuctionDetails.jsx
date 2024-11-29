@@ -22,8 +22,10 @@ const AuctionDetails = () => {
         const fetchProduct = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products/${productId}`);
-                setProduct(response.data);
-                setSelectedImage(response.data.images[0]);
+                if (response.data) {
+                    setProduct(response.data);
+                    setSelectedImage(response.data.images && response.data.images[0]); // Asegura que haya imágenes
+                }
             } catch (error) {
                 console.error("Error al cargar el producto:", error);
             }
@@ -32,13 +34,12 @@ const AuctionDetails = () => {
         const fetchBids = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bids`);
-                setBids(response.data);
-
-                if (response.data.length > 0) {
-                    const maxBid = Math.max(...response.data.map(bid => bid.bidAmount));
+                if (Array.isArray(response.data)) {
+                    setBids(response.data);
+                    const maxBid = response.data.length > 0 ? Math.max(...response.data.map(bid => bid.bidAmount)) : 0;
                     setHighestBid(maxBid);
                 } else {
-                    setHighestBid(product.startingPrice);
+                    console.error("Las pujas no llegaron como un array válido.");
                 }
             } catch (error) {
                 console.error("Error al cargar las pujas:", error);
@@ -91,9 +92,11 @@ const AuctionDetails = () => {
                 userId: userId,
                 bidAmount: parseFloat(bidAmount),
             });
-            setBids([response.data, ...bids]);
-            setHighestBid(parseFloat(bidAmount));
-            setBidAmount("");
+            if (response.data) {
+                setBids([response.data, ...bids]);
+                setHighestBid(parseFloat(bidAmount));
+                setBidAmount("");
+            }
         } catch (error) {
             console.error("Error al hacer la puja:", error);
         }
@@ -121,15 +124,19 @@ const AuctionDetails = () => {
                         )}
                     </div>
                     <div className="thumbnail-container">
-                        {product.images.map((img, index) => (
-                            <img
-                                key={index}
-                                src={img}
-                                alt={`${product.name} thumbnail ${index + 1}`}
-                                className="thumbnail-image"
-                                onMouseEnter={() => setSelectedImage(img)}
-                            />
-                        ))}
+                        {product.images && product.images.length > 0 ? (
+                            product.images.map((img, index) => (
+                                <img
+                                    key={index}
+                                    src={img}
+                                    alt={`${product.name} thumbnail ${index + 1}`}
+                                    className="thumbnail-image"
+                                    onMouseEnter={() => setSelectedImage(img)}
+                                />
+                            ))
+                        ) : (
+                            <p>No hay imágenes disponibles</p>
+                        )}
                     </div>
                 </div>
 
@@ -166,11 +173,15 @@ const AuctionDetails = () => {
 
                     <h3>Pujas Actuales</h3>
                     <ul>
-                        {bids.map((bid) => (
-                            <li key={bid._id}>
-                                {bid.userName}: ${bid.bidAmount} - {new Date(bid.bidTime).toLocaleString()}
-                            </li>
-                        ))}
+                        {bids.length > 0 ? (
+                            bids.map((bid) => (
+                                <li key={bid._id}>
+                                    {bid.userName}: ${bid.bidAmount} - {new Date(bid.bidTime).toLocaleString()}
+                                </li>
+                            ))
+                        ) : (
+                            <li>No hay pujas aún.</li>
+                        )}
                     </ul>
                 </div>
             </div>
