@@ -18,7 +18,6 @@ const AuctionDetails = () => {
     const [auctionEnded, setAuctionEnded] = useState(false);
     const navigate = useNavigate(); // Estado para controlar si la subasta ha finalizado
 
-
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -88,19 +87,16 @@ const AuctionDetails = () => {
         }
 
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bid`, 
-                {
-                    userId: userId,
-                    bidAmount: parseFloat(bidAmount),
-                }
-            );
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bid`, {
+                userId: userId,
+                bidAmount: parseFloat(bidAmount),
+            });
             setBids([response.data, ...bids]);
             setHighestBid(parseFloat(bidAmount));
             setBidAmount("");
         } catch (error) {
             console.error("Error al hacer la puja:", error);
-        }        
+        }
     };
 
     const handleIncreaseBy100 = () => {
@@ -138,9 +134,9 @@ const AuctionDetails = () => {
                 </div>
 
                 <div className="auction-info">
-                <div className="time-remaining-box">
-    <p>Tiempo restante: {timeRemaining}</p>
-</div>
+                    <div className="time-remaining-box">
+                        <p>Tiempo restante: {timeRemaining}</p>
+                    </div>
 
                     <h2>{product.name}</h2>
                     <p>Precio inicial: ${product.startingPrice}</p>
