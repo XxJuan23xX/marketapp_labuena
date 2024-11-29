@@ -19,6 +19,7 @@ import CrearSubasta from './pages/CrearSubasta';
 import AllProducts from './pages/AllProducts';
 import Compras from './pages/Compras';
 import PedidoEstado from './pages/PedidoEstado';
+import PopularProducts from './pages/PopularProducts';
 
 import ProtectedRoute from './components/RutasAdmin/ProtectedRoute';
 
@@ -39,6 +40,7 @@ const App = () => {
             <Route path="/allderrapin" element={<AllProducts/>}/>
             <Route path="/register" element={<Register />} />
             <Route path="/Account" element={<UserProfile />} />
+            <Route path="/Populares" element={<PopularProducts />} />
             <Route path="/auction/:productId" element={<AuctionDetails />} />
             
             {/* Ruta para historial de compras y detalles de compra */}
