@@ -225,7 +225,7 @@ exports.getUserProducts = async (req, res) => {
     }
 };
 
-async function getProductosPopulares(req, res) {
+export const getProductosPopulares = async (req, res) => {
     try {
         const query = req.query.query || 'box';  // Término de búsqueda por defecto
         const url = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}`;
@@ -245,6 +245,4 @@ async function getProductosPopulares(req, res) {
         console.error(error);
         res.status(500).json({ error: 'Error al obtener productos' });
     }
-}
-
-module.exports = { getProductosPopulares };
+};
