@@ -4,7 +4,7 @@ import Navbar from "../components/navbar/navbarComponent";
 import Footer from "../components/footer/Footer";
 import "../pages/PopularProducts.css";
 
-const BASE_URL = 'https://api.mercadolibre.com/sites/MLA/search?q=';
+const BASE_URL = 'https://api.mercadolibre.com/sites/MLA/search?category=';
 
 const PopularProducts = () => {
     const [categories, setCategories] = useState([]); // Para las categorías disponibles
@@ -33,13 +33,20 @@ const PopularProducts = () => {
         setSelectedCategory(e.target.value);
     };
 
-    const fetchProductsByCategory = async (category) => {
+    const fetchProductsByCategory = async (categoryId) => {
         setLoading(true); // Activar el loading
         setError(null); // Limpiar cualquier error previo
         try {
-            const response = await fetch(`${BASE_URL}${category}`);
+            // Usar la categoría ID para filtrar los productos
+            const response = await fetch(`${BASE_URL}${categoryId}`);
             const data = await response.json();
-            setProducts(data.results); // Actualizar los productos con la respuesta de la API
+            
+            // Verificamos que haya resultados antes de actualizar el estado
+            if (data.results && data.results.length > 0) {
+                setProducts(data.results); // Actualizar los productos con la respuesta de la API
+            } else {
+                setProducts([]); // No se encontraron productos
+            }
         } catch (error) {
             console.error('Error al cargar los productos:', error);
             setError('Hubo un problema al cargar los productos. Intenta de nuevo.');
