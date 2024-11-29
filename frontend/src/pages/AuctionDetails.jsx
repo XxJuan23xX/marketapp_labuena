@@ -25,6 +25,8 @@ const AuctionDetails = () => {
                 if (response.data) {
                     setProduct(response.data);
                     setSelectedImage(response.data.images && response.data.images[0]); // Asegura que haya imágenes
+                } else {
+                    console.error("Error: No se recibieron los datos del producto.");
                 }
             } catch (error) {
                 console.error("Error al cargar el producto:", error);
@@ -34,6 +36,7 @@ const AuctionDetails = () => {
         const fetchBids = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/bids/${productId}/bids`);
+                console.log("Respuesta de pujas:", response.data); // Imprime los datos de las pujas para debug
                 if (Array.isArray(response.data)) {
                     setBids(response.data);
                     const maxBid = response.data.length > 0 ? Math.max(...response.data.map(bid => bid.bidAmount)) : 0;
@@ -48,7 +51,7 @@ const AuctionDetails = () => {
 
         fetchProduct();
         fetchBids();
-    }, [productId, product?.startingPrice]);
+    }, [productId]);
 
     // Calcular el tiempo restante y verificar si la subasta ha terminado
     useEffect(() => {
