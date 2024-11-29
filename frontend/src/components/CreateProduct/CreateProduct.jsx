@@ -12,12 +12,14 @@ const CreateProduct = () => {
     description: '',
     category: '',
     images: [],
-    type: 'venta',
+    type: 'venta',  // Venta o Subasta
     price: '',
-    stock: '', // Agregamos el campo stock
+    stock: '', 
     startingPrice: '',
     auctionStartTime: '',
-    auctionEndTime: '',
+    auctionEndTime: '', // Se manejará automáticamente
+    auctionType: 'normal', // Nuevo campo: normal o flash
+    flashDuration: 60, // Duración por defecto en minutos (1 hora)
   });
 
   const [categories, setCategories] = useState([]); 
@@ -72,7 +74,7 @@ const CreateProduct = () => {
     
     const formData = new FormData();
     
-    // Agregar todos los campos de texto y numéricos
+    // Agregar todos los campos del producto
     formData.append('name', product.name);
     formData.append('description', product.description);
     formData.append('category', product.category);
@@ -81,25 +83,32 @@ const CreateProduct = () => {
     formData.append('stock', product.stock);
     formData.append('startingPrice', product.startingPrice);
     formData.append('auctionStartTime', product.auctionStartTime);
-    formData.append('auctionEndTime', product.auctionEndTime);
+    
+    // Calcular y agregar la fecha de fin de la subasta (si es subasta flash)
+    if (product.auctionType === 'flash') {
+      // Calculamos la hora de fin de la subasta flash
+      const auctionEndTime = new Date(product.auctionStartTime);
+      auctionEndTime.setMinutes(auctionEndTime.getMinutes() + parseInt(product.flashDuration)); // Duración en minutos
+      formData.append('auctionEndTime', auctionEndTime.toISOString());  // Asegúrate de enviar la fecha en formato ISO
+    }
+
+    formData.append('auctionType', product.auctionType); // Nuevo campo
+    formData.append('flashDuration', product.flashDuration); // Nuevo campo
 
     // Agregar las imágenes
     product.images.forEach((file) => formData.append('images', file));
 
-    // Debugging para verificar el FormData
     for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
+      console.log(`${key}:`, value);  // Asegúrate de ver los valores de `auctionType` y `flashDuration`
     }
 
     // Intentar enviar los datos
     await addProduct(formData);
 };
 
-
-
   return (
     <div className="create-product-container">
-      <button className="back-button" onClick={() => navigate('/')}>
+      <button className="back-button" onClick={() => navigate('/')} >
         <FaArrowLeft /> Regresar a la página principal
       </button>
 
@@ -173,6 +182,62 @@ const CreateProduct = () => {
             <option value="subasta">Subasta</option>
           </select>
 
+          {/* Si es subasta, agregar el tipo de subasta (normal o flash) */}
+          {product.type === 'subasta' && (
+            <>
+              <label className="create-product-label">Tipo de Subasta:</label>
+              <select 
+                name="auctionType" 
+                value={product.auctionType} 
+                onChange={handleChange} 
+                required
+                className="create-product-select"
+              >
+                <option value="normal">Normal</option>
+                <option value="flash">Flash</option>
+              </select>
+
+              {/* Si es subasta flash, mostrar la duración */}
+              {product.auctionType === 'flash' && (
+                <>
+                  <label className="create-product-label">Duración de Subasta Flash:</label>
+                  <select 
+                    name="flashDuration" 
+                    value={product.flashDuration} 
+                    onChange={handleChange} 
+                    required
+                    className="create-product-select"
+                  >
+                    <option value={30}>30 minutos</option>
+                    <option value={60}>1 hora</option>
+                    <option value={120}>2 horas</option>
+                  </select>
+                </>
+              )}
+
+              <label className="create-product-label">Precio Inicial:</label>
+              <input
+                type="number"
+                name="startingPrice"
+                value={product.startingPrice}
+                onChange={handleChange}
+                required
+                className="create-product-input"
+              />
+
+              <label className="create-product-label">Fecha de Inicio de Subasta:</label>
+              <input
+                type="datetime-local"
+                name="auctionStartTime"
+                value={product.auctionStartTime}
+                onChange={handleChange}
+                required
+                className="create-product-input"
+              />
+            </>
+          )}
+
+          {/* Resto de los campos de producto como precio y stock si es venta */}
           {product.type === 'venta' && (
             <>
               <label className="create-product-label">Precio:</label>
@@ -197,40 +262,6 @@ const CreateProduct = () => {
             </>
           )}
 
-          {product.type === 'subasta' && (
-            <>
-              <label className="create-product-label">Precio Inicial:</label>
-              <input
-                type="number"
-                name="startingPrice"
-                value={product.startingPrice}
-                onChange={handleChange}
-                required
-                className="create-product-input"
-              />
-
-              <label className="create-product-label">Fecha de Inicio de Subasta:</label>
-              <input
-                type="datetime-local"
-                name="auctionStartTime"
-                value={product.auctionStartTime}
-                onChange={handleChange}
-                required
-                className="create-product-input"
-              />
-
-              <label className="create-product-label">Fecha de Fin de Subasta:</label>
-              <input
-                type="datetime-local"
-                name="auctionEndTime"
-                value={product.auctionEndTime}
-                onChange={handleChange}
-                required
-                className="create-product-input"
-              />
-            </>
-          )}
-
           <label className="create-product-label">Imágenes:</label>
           <div className="file-input-container">
             <input
@@ -248,11 +279,11 @@ const CreateProduct = () => {
             <span className="file-selected">
               {product.images.length > 0
                 ? `${product.images.length} archivo(s) seleccionado(s)`
-                : "Ningún archivo seleccionado"}
+                : "No se ha seleccionado ningún archivo."}
             </span>
           </div>
 
-          <button type="submit" className="createbotonazo">Crear Producto</button>
+          <button type="submit" className="create-product-button">Crear Producto</button>
         </form>
       </div>
     </div>

@@ -15,10 +15,12 @@ const AllProducts = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    // Cargar productos y categorías
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await api.get('/products');
+                console.log('Productos cargados:', response.data); // Log para verificar productos
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error al cargar los productos:', error);
@@ -38,10 +40,13 @@ const AllProducts = () => {
         fetchCategories();
     }, []);
 
-    // Verifica si hay una categoría seleccionada pasada en la navegación
+    // Verificar si hay una categoría o tipo seleccionado desde la navegación
     useEffect(() => {
         if (location.state?.selectedCategory) {
             setSelectedCategory(location.state.selectedCategory);
+        }
+        if (location.state?.selectedType === 'flash') {
+            setSelectedType('flash'); // Aseguramos que "Subastas Flash" sea el tipo seleccionado
         }
     }, [location.state]);
 
@@ -68,35 +73,46 @@ const AllProducts = () => {
         }
     };
 
-    // Filtrar productos según el tipo y la categoría seleccionada
-    const filteredProducts = products.filter(product => 
-        (selectedCategory === "All" || product.category === selectedCategory) &&
-        product.type === selectedType &&
-        (product.seller_id._id || product.seller_id) !== userId
-    );
+    // Filtrar productos según el tipo seleccionado y la categoría
+    const filteredProducts = products.filter(product => {
+        if (selectedType === "flash") {
+            return product.auctionType === "flash"; // Solo muestra subastas flash
+        }
+
+        const isCategoryMatch = selectedCategory === "All" || product.category === selectedCategory;
+        const isTypeMatch = selectedType === product.type;
+        const isSellerMatch = (product.seller_id._id || product.seller_id) !== userId;
+
+        return isCategoryMatch && isTypeMatch && isSellerMatch;
+    });
 
     return (
         <div className="all-products-container">
-            <Navbar />
+            <Navbar selectedType={selectedType} handleTypeChange={handleTypeChange} />
             <div className="product-type-filters">
-                        <button 
-                            className={`type-button ${selectedType === "venta" ? "active" : ""}`} 
-                            onClick={() => handleTypeChange("venta")}
-                        >
-                            Venta
-                        </button>
-                        <button 
-                            className={`type-button ${selectedType === "subasta" ? "active" : ""}`} 
-                            onClick={() => handleTypeChange("subasta")}
-                        >
-                            Subasta
-                        </button>
-                    </div>
+                <button 
+                    className={`type-button ${selectedType === "venta" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("venta")}
+                >
+                    Venta
+                </button>
+                <button 
+                    className={`type-button ${selectedType === "subasta" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("subasta")}
+                >
+                    Subasta
+                </button>
+                <button 
+                    className={`type-button ${selectedType === "flash" ? "active" : ""}`} 
+                    onClick={() => handleTypeChange("flash")}
+                >
+                    Subastas Flash
+                </button>
+            </div>
+
             <div className="main-content">
-            
                 {/* Sidebar de filtros */}
                 <div className="sidebar">
-                    
                     <div className="category-filter">
                         <button 
                             className={`category-button ${selectedCategory === "All" ? "active" : ""}`} 
@@ -119,42 +135,46 @@ const AllProducts = () => {
                 {/* Sección de productos */}
                 <div className="product-section">
                     <h2 className="section-title">
-                        {selectedType === "venta" ? "Productos en Venta" : "Productos en Subasta"}
+                        {selectedType === "venta" ? "Productos en Venta" : selectedType === "subasta" ? "Productos en Subasta" : "Subastas Flash"}
                     </h2>
                     <div className="auction-cards">
-                        {filteredProducts.map(product => (
-                            <div 
-                                key={product._id} 
-                                className="auction-card" 
-                                onClick={() => goToDetails(product._id)}
-                            >
-                                <div className="product-image-container">
-                                    <img 
-                                        src={product.images[0]} 
-                                        alt={product.name} 
-                                        className="product-image" 
-                                    />
+                        {filteredProducts.length === 0 ? (
+                            <p>No hay productos disponibles en esta categoría o tipo.</p>
+                        ) : (
+                            filteredProducts.map(product => (
+                                <div 
+                                    key={product._id} 
+                                    className="auction-card" 
+                                    onClick={() => goToDetails(product._id)}
+                                >
+                                    <div className="product-image-container">
+                                        <img 
+                                            src={product.images[0]} 
+                                            alt={product.name} 
+                                            className="product-image" 
+                                        />
+                                    </div>
+                                    <h3 className="product-name">{product.name}</h3>
+                                    <p className="product-category">Categoría: {product.category}</p>
+                                    
+                                    {product.type === 'venta' ? (
+                                        <>
+                                            <p className="product-price">Precio: ${product.price}</p>
+                                            <p className="product-status">Aún en venta</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="product-price">Precio inicial: ${product.startingPrice}</p>
+                                            <p className="product-status">
+                                                {product.auctionEndTime 
+                                                    ? getAuctionStatus(product.auctionEndTime) 
+                                                    : 'Fecha de finalización no disponible'}
+                                            </p>
+                                        </>
+                                    )}
                                 </div>
-                                <h3 className="product-name">{product.name}</h3>
-                                <p className="product-category">Categoría: {product.category}</p>
-                                
-                                {product.type === 'venta' ? (
-                                    <>
-                                        <p className="product-price">Precio: ${product.price}</p>
-                                        <p className="product-status">Aún en venta</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p className="product-price">Precio inicial: ${product.startingPrice}</p>
-                                        <p className="product-status">
-                                            {product.auctionEndTime 
-                                                ? getAuctionStatus(product.auctionEndTime) 
-                                                : 'Fecha de finalización no disponible'}
-                                        </p>
-                                    </>
-                                )}
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

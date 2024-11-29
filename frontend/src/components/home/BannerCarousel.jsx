@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './BannerCarousel.css';
-import banner1 from '../../assets/banners/banner1.jpg';
+import banner3 from '../../assets/banners/banner3.png';
 import banner2 from '../../assets/banners/banner2.png';
+import banner1 from '../../assets/banners/banner1.jpg';
 
 const banners = [
-  { image: banner1, productId: '67296054fb4606e93299ba70' }, // Reemplaza con el ID real del producto
-  { image: banner2, productId: '6729652efb4606e93299bb4a' }, // Reemplaza con el ID real del producto
+  { image: banner1, productId: '674937ef4de80aec805008d5' }, // Reemplaza con el ID real del producto
+  { image: banner2, productId: '6728182dd642acd0785bc43c' }, // Reemplaza con el ID real del producto
+  { image: banner3, productId: 'flash-auction' }, // Este es el banner para Subastas Flash
 ];
 
 const BannerCarousel = () => {
@@ -22,7 +24,10 @@ const BannerCarousel = () => {
   };
 
   const handleBannerClick = (productId) => {
-    navigate(`/detallesallproducts/${productId}`);
+    if (productId === 'flash-auction') {
+      // Redirigir a la sección de Subastas Flash
+      navigate('/allderrapin', { state: { selectedType: 'flash' } });
+    } 
   };
 
   return (

@@ -18,7 +18,6 @@ const AuctionDetails = () => {
     const [auctionEnded, setAuctionEnded] = useState(false);
     const navigate = useNavigate(); // Estado para controlar si la subasta ha finalizado
 
-
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -135,9 +134,9 @@ const AuctionDetails = () => {
                 </div>
 
                 <div className="auction-info">
-                <div className="time-remaining-box">
-    <p>Tiempo restante: {timeRemaining}</p>
-</div>
+                    <div className="time-remaining-box">
+                        <p>Tiempo restante: {timeRemaining}</p>
+                    </div>
 
                     <h2>{product.name}</h2>
                     <p>Precio inicial: ${product.startingPrice}</p>

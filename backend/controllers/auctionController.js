@@ -1,25 +1,48 @@
-// controllers/auctionController.js
 const Auction = require('../models/Auction');
-const upload = require('../uploads/multerConfig'); // Cambia esto a la ruta correcta de tu configuración de Multer
+const upload = require('../uploads/multerConfig'); // Configuración de Multer
 
 // Crear una subasta con subida de imágenes
 exports.createAuction = [
     upload.array('images', 5), // Permitir hasta 5 imágenes
     async (req, res) => {
         try {
-            const { product_id, seller_id, startingPrice, auctionEndTime } = req.body;
-            const images = req.files.map(file => file.path); // Guardar las rutas de las imágenes
+            const { product_id, seller_id, startingPrice, auctionType, flashDuration } = req.body;
+            
+            // Validación de datos
+            if (!product_id || !seller_id || !startingPrice || !auctionType) {
+                return res.status(400).json({ error: 'Faltan datos obligatorios' });
+            }
 
+            // Si es una subasta flash, validamos la duración
+            let auctionEndTime = new Date();
+            if (auctionType === 'flash') {
+                if (!flashDuration || isNaN(flashDuration)) {
+                    return res.status(400).json({ error: 'La duración de la subasta flash debe ser un número válido' });
+                }
+                auctionEndTime.setMinutes(auctionEndTime.getMinutes() + parseInt(flashDuration)); // Sumamos minutos a la hora actual
+            } else {
+                auctionEndTime.setHours(auctionEndTime.getHours() + 24); // Subasta normal de 24 horas
+            }
+
+            // Si no se envían imágenes, lo manejamos
+            const images = req.files ? req.files.map(file => file.path) : [];
+
+            // Crear la subasta
             const newAuction = new Auction({
                 product_id,
                 seller_id,
                 startingPrice,
                 auctionEndTime,
-                images // Guardar las rutas de las imágenes en la base de datos
+                auctionType,
+                flashDuration, // Solo se usará si es una subasta flash
+                images // Guardar las rutas de las imágenes
             });
 
+            // Guardar la subasta en la base de datos
             await newAuction.save();
-            res.status(201).json(newAuction);
+
+            // Responder con la subasta creada
+            res.status(201).json({ message: 'Subasta creada exitosamente', auction: newAuction });
         } catch (error) {
             res.status(400).json({ error: 'Error creando la subasta: ' + error.message });
         }
@@ -35,6 +58,18 @@ exports.getAuctions = async (req, res) => {
         res.status(200).json(auctions);
     } catch (error) {
         res.status(500).json({ error: 'Error obteniendo las subastas: ' + error.message });
+    }
+};
+
+// Obtener subastas flash
+exports.getFlashAuctions = async (req, res) => {
+    try {
+        const auctions = await Auction.find({ auctionType: 'flash' })
+            .populate('product_id')
+            .populate('seller_id', 'name email');
+        res.status(200).json(auctions);
+    } catch (error) {
+        res.status(500).json({ error: 'Error obteniendo las subastas flash: ' + error.message });
     }
 };
 
