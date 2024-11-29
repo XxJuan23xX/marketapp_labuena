@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import './BannerCarousel.css';
 import banner1 from '../../assets/banners/banner1.jpg';
 import banner2 from '../../assets/banners/banner2.png';
+import banner3 from '../../assets/banners/banner3.png';  // Asegúrate de importar el banner3
 
 const banners = [
-  { image: banner1, productId: '67296054fb4606e93299ba70' },
-  { image: banner2, productId: '6729652efb4606e93299bb4a' },
+  { image: banner1, productId: '67296054fb4606e93299ba70', type: 'venta' },
+  { image: banner2, productId: '6729652efb4606e93299bb4a', type: 'flash' }, // Este banner es de "Subasta Flash"
+  { image: banner3, productId: null, type: 'flash' },  // Este banner también es de "Subasta Flash"
 ];
 
 const BannerCarousel = () => {
-  console.log("Backend URL:", process.env.REACT_APP_BACKEND_URL); // Verifica el valor de la variable de entorno
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -23,8 +23,11 @@ const BannerCarousel = () => {
     setCurrentIndex(currentIndex === banners.length - 1 ? 0 : currentIndex + 1);
   };
 
-  const handleBannerClick = (productId) => {
-    navigate(`/detallesallproducts/${productId}`);
+  const handleBannerClick = (productId, type) => {
+    // Si es una "Subasta Flash", redirigimos a la página de productos con ese filtro
+    if (type === 'flash') {
+      navigate('/allderrapin', { state: { selectedType: 'flash' } });  // Pasa el estado para filtrar
+    } 
   };
 
   return (
@@ -36,7 +39,7 @@ const BannerCarousel = () => {
           src={banners[currentIndex].image}
           alt={`Banner ${currentIndex + 1}`}
           className="banner-image"
-          onClick={() => handleBannerClick(banners[currentIndex].productId)}
+          onClick={() => handleBannerClick(banners[currentIndex].productId, banners[currentIndex].type)}
           style={{ cursor: 'pointer' }}
         />
         
