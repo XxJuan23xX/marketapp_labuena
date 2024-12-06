@@ -17,23 +17,23 @@ const PrivacyPolicy = () => {
 
       {/* Sección "Política de Privacidad" */}
       <section className="section">
-        <h1 className="section-title">Política de Privacidad</h1>
+        <h1 className="section-title">Terminos y condiciones</h1>
         <p>
-          En Market App entendemos lo importante que es para ti la privacidad y la seguridad de tu información personal.
-          Nuestra política de privacidad tiene como objetivo informarte de manera transparente sobre cómo recopilamos, 
-          utilizamos y protegemos tus datos personales. A continuación, te explicamos todo lo que necesitas saber 
-          para que puedas hacer uso de nuestra plataforma con confianza.
+        Bienvenido a Market App. Al utilizar nuestros servicios, aceptas estar sujeto a estos Términos y Condiciones, los cuales son esenciales para garantizar una experiencia segura, justa y eficiente para todos nuestros usuarios. A continuación, te explicamos de manera detallada las reglas y normas que debes seguir al interactuar con nuestra plataforma.
+
         </p>
       </section>
 
       {/* Sección "¿Qué Información Recopilamos?" */}
       <section className="section">
-        <h2 className="section-title">¿Qué Información Recopilamos?</h2>
-        <p>Recopilamos diferentes tipos de información cuando interactúas con nuestra plataforma. Estos son los principales tipos de datos que recopilamos:</p>
+        <h2 className="section-title">Uso del Servicio</h2>
+        <p>Market App pone a tu disposición una plataforma que facilita la compra y venta de productos de diversos tipos, incluyendo opciones de subasta y venta directa. Al utilizar nuestros servicios, te comprometes a cumplir con las siguientes normas:</p>
         <ul>
-          <li><strong>Información personal básica:</strong>
+          <li><strong></strong>
             <ul>
-              <li><strong>Datos de registro:</strong> Al crear tu cuenta o registrarte en nuestro sitio, te pediremos que proporciones tu nombre, dirección de correo electrónico, número de teléfono y otros datos de contacto.</li>
+              <li><strong></strong> gistro y autenticidad: Debes proporcionar información veraz, precisa y actualizada al registrarte y crear una cuenta. Es tu responsabilidad mantener la confidencialidad de tus credenciales de acceso (nombre de usuario y contraseña) y asegurarte de que nadie más acceda a tu cuenta sin tu permiso.
+Compra y venta de productos: Solo podrás publicar productos que estén permitidos en nuestra plataforma, siguiendo las políticas de venta establecidas. Cualquier producto ilegal, prohibido o que infrinja derechos de propiedad intelectual no está permitido.
+Cumplimiento de leyes locales: Al vender o comprar productos, te comprometes a cumplir con todas las leyes y regulaciones aplicables en tu país de residencia, incluidas, pero no limitadas a, las leyes de protección al consumidor, normativas fiscales y de propiedad intelectual.</li>
               <li><strong>Información de pago:</strong> Cuando realices compras o ventas, solicitaremos los datos de tu tarjeta de crédito o débito, o detalles sobre otros métodos de pago (como PayPal), para procesar tus pagos de forma segura.</li>
             </ul>
           </li>
