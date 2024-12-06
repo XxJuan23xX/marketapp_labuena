@@ -1,6 +1,7 @@
 import React from 'react';
 import './HowItWorks.css';
 import { useNavigate } from 'react-router-dom'; // Actualiza la importación a useNavigate
+import Footer from '../components/footer/Footer';
 
 const HowItWorks = () => {
   const navigate = useNavigate(); // Reemplaza useHistory por useNavigate
@@ -68,6 +69,7 @@ const HowItWorks = () => {
           Con Market App, tanto compradores como vendedores tienen la certeza de realizar transacciones seguras, fáciles y rápidas.
         </p>
       </section>
+      <Footer></Footer>
     </div>
   );
 };

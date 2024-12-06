@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PrivacyPolicy.css'; // Asegúrate de tener el archivo CSS
+import Footer from '../components/footer/Footer';
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
@@ -76,16 +77,7 @@ const PrivacyPolicy = () => {
      
 
       {/* Footer */}
-      <footer className="footer">
-        <div className="footer-content">
-          <p>&copy; 2024 Market App. Todos los derechos reservados.</p>
-          <div className="footer-links">
-            <a href="/privacy-policy">Política de Privacidad</a> | 
-            <a href="/terms">Términos y Condiciones</a> | 
-            <a href="/contact">Contacto</a>
-          </div>
-        </div>
-      </footer>
+      <Footer></Footer>
     </div>
   );
 };
