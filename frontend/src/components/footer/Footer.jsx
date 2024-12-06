@@ -5,36 +5,57 @@ import logo from '../../assets/logo.png'; // Asegúrate de tener la ruta correct
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-bar">
-        <h3>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="lightblue">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h-2v-6h2v6zm4 0h-2v-6h2v6zm2-8h-8V8h8v2z"/>
-          </svg>
-          Hover Me
-        </h3>
+      {/* Sección de logo */}
+      <div className="footer-logo-container">
+        <img src={logo} alt="Logo" className="footer-logo" />
       </div>
-      <div className="footer-content">
+
+      {/* Sección de Modelo de Negocios */}
+      <div className="footer-sections">
         <div className="footer-column">
-          <div className="footer-logo-container">
-            <img src={logo} alt="Logo" className="footer-logo" />
-          </div>
-          
+          <h4 className="footer-title">Vendedores</h4>
+          <p>
+            Publican productos para subasta o venta directa, alcanzando una audiencia amplia de compradores.
+            La plataforma ofrece herramientas simples y eficientes para gestionar inventarios, fijar precios
+            competitivos y promover ventas rápidas.
+          </p>
         </div>
         <div className="footer-column">
-          <h4>Contáctanos</h4>
-          <ul>
-            <li><a href="#">Email: 23090467@alumno.utmetropolitana.com.mx</a></li>
-            <li><a href="#">Phone: +52 9995406380</a></li>
-          </ul>
+          <h4 className="footer-title">Compradores</h4>
+          <p>
+            Acceden a productos variados con precios competitivos y la opción de comprar en subasta o venta directa.
+            Los compradores disfrutan de un entorno seguro y transparente, con funciones diseñadas para maximizar su experiencia de compra.
+          </p>
         </div>
         <div className="footer-column">
-          <h4>Desarrollado por</h4>
-          <ul>
-            <li><a href="https://www.facebook.com/manuel.sima.12" target="_blank" rel="noopener noreferrer">Juan Manuel</a></li>
-            <li><a href="https://www.facebook.com/angelo.romos" target="_blank" rel="noopener noreferrer">Miguel Angel</a></li>
-            <li><a href="https://www.twitch.tv/derrapin" target="_blank" rel="noopener noreferrer">Twitch Derrapin</a></li>
-          </ul>
+          <h4 className="footer-title">Objetivos</h4>
+          <p>
+            Crear una plataforma donde los usuarios puedan vender y comprar productos de manera fácil, segura y accesible.
+            Nuestro propósito es promover una comunidad conectada por la confianza y la innovación.
+          </p>
         </div>
+      </div>
+
+      {/* Línea de separación entre secciones */}
+      <div className="footer-divider"></div>
+
+      {/* Market App y contacto */}
+      <div className="footer-contact">
+        <div>
+          <p>
+            <a href="quienes-somos">¿Quiénes somos?</a> | <a href="como-funciona">Cómo funciona</a> | <a href="politicadeprivacidad">Política de privacidad</a> |{' '}
+            <a href="terminosycondiciones">Términos y condiciones</a>
+          </p>
+        </div>
+        <div className="footer-contact-details">
+          <p>Contáctanos: MarketApp@gmail.com</p>
+          <p>Redes sociales: Facebook | Instagram</p> 
+        </div>
+      </div>
+
+      {/* Línea de separación final */}
+      <div className="footer-bottom">
+        <p>©2024 MarketApp - Apoyando a la segunda mano</p>
       </div>
     </footer>
   );

@@ -1,90 +1,75 @@
+/* Footer Principal */
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #445;
-  color: white;
-  overflow: hidden;
-  transition: height 0.5s ease;
-  height: 50px; /* Altura inicial de la barra */
-  border-radius: 20px 20px 0 0;
-  z-index: 2;
-}
-
-.footer:hover {
-  height: 300px; /* Altura expandida al hacer hover */
-}
-
-.footer-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  background-color: #333;
-}
-
-.footer-bar h3 {
-  display: flex;
-  align-items: center;
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.footer-bar svg {
-  margin-right: 10px;
-}
-
-.footer-content {
+  background-color: #f8f9fa;
   padding: 20px;
-  display: flex;
-  justify-content: space-around;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+  text-align: center;
+  border-top: 2px solid #ddd;
 }
 
-.footer:hover .footer-content {
-  opacity: 1;
-  pointer-events: all;
+/* Logo */
+.footer-logo-container {
+  margin-bottom: 20px;
+}
+
+.footer-logo {
+  max-width: 100px;
+  height: auto;
+}
+
+/* Secciones de Modelo de Negocios */
+.footer-sections {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007bff; /* Línea azul debajo de las secciones */
+  padding-bottom: 20px;
 }
 
 .footer-column {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex: 1;
+  margin: 0 10px;
+  text-align: left;
 }
 
-.footer-column h4 {
+.footer-title {
+  font-size: 1.2em;
   margin-bottom: 10px;
-  font-size: 1rem;
+  color: #007bff; /* Títulos en azul */
 }
 
-.footer-column ul {
-  list-style: none;
-  padding: 0;
+.footer-column p {
+  font-size: 0.9em;
+  color: #6c757d;
 }
 
-.footer-column li {
-  margin-bottom: 5px;
+/* Línea de Separación */
+.footer-divider {
+  margin: 20px 0;
+  border-top: 2px solid #ddd;
 }
 
-.footer-column a {
-  color: lightblue;
+/* Enlaces y Contacto */
+.footer-contact {
+  margin-bottom: 20px;
+}
+
+.footer-contact a {
+  color: #007bff;
   text-decoration: none;
+  margin: 0 5px;
 }
 
-/* Aseguramos que el logo esté alineado con los enlaces */
-.footer-logo-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  justify-content: flex-start; /* Asegura que el logo esté alineado a la izquierda */
+.footer-contact a:hover {
+  text-decoration: underline;
 }
 
-/* Aumentar el tamaño del logo */
-.footer-logo {
-  width: 150px;  /* Tamaño más grande para el logo */
-  height: auto;
-  margin-right: 20px; /* Espacio entre el logo y el texto */
+.footer-contact-details p {
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+/* Parte Inferior */
+.footer-bottom {
+  font-size: 0.8em;
+  color: #6c757d;
 }

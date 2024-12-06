@@ -19,9 +19,12 @@ import CrearSubasta from './pages/CrearSubasta';
 import AllProducts from './pages/AllProducts';
 import Compras from './pages/Compras';
 import PedidoEstado from './pages/PedidoEstado';
-import PopularProducts from './pages/PopularProducts';
-
+import WhoWeAre from './pages/somos';
 import ProtectedRoute from './components/RutasAdmin/ProtectedRoute';
+import HowItWorks from './pages/funciones';
+import TermsAndConditions from './pages/politica';
+import PrivacyPolicy from './pages/poli';
+
 
 const App = () => {
   return (
@@ -40,14 +43,19 @@ const App = () => {
             <Route path="/allderrapin" element={<AllProducts/>}/>
             <Route path="/register" element={<Register />} />
             <Route path="/Account" element={<UserProfile />} />
-            <Route path="/Populares" element={<PopularProducts />} />
             <Route path="/auction/:productId" element={<AuctionDetails />} />
+
+            <Route path="/quienes-somos" element={<WhoWeAre />} />
+            <Route path="/como-funciona" element={< HowItWorks/>} />
+            <Route path="/politicadeprivacidad" element={<PrivacyPolicy/>} />
+            <Route path="/terminosycondiciones" element={<TermsAndConditions />} />
             
             {/* Ruta para historial de compras y detalles de compra */}
             <Route path="/Historial" element={<Compras />} />
             <Route path="/compras/:orderId" element={<Compras />} />  {/* Muestra los detalles de la compra */}
 
             <Route path="/PedidoEstado/:orderId" element={<PedidoEstado />} />
+
 
             {/* Rutas protegidas */}
             <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />
@@ -60,5 +68,5 @@ const App = () => {
     </AuthProvider>
   );
 };
-
+ 
 export default App;
