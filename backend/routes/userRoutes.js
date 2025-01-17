@@ -5,6 +5,7 @@ const userController = require('../controllers/userController');
 router.post('/', userController.createUser);
 router.post('/login', userController.loginUser);
 router.get('/', userController.getUsers);
+router.get('/paginados', userController.getPaginatedUsers);
 // Ruta para obtener los últimos 3 usuarios
 router.get('/latest', userController.getLatestUsers);
 // Obtener el número total de clientes

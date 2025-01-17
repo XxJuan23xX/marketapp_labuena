@@ -170,4 +170,25 @@ exports.getLatestUsers = async (req, res) => {
     }
   };
 
-  
+  // Endpoint de paginado de usuarios
+exports.getPaginatedUsers = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query; // Lee los parámetros de consulta
+    const skip = (page - 1) * limit; // Calcula el índice de inicio
+
+    try {
+        const usuarios = await User.find().skip(skip).limit(parseInt(limit)); // Consulta paginada
+        const total = await User.countDocuments(); // Total de usuarios
+
+        res.status(200).json({
+            data: usuarios,
+            pagination: {
+                total,
+                page: parseInt(page),
+                pageSize: parseInt(limit),
+                totalPages: Math.ceil(total / limit),
+            },
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error obteniendo los usuarios paginados: ' + error.message });
+    }
+};
