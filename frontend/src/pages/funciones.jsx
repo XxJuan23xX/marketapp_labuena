@@ -69,6 +69,17 @@ const HowItWorks = () => {
           Con Market App, tanto compradores como vendedores tienen la certeza de realizar transacciones seguras, fáciles y rápidas.
         </p>
       </section>
+
+      {/* Sección "Beneficios" */}
+      <section className="section">
+        <h2 className="section-title">¿Cómo obtenemos dinero?</h2>
+        <ul>
+          <li><strong>Comisión:</strong> Nosotros cobramos un 10% de la ganancia obtenida en ventas dependiendo de la categoría del producto y la cantidad del precio total.</li>
+          <li><strong>Anuncios en la app:</strong> Utilizamos el uso de anuncios para que también haya una ganancia.</li>
+          <li><strong>Darle promoción a tu artículo:</strong> En caso de que quiera que su artículo aparezca en el banner principal puede pagar una comisión estimada en $100 por semana, el plazo se puede extender y este precio no es fijo así que puede variar y avisaremos en caso de qque cambie.</li>
+        </ul>
+      </section>
+
       <Footer></Footer>
     </div>
   );
