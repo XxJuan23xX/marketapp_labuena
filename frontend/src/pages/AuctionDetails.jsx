@@ -110,7 +110,7 @@ const AuctionDetails = () => {
             <Navbar />
             <div className="back-button-container">
                 <button className="back-button" onClick={() => navigate(-1)}>
-                    <FaArrowLeft /> Regresar
+                    <FaArrowLeft /> back
                 </button>
             </div>
             <div className="auction-details-container">
